@@ -63,6 +63,7 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 			define( 'WC4BP_GROUP_RESOURCES_PATH', WC4BP_GROUP_CLASSES_PATH . 'resources' . DIRECTORY_SEPARATOR );
 			
 			$this->load_plugin_textdomain();
+			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_override.php';
 			
 			require_once WC4BP_GROUP_RESOURCES_PATH . 'class-tgm-plugin-activation.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_required.php';
