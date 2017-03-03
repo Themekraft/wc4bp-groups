@@ -25,7 +25,8 @@ class wc4bp_groups_manager {
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
 		try {
 			//loading_dependency
-			
+			require_once WC4BP_GROUP_CLASSES_PATH.'wc4bp_groups_woo.php';
+			new wc4bp_groups_woo();
 			
 		} catch ( Exception $ex ) {
 			wc4bp_groups_log::log( array(
