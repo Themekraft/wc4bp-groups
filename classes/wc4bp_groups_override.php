@@ -20,3 +20,12 @@ function _wc4bp_groups( $str ) {
 function _e_wc4bp_groups( $str ) {
 	_e( $str, 'wc4bp_groups' );
 }
+
+/**
+ * Display the translation for the plugins.
+ *
+ * @param $str
+ */
+function esc_attr_e_wc4bp_groups( $str ) {
+	echo esc_attr( _wc4bp_groups( $str ) );
+}
