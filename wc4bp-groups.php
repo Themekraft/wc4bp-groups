@@ -52,7 +52,7 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		/**
 		 * Initialize the plugin.
 		 */
-		private function __construct() {
+		public function __construct() {
 			define( 'WC4BP_GROUP_BASE_NAME', plugin_basename( __FILE__ ) );
 			define( 'WC4BP_GROUP_BASE_FILE', trailingslashit( str_replace( "\\", "/", plugin_dir_path( __FILE__ ) ) ) . 'wc4bp-groups.php' );
 			define( 'WC4BP_GROUP_URLPATH', trailingslashit( str_replace( "\\", "/", plugin_dir_url( __FILE__ ) ) ) );
