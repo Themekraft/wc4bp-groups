@@ -9,6 +9,7 @@
  * Text Domain: wc4bp
  * Domain Path: /languages
  *
+ * @package wc4bp_groups
  *
  *****************************************************************************
  *

@@ -43,22 +43,40 @@ class wc4bp_groups_woo {
 	 */
 	public function addProductOptionPanelTab() {
 		global $woocommerce, $post;
-		echo '<div id="' . wc4bp_groups_manager::getSlug() . '" class="panel woocommerce_options_panel"><div class="options_group">';
-		
-		woocommerce_wp_select(
-			array(
-				'id'      => '_test',
-				'label'   => _wc4bp_groups( "Test Option:" ),
-				'options' => array(
-					'1' => "Yes",
-					''  => "No",
-				)
-			)
-		);
-		
-		echo '</div></div>';
+		?>
+
+        <div id="<?php echo wc4bp_groups_manager::getSlug(); ?>" class="panel woocommerce_options_panel wc-metaboxes-wrapper">
+            <div id="message" class="inline notice woocommerce-message">
+                <p><?php _e_wc4bp_groups( 'Before you can add a group configuration you need to save the product.' ); ?></p>
+            </div>
+
+            <div class="toolbar toolbar-top">
+				<?php $this->show_woo_tab_search_for_group(); ?>
+            </div>
+            <div class="<?php echo wc4bp_groups_manager::getSlug(); ?> wc-metaboxes ui-sortable">
+	
+	            <?php $this->show_woo_tab_item_for_group(); ?>
+                
+            </div>
+
+            <div class="toolbar">
+					<span class="expand-close">
+						<a href="#" class="expand_all"><?php _e_wc4bp_groups( 'Expand' ); ?></a> / <a href="#" class="close_all"><?php _e_wc4bp_groups( 'Close' ); ?></a>
+					</span>
+                <button type="button" class="button save_groups button-primary"><?php _e_wc4bp_groups( 'Save Groups' ); ?></button>
+            </div>
+        </div>
+		<?php
 	}
 	
+	private function show_woo_tab_search_for_group() {
+		global $woocommerce, $post;
+		include WC4BP_GROUP_VIEW_PATH . 'woo_tab_search.php';
+	}
+	
+	private function show_woo_tab_item_for_group() {
+		include WC4BP_GROUP_VIEW_PATH . 'woo_tab_item.php';
+	}
 	/**
 	 * Save option selected into the tabs
 	 *
@@ -66,7 +84,7 @@ class wc4bp_groups_woo {
 	 * @param $post
 	 */
 	public function saveProductOptionsFields( $post_id, $post ) {
-		$test_post     = esc_attr( $_POST['_test'] );
+		$test_post   = esc_attr( $_POST['_test'] );
 		$test_option = get_post_meta( $post_id, '_test', true );
 		if ( ! empty( $test_post ) ) {
 			if ( $test_post != $test_option ) {

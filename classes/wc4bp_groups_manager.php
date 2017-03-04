@@ -25,9 +25,13 @@ class wc4bp_groups_manager {
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
 		try {
 			//loading_dependency
-			require_once WC4BP_GROUP_CLASSES_PATH.'wc4bp_groups_woo.php';
+			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_handler.php';
+			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo.php';
+			new wc4bp_groups_handler();
 			new wc4bp_groups_woo();
 			
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ) );
 		} catch ( Exception $ex ) {
 			wc4bp_groups_log::log( array(
 				'action'         => get_class( $this ),
@@ -38,6 +42,25 @@ class wc4bp_groups_manager {
 		}
 	}
 	
+	/**
+	 * Include styles in admin
+	 */
+	public function enqueue_style() {
+		wp_enqueue_style( 'jquery' );
+		wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
+	}
+	
+	/**
+	 * Include script
+	 */
+	public function enqueue_js() {
+		wp_register_script( 'wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array( "jquery" ), true );
+		wp_enqueue_script( 'wc4bp_groups' );
+		wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
+			'ajax_url'            => admin_url( 'admin-ajax.php' ),
+			'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
+		) );
+	}
 	
 	/**
 	 * Get plugins version
