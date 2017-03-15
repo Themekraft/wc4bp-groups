@@ -44,7 +44,8 @@ class wc4bp_groups_manager {
 	 * @param $hook
 	 */
 	public function enqueue_style( $hook ) {
-		if ( $hook == 'post.php' ) {
+		global $post;
+		if ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) {
 			wp_enqueue_style( 'jquery' );
 			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
 		}
@@ -56,12 +57,15 @@ class wc4bp_groups_manager {
 	 * @param $hook
 	 */
 	public function enqueue_js( $hook ) {
-		if ( $hook == 'post.php' ) {
+		global $post;
+		if ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) {
 			wp_register_script( 'wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array( "jquery" ), wc4bp_groups_manager::getVersion() );
 			wp_enqueue_script( 'wc4bp_groups' );
 			wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
 				'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
+				'general_error'       => _wc4bp_groups( 'General Error, contact the admin. #1' ),
+				'remove'              => _wc4bp_groups( 'General Error, contact the admin. #1' ),
 			) );
 		}
 	}
