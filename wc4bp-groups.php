@@ -4,7 +4,7 @@
  * Plugin URI:  http://themekraft.com/store/woocommerce-buddypress-integration-wordpress-plugin/
  * Description: Handle a WooCommerce installation with a BuddyPress social network
  * Author:      WC4BP Integration Dev Team ;)
- * Version:     1.0
+ * Version:     1.0.0
  * Licence:     GPLv3
  * Text Domain: wc4bp
  * Domain Path: /languages
@@ -36,7 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 if ( ! class_exists( 'wc4bp_groups' ) ) {
 	
-	require_once dirname(__FILE__).'/classes/wc4bp_groups_fs.php';
+	require_once dirname( __FILE__ ) . '/classes/wc4bp_groups_fs.php';
 	new wc4bp_groups_fs();
 	
 	class wc4bp_groups {
@@ -54,7 +54,7 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		public function __construct() {
 			define( 'WC4BP_GROUP_BASE_NAME', plugin_basename( __FILE__ ) );
 			define( 'WC4BP_GROUP_BASE_FILE', trailingslashit( wp_normalize_path( plugin_dir_path( __FILE__ ) ) ) . 'wc4bp-groups.php' );
-			define( 'WC4BP_GROUP_URLPATH', trailingslashit( wp_normalize_path( plugin_dir_url( __FILE__ ) ) ) );
+			define( 'WC4BP_GROUP_URLPATH', plugin_dir_url( __FILE__ ) );
 			define( 'WC4BP_GROUP_CSS_PATH', WC4BP_GROUP_URLPATH . 'assets/css/' );
 			define( 'WC4BP_GROUP_JS_PATH', WC4BP_GROUP_URLPATH . 'assets/js/' );
 			define( 'WC4BP_GROUP_VIEW_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR );
