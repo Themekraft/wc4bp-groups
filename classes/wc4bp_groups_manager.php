@@ -15,13 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class wc4bp_groups_manager {
 	
 	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version;
+	protected static $version = '1.0.0';
 	
 	public function __construct() {
-		wc4bp_groups_required::load_plugins_dependency();
-		$plugins_header = get_plugin_data( WC4BP_GROUP_BASE_FILE );
-		self::$version  = $plugins_header['Version'];
-		
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
 		try {
 			//loading_dependency
