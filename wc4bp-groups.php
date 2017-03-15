@@ -36,6 +36,9 @@ if ( ! defined( 'WPINC' ) ) {
 
 if ( ! class_exists( 'wc4bp_groups' ) ) {
 	
+	require_once dirname(__FILE__).'/classes/wc4bp_groups_fs.php';
+	new wc4bp_groups_fs();
+	
 	class wc4bp_groups {
 		
 		/**
@@ -46,17 +49,12 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		protected static $instance = null;
 		
 		/**
-		 * @var Freemius
-		 */
-		public static $freemius;
-		
-		/**
 		 * Initialize the plugin.
 		 */
 		public function __construct() {
 			define( 'WC4BP_GROUP_BASE_NAME', plugin_basename( __FILE__ ) );
-			define( 'WC4BP_GROUP_BASE_FILE', trailingslashit( str_replace( "\\", "/", plugin_dir_path( __FILE__ ) ) ) . 'wc4bp-groups.php' );
-			define( 'WC4BP_GROUP_URLPATH', trailingslashit( str_replace( "\\", "/", plugin_dir_url( __FILE__ ) ) ) );
+			define( 'WC4BP_GROUP_BASE_FILE', trailingslashit( wp_normalize_path( plugin_dir_path( __FILE__ ) ) ) . 'wc4bp-groups.php' );
+			define( 'WC4BP_GROUP_URLPATH', trailingslashit( wp_normalize_path( plugin_dir_url( __FILE__ ) ) ) );
 			define( 'WC4BP_GROUP_CSS_PATH', WC4BP_GROUP_URLPATH . 'assets/css/' );
 			define( 'WC4BP_GROUP_JS_PATH', WC4BP_GROUP_URLPATH . 'assets/js/' );
 			define( 'WC4BP_GROUP_VIEW_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR );
