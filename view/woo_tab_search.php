@@ -20,4 +20,5 @@
 	       echo esc_attr( json_encode( $json_ids ) );
 	       ?>" value="<?php echo implode( ',', array_keys( $json_ids ) ); ?>"/>
     <button type="button" class="button wc4bp add_groups"><?php _e_wc4bp_groups( 'Add Group' ); ?></button>
+    <span class="wc4bp-group-loading"></span>
 </p>

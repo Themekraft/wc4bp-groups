@@ -43,28 +43,42 @@ class wc4bp_groups_woo {
 	 */
 	public function addProductOptionPanelTab() {
 		global $woocommerce, $post;
+		$groups_json = get_post_meta( $post->ID, '_wc4bp_groups_json', true );
+		$groups_json = html_entity_decode( $groups_json );
+		if ( ! empty( $groups_json ) ) {
+			$groups = json_decode( $groups_json );
+		}
 		?>
 
         <div id="<?php echo wc4bp_groups_manager::getSlug(); ?>" class="panel woocommerce_options_panel wc-metaboxes-wrapper">
-            <div id="message" class="inline notice woocommerce-message">
-                <p><?php _e_wc4bp_groups( 'Before you can add a group configuration you need to save the product.' ); ?></p>
-            </div>
 
             <div class="toolbar toolbar-top">
 				<?php $this->show_woo_tab_search_for_group(); ?>
             </div>
-            <div class="<?php echo wc4bp_groups_manager::getSlug(); ?> wc-metaboxes ui-sortable">
-	
-	            <?php $this->show_woo_tab_item_for_group(); ?>
-                
+            <div class="<?php echo wc4bp_groups_manager::getSlug(); ?> wc4bp-group-container wc-metaboxes ui-sortable">
+				<?php
+				$added_groups = array();
+				if ( ! empty( $groups ) ) {
+					foreach ( $groups as $group ) {
+						$added_groups[] = $group->group_id;
+						$this->show_woo_tab_item_for_group( $post->ID, $group );
+					}
+				}
+				?>
             </div>
 
-            <div class="toolbar">
-					<span class="expand-close">
-						<a href="#" class="expand_all"><?php _e_wc4bp_groups( 'Expand' ); ?></a> / <a href="#" class="close_all"><?php _e_wc4bp_groups( 'Close' ); ?></a>
-					</span>
-                <button type="button" class="button save_groups button-primary"><?php _e_wc4bp_groups( 'Save Groups' ); ?></button>
+            <div class="toolbar wc4bp-bottom-toolbar">
+                <span class="expand-close">
+                    <a href="#" class="expand_all"><?php _e_wc4bp_groups( 'Expand' ); ?></a> / <a href="#" class="close_all"><?php _e_wc4bp_groups( 'Close' ); ?></a>
+                </span>
             </div>
+            <input type="hidden" id="wc4bp_groups_existing_ids" value="<?php echo esc_attr( json_encode( $added_groups ) ); ?>">
+			<?php
+			woocommerce_wp_hidden_input( array(
+				'id'    => '_wc4bp_groups_json',
+				'class' => wc4bp_groups_manager::getSlug()
+			) );
+			?>
         </div>
 		<?php
 	}
@@ -74,9 +88,10 @@ class wc4bp_groups_woo {
 		include WC4BP_GROUP_VIEW_PATH . 'woo_tab_search.php';
 	}
 	
-	private function show_woo_tab_item_for_group() {
+	private function show_woo_tab_item_for_group( $post_id, $group ) {
 		include WC4BP_GROUP_VIEW_PATH . 'woo_tab_item.php';
 	}
+	
 	/**
 	 * Save option selected into the tabs
 	 *
@@ -84,15 +99,15 @@ class wc4bp_groups_woo {
 	 * @param $post
 	 */
 	public function saveProductOptionsFields( $post_id, $post ) {
-		$test_post   = esc_attr( $_POST['_test'] );
-		$test_option = get_post_meta( $post_id, '_test', true );
-		if ( ! empty( $test_post ) ) {
-			if ( $test_post != $test_option ) {
-				update_post_meta( $post_id, '_test', esc_attr( $test_post ) );
+		$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
+		$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
+		if ( ! empty( $wc4bp_groups_json ) ) {
+			if ( $wc4bp_groups_json != $wc4bp_groups_json_old ) {
+				update_post_meta( $post_id, '_wc4bp_groups_json', esc_attr( $wc4bp_groups_json ) );
 			}
 		} else {
-			if ( ! empty( $test_option ) ) {
-				delete_post_meta( $post_id, '_test' );
+			if ( ! empty( $wc4bp_groups_json_old ) ) {
+				delete_post_meta( $post_id, '_wc4bp_groups_json' );
 			}
 		}
 	}
