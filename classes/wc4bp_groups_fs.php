@@ -25,12 +25,12 @@ class wc4bp_groups_fs {
 		$this->start_freemius();
 	}
 	
-	public function start_freemius(){
+	public function start_freemius() {
 		global $wc4bp_groups_fs;
 		
 		if ( ! isset( $wc4bp_groups_fs ) ) {
 			// Include Freemius SDK.
-			require_once dirname(__FILE__) . '/resources/freemius/start.php';
+			require_once dirname( __FILE__ ) . '/resources/freemius/start.php';
 			
 			$wc4bp_groups_fs = fs_dynamic_init( array(
 				'id'                  => '831',

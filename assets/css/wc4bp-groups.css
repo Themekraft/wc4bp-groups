@@ -37,3 +37,13 @@ button.button.wc4bp.add_groups {
 .wc4bp-group-error {
     border: 1px solid #ff182e !important;
 }
+
+.wc4bp-group-radios{
+	list-style-type: none !important;
+}
+
+._bp_group_field{
+	clear: both;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
