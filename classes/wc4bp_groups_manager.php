@@ -64,8 +64,8 @@ class wc4bp_groups_manager {
 			wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
 				'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
-				'general_error'       => wc4bp_groups_manager::_wc4bp_groups( 'General Error, contact the admin. #1' ),
-				'remove'              => wc4bp_groups_manager::_wc4bp_groups( 'General Error, contact the admin. #1' ),
+				'general_error'       => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),
+				'remove'              => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),
 			) );
 		}
 	}
@@ -95,7 +95,7 @@ class wc4bp_groups_manager {
 	 *
 	 * @return string
 	 */
-	public static function _wc4bp_groups( $str ) {
+	public static function translation( $str ) {
 		return __( $str, 'wc4bp_groups' );
 	}
 	
@@ -105,7 +105,7 @@ class wc4bp_groups_manager {
 	 *
 	 * @param $str
 	 */
-	public static function _e_wc4bp_groups( $str ) {
+	public static function echo_translation( $str ) {
 		_e( $str, 'wc4bp_groups' );
 	}
 	
@@ -114,7 +114,7 @@ class wc4bp_groups_manager {
 	 *
 	 * @param $str
 	 */
-	public static function esc_attr_e_wc4bp_groups( $str ) {
-		echo esc_attr( self::_wc4bp_groups( $str ) );
+	public static function echo_esc_attr_translation( $str ) {
+		echo esc_attr( self::translation( $str ) );
 	}
 }

@@ -1,7 +1,7 @@
 <div id="wc4bp_item_<?php echo esc_attr( $group->group_id ); ?>" data-taxonomy="" class="woocommerce_attribute wc-metabox closed wc4bp-group-item" rel="0" group_name="<?php echo esc_attr( $group->group_name ); ?>" group_id="<?php echo esc_attr( $group->group_id ); ?>">
     <h3>
-        <a group_id="<?php echo esc_attr( $group->group_id ); ?>" href="#" class="remove_row delete wc4bp-group-group-remove"><?php wc4bp_groups_manager::esc_attr_e_wc4bp_groups('Remove') ?></a>
-        <div class="handlediv" title="<?php wc4bp_groups_manager::esc_attr_e_wc4bp_groups('Click to toggle') ?>"></div>
+        <a group_id="<?php echo esc_attr( $group->group_id ); ?>" href="#" class="remove_row delete wc4bp-group-group-remove"><?php wc4bp_groups_manager::echo_esc_attr_translation('Remove') ?></a>
+        <div class="handlediv" title="<?php wc4bp_groups_manager::echo_esc_attr_translation('Click to toggle') ?>"></div>
         <strong class="attribute_name"><?php echo esc_html( $group->group_name ); ?></strong>
     </h3>
     <div class="woocommerce_attribute_data wc-metabox-content">
@@ -9,11 +9,11 @@
 			<?php
 			$membership_level = array(
 				'id'      => '_membership_level',
-				'label'   => wc4bp_groups_manager::_wc4bp_groups( "Membership level:" ),
+				'label'   => wc4bp_groups_manager::translation( "Membership level:" ),
 				'options' => array(
-					'1' => wc4bp_groups_manager::_wc4bp_groups( "Moderator" ),
-					'2' => wc4bp_groups_manager::_wc4bp_groups( "Admin" ),
-					'0' => wc4bp_groups_manager::_wc4bp_groups( "Normal" ),
+					'1' => wc4bp_groups_manager::translation( "Moderator" ),
+					'2' => wc4bp_groups_manager::translation( "Admin" ),
+					'0' => wc4bp_groups_manager::translation( "Normal" ),
 				)
 			);
 			
@@ -25,10 +25,10 @@
 			
 			$is_optional = array(
 				'id'      => '_membership_optional',
-				'label'   => wc4bp_groups_manager::_wc4bp_groups( "Is optional:" ),
+				'label'   => wc4bp_groups_manager::translation( "Is optional:" ),
 				'options' => array(
-					'1' => wc4bp_groups_manager::_wc4bp_groups( "Yes" ),
-					'0' => wc4bp_groups_manager::_wc4bp_groups( "No" ),
+					'1' => wc4bp_groups_manager::translation( "Yes" ),
+					'0' => wc4bp_groups_manager::translation( "No" ),
 				)
 			);
 			if ( isset( $group->is_optional ) ) {
