@@ -69,8 +69,6 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 			new wc4bp_groups_required();
 			
 			if ( wc4bp_groups_required::is_buddypress_active() && wc4bp_groups_required::is_woocommerce_active() && wc4bp_groups_required::is_wc4bp_active() ) {
-
-//				self::$freemius = $this->wc4bp_fs();
 				
 				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_manager.php';
 				new wc4bp_groups_manager();

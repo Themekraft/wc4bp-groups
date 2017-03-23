@@ -138,7 +138,8 @@ class wc4bp_groups_woo {
 		
 		if ( ! empty( $groups_to_show ) ) {
 			$this->output_checkbox( array(
-				'id'      => '_bp_group',
+				'id'      => '_bp_group[]',
+				'wrapper_class'      => '_bp_group_field',
 				'label'   => _wc4bp_groups( "Select BuddyPress Group" ),
 				'options' => $groups_to_show,
 			) );

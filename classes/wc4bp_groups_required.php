@@ -57,21 +57,25 @@ class wc4bp_groups_required {
 	
 	public static function is_woocommerce_active() {
 		self::load_plugins_dependency();
+		
 		return is_plugin_active( 'woocommerce/woocommerce.php' );
 	}
 	
 	public static function is_buddypress_active() {
 		self::load_plugins_dependency();
+		
 		return is_plugin_active( 'buddypress/bp-loader.php' );
 	}
 	
 	public static function is_wc4bp_active() {
 		self::load_plugins_dependency();
+		
 		return is_plugin_active( 'wc4bp/wc4bp-basic-integration.php' );
 	}
 	
 	public static function is_current_active() {
 		self::load_plugins_dependency();
+		
 		return is_plugin_active( 'wc4bp-groups/wc4bp-groups.php' );
 	}
 	
@@ -91,10 +95,10 @@ class wc4bp_groups_required {
 				'required' => true,
 			),
 			array(
-				'name'             => 'WC4BP -> Checkout Manager',
-				'slug'             => 'wc4bp',
-				'version'          => '2.5',
-				'required'         => true,
+				'name'     => 'WC4BP -> Checkout Manager',
+				'slug'     => 'wc4bp',
+				'version'  => '2.5',
+				'required' => true,
 			),
 		);
 		
