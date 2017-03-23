@@ -52,19 +52,13 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		 * Initialize the plugin.
 		 */
 		public function __construct() {
-			define( 'WC4BP_GROUP_BASE_NAME', plugin_basename( __FILE__ ) );
-			define( 'WC4BP_GROUP_BASE_FILE', trailingslashit( wp_normalize_path( plugin_dir_path( __FILE__ ) ) ) . 'wc4bp-groups.php' );
-			define( 'WC4BP_GROUP_URLPATH', plugin_dir_url( __FILE__ ) );
-			define( 'WC4BP_GROUP_CSS_PATH', WC4BP_GROUP_URLPATH . 'assets/css/' );
-			define( 'WC4BP_GROUP_JS_PATH', WC4BP_GROUP_URLPATH . 'assets/js/' );
+			define( 'WC4BP_GROUP_CSS_PATH', plugin_dir_url( __FILE__ ) . 'assets/css/' );
+			define( 'WC4BP_GROUP_JS_PATH', plugin_dir_url( __FILE__ ) . 'assets/js/' );
 			define( 'WC4BP_GROUP_VIEW_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR );
 			define( 'WC4BP_GROUP_CLASSES_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
-			define( 'WC4BP_GROUP_RESOURCES_PATH', WC4BP_GROUP_CLASSES_PATH . 'resources' . DIRECTORY_SEPARATOR );
 			
 			$this->load_plugin_textdomain();
-			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_override.php';
-			
-			require_once WC4BP_GROUP_RESOURCES_PATH . 'class-tgm-plugin-activation.php';
+			require_once WC4BP_GROUP_CLASSES_PATH . 'resources' . DIRECTORY_SEPARATOR . 'class-tgm-plugin-activation.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_required.php';
 			new wc4bp_groups_required();
 			

@@ -37,7 +37,7 @@ class wc4bp_groups_woo {
 	 */
 	public function addProductOptionSection( $sections ) {
 		$sections[ wc4bp_groups_manager::getSlug() ] = array(
-			'label'  => _wc4bp_groups( 'WC4BP Groups' ),
+			'label'  => wc4bp_groups_manager::_wc4bp_groups( 'WC4BP Groups' ),
 			'target' => wc4bp_groups_manager::getSlug(),
 			'class'  => array(),
 		);
@@ -112,7 +112,7 @@ class wc4bp_groups_woo {
 			$this->output_checkbox( array(
 				'id'            => '_bp_group[]',
 				'wrapper_class' => '_bp_group_field',
-				'label'         => _wc4bp_groups( "Select BuddyPress Group" ),
+				'label'         => wc4bp_groups_manager::_wc4bp_groups( "Select BuddyPress Group" ),
 				'options'       => $groups_to_show,
 			) );
 			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
@@ -256,7 +256,7 @@ class wc4bp_groups_woo {
 				}
 				$groups_str  = implode( ', ', $groups_str );
 				$item_data[] = array(
-					'key'   => '<strong>' . _wc4bp_groups( "BuddyPress Group" ) . '</strong>',
+					'key'   => '<strong>' . wc4bp_groups_manager::_wc4bp_groups( "BuddyPress Group" ) . '</strong>',
 					'value' => $groups_str
 				);
 			}
