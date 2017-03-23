@@ -18,12 +18,14 @@ class wc4bp_groups_woo {
 		add_filter( 'woocommerce_product_data_tabs', array( $this, 'addProductOptionSection' ), 10, 1 );//Add section
 		add_action( 'woocommerce_product_data_panels', array( $this, 'addProductOptionPanelTab' ) );//Add Section Tab content
 		add_action( 'woocommerce_process_product_meta', array( $this, 'saveProductOptionsFields' ), 11, 2 );//Save option
-		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'add_field_to_product_page' ) ); //Add field to the product page
-		// filters for cart actions
-		add_filter( 'woocommerce_add_cart_item_data', array( $this, 'add_cart_item_data' ), 10, 2 );
-		add_filter( 'woocommerce_get_cart_item_from_session', array( $this, 'get_cart_item_from_session' ), 10, 2 );
-		add_filter( 'woocommerce_get_item_data', array( $this, 'get_item_data' ), 10, 2 );
-		add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_meta' ), 10, 2 );
+		if ( bp_is_active( 'groups' ) ) {
+			add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'add_field_to_product_page' ) ); //Add field to the product page
+			// filters for cart actions
+			add_filter( 'woocommerce_add_cart_item_data', array( $this, 'add_cart_item_data' ), 10, 2 );
+			add_filter( 'woocommerce_get_cart_item_from_session', array( $this, 'get_cart_item_from_session' ), 10, 2 );
+			add_filter( 'woocommerce_get_item_data', array( $this, 'get_item_data' ), 10, 2 );
+			add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_meta' ), 10, 2 );
+		}
 	}
 	
 	/**
@@ -53,39 +55,7 @@ class wc4bp_groups_woo {
 		if ( ! empty( $groups_json ) ) {
 			$groups = json_decode( $groups_json );
 		}
-		?>
-
-        <div id="<?php echo wc4bp_groups_manager::getSlug(); ?>" class="panel woocommerce_options_panel wc-metaboxes-wrapper">
-
-            <div class="toolbar toolbar-top">
-				<?php $this->show_woo_tab_search_for_group(); ?>
-            </div>
-            <div class="<?php echo wc4bp_groups_manager::getSlug(); ?> wc4bp-group-container wc-metaboxes ui-sortable">
-				<?php
-				$added_groups = array();
-				if ( ! empty( $groups ) ) {
-					foreach ( $groups as $group ) {
-						$added_groups[] = $group->group_id;
-						$this->show_woo_tab_item_for_group( $post->ID, $group );
-					}
-				}
-				?>
-            </div>
-
-            <div class="toolbar wc4bp-bottom-toolbar">
-                <span class="expand-close">
-                    <a href="#" class="expand_all"><?php _e_wc4bp_groups( 'Expand' ); ?></a> / <a href="#" class="close_all"><?php _e_wc4bp_groups( 'Close' ); ?></a>
-                </span>
-            </div>
-            <input type="hidden" id="wc4bp_groups_existing_ids" value="<?php echo esc_attr( json_encode( $added_groups ) ); ?>">
-			<?php
-			woocommerce_wp_hidden_input( array(
-				'id'    => '_wc4bp_groups_json',
-				'class' => wc4bp_groups_manager::getSlug()
-			) );
-			?>
-        </div>
-		<?php
+		include WC4BP_GROUP_VIEW_PATH . 'woo_tab_conatiner.php';
 	}
 	
 	private function show_woo_tab_search_for_group() {
@@ -104,15 +74,17 @@ class wc4bp_groups_woo {
 	 * @param $post
 	 */
 	public function saveProductOptionsFields( $post_id, $post ) {
-		$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
-		$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
-		if ( ! empty( $wc4bp_groups_json ) ) {
-			if ( $wc4bp_groups_json != $wc4bp_groups_json_old ) {
-				update_post_meta( $post_id, '_wc4bp_groups_json', esc_attr( $wc4bp_groups_json ) );
-			}
-		} else {
-			if ( ! empty( $wc4bp_groups_json_old ) ) {
-				delete_post_meta( $post_id, '_wc4bp_groups_json' );
+		if ( bp_is_active( 'groups' ) ) {
+			$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
+			$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
+			if ( ! empty( $wc4bp_groups_json ) ) {
+				if ( $wc4bp_groups_json != $wc4bp_groups_json_old ) {
+					update_post_meta( $post_id, '_wc4bp_groups_json', esc_attr( $wc4bp_groups_json ) );
+				}
+			} else {
+				if ( ! empty( $wc4bp_groups_json_old ) ) {
+					delete_post_meta( $post_id, '_wc4bp_groups_json' );
+				}
 			}
 		}
 	}
@@ -138,17 +110,17 @@ class wc4bp_groups_woo {
 		
 		if ( ! empty( $groups_to_show ) ) {
 			$this->output_checkbox( array(
-				'id'      => '_bp_group[]',
-				'wrapper_class'      => '_bp_group_field',
-				'label'   => _wc4bp_groups( "Select BuddyPress Group" ),
-				'options' => $groups_to_show,
+				'id'            => '_bp_group[]',
+				'wrapper_class' => '_bp_group_field',
+				'label'         => _wc4bp_groups( "Select BuddyPress Group" ),
+				'options'       => $groups_to_show,
 			) );
 			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
 		}
 	}
 	
 	/**
-	 * Output a radio input box.
+	 * Output a checkbox input box.
 	 *
 	 * @param array $field
 	 */
