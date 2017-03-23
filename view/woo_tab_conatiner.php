@@ -1,7 +1,7 @@
 <div id="<?php echo wc4bp_groups_manager::getSlug(); ?>" class="panel woocommerce_options_panel wc-metaboxes-wrapper">
 	<?php if ( ! bp_is_active( 'groups' ) ): ?>
 		<div id="message" class="inline notice woocommerce-message">
-			<p><?php wc4bp_groups_manager::_e_wc4bp_groups( 'BuddyPress group need to be activated!.' ); ?></p>
+			<p><?php wc4bp_groups_manager::_e_wc4bp_groups( 'You need to Activate User Groups in the BuddyPress Settings.' ); ?></p>
 		</div>
 	<?php else: ?>
 		<div class="toolbar toolbar-top">
