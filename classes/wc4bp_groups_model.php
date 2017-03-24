@@ -12,14 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class wc4bp_groups_handler {
+class wc4bp_groups_model {
 	
 	public function __construct() {
 		add_action( "wp_ajax_wc4bp_group_search", array( $this, "group_search" ) );
 		add_action( "wp_ajax_wc4bp_get_group_view", array( $this, "get_group_view" ) );
-//		add_action( "wp_ajax_wc4bp_group_add", array( $this, "group_add_view" ) );
-//		add_action( "wp_ajax_wc4bp_group_remove", array( $this, "group_remove_view" ) );
-//		add_action( "wp_ajax_wc4bp_groups_save", array( $this, "groups_save" ) );
 	}
 	
 	/**
@@ -29,7 +26,7 @@ class wc4bp_groups_handler {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
 		$groups_founded = array();
 		if ( ! empty( $_GET['term'] ) ) {
-			$groups = BP_Groups_Group::search_groups( wc_clean( stripslashes( $_GET['term'] ) ) );
+			$groups = $this->search_groups( wc_clean( stripslashes( $_GET['term'] ) ) );
 			if ( ! empty( $groups['groups'] ) ) {
 				foreach ( $groups['groups'] as $group_id ) {
 					$group                                 = new BP_Groups_Group( $group_id->group_id );
@@ -41,12 +38,44 @@ class wc4bp_groups_handler {
 	}
 	
 	/**
+	 * Get a list of groups, filtered by a search string, including the hidden groups.
+	 *
+	 *
+	 * @param string $filter Search term. Matches against 'name' and
+	 *                             'description' fields.
+	 *
+	 * @return array {
+	 * @type array $groups Array of matched and paginated group IDs,
+	 * @type int $total Total count of groups matching the query.
+	 * }
+	 */
+	public function search_groups( $filter ) {
+		$args = array(
+			'search_terms' => $filter,
+			'show_hidden'  => true
+		);
+		
+		$groups = BP_Groups_Group::get( $args );
+		
+		// Modify the results to match the old format.
+		$paged_groups = array();
+		$i            = 0;
+		foreach ( $groups['groups'] as $group ) {
+			$paged_groups[ $i ]           = new stdClass;
+			$paged_groups[ $i ]->group_id = $group->id;
+			$i ++;
+		}
+		
+		return array( 'groups' => $paged_groups, 'total' => $groups['total'] );
+	}
+	
+	/**
 	 * Return the view to add a group
 	 */
 	public function get_group_view() {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
 		if ( ! empty( $_POST['group'] ) && wp_doing_ajax() ) {
-			$group_request     = array_map('esc_attr', $_POST['group'] );
+			$group_request     = array_map( 'esc_attr', $_POST['group'] );
 			$group             = new stdClass();
 			$group->group_id   = $group_request['id'];
 			$group->group_name = $group_request['text'];
