@@ -13,11 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class wc4bp_groups_woo {
-	
 	public function __construct() {
-		add_filter( 'woocommerce_product_data_tabs', array( $this, 'addProductOptionSection' ), 10, 1 );//Add section
-		add_action( 'woocommerce_product_data_panels', array( $this, 'addProductOptionPanelTab' ) );//Add Section Tab content
-		add_action( 'woocommerce_process_product_meta', array( $this, 'saveProductOptionsFields' ), 11, 2 );//Save option
+		add_filter( 'woocommerce_product_data_tabs', array( $this, 'addProductOptionSection' ), 10, 1 ); // Add section
+		add_action( 'woocommerce_product_data_panels', array( $this, 'addProductOptionPanelTab' ) );// Add Section Tab content
+		add_action( 'woocommerce_process_product_meta', array( $this, 'saveProductOptionsFields' ), 11, 2 ); // Save option
 		if ( bp_is_active( 'groups' ) ) {
 			add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'add_field_to_product_page' ) ); //Add field to the product page
 			// filters for cart actions
@@ -27,7 +26,6 @@ class wc4bp_groups_woo {
 			add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_meta' ), 10, 2 );
 		}
 	}
-	
 	/**
 	 * Add new tab to general product tabs
 	 *
@@ -249,6 +247,7 @@ class wc4bp_groups_woo {
 		if ( isset( $cart_item['_bp_group'] ) ) {
 			$groups = $this->get_product_groups( $cart_item['product_id'] );
 			if ( ! empty( $groups ) ) {
+				$groups_str = array();
 				foreach ( $groups as $group ) {
 					if ( in_array( $group->group_id, $cart_item['_bp_group'] ) ) {
 						$groups_str[] = $group->group_name;
