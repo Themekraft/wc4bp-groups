@@ -93,8 +93,15 @@ class wc4bp_groups_model {
 	 * credits go to boon georges. This function is coppyed from the group management plugin.
 	 *
 	 * @package wc4bp_groups
+	 *
+	 * @param $group_id
+	 * @param bool $user_id
+	 * @param int $is_admin
+	 * @param int $is_mod
+	 *
+	 * @return bool
 	 */
-	public static function add_member_to_group( $group_id, $user_id = false ) {
+	public static function add_member_to_group( $group_id, $user_id = false, $is_admin = 0, $is_mod = 0 ) {
 		global $bp;
 		if ( ! $user_id ) {
 			$user_id = $bp->loggedin_user->id;
@@ -118,7 +125,8 @@ class wc4bp_groups_model {
 		$new_member->group_id      = $group_id;
 		$new_member->user_id       = $user_id;
 		$new_member->inviter_id    = 0;
-		$new_member->is_admin      = 1;
+		$new_member->is_admin      = $is_admin;
+		$new_member->is_mod        = $is_mod;
 		$new_member->user_title    = '';
 		$new_member->date_modified = gmdate( "Y-m-d H:i:s" );
 		$new_member->is_confirmed  = 1;

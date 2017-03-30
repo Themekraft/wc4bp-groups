@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class wc4bp_groups_woo {
+	
 	public function __construct() {
 		add_filter( 'woocommerce_product_data_tabs', array( $this, 'addProductOptionSection' ), 10, 1 ); // Add section
 		add_action( 'woocommerce_product_data_panels', array( $this, 'addProductOptionPanelTab' ) );// Add Section Tab content
@@ -24,8 +25,139 @@ class wc4bp_groups_woo {
 			add_filter( 'woocommerce_get_cart_item_from_session', array( $this, 'get_cart_item_from_session' ), 10, 2 );
 			add_filter( 'woocommerce_get_item_data', array( $this, 'get_item_data' ), 10, 2 );
 			add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_meta' ), 10, 2 );
+			
+			add_action( 'woocommerce_order_status_completed', array( $this, 'on_payment_complete' ), 10, 1 );
+			
+			add_filter( 'woocommerce_order_items_meta_display', array( $this, 'on_order_items_meta_display' ), 10, 2 ); //Process the item meta to show in the order in the front
+			add_filter( 'woocommerce_hidden_order_itemmeta', array( $this, 'hidden_order_itemmeta' ), 10, 1 ); //Hide the custom meta to avoid show it as code
+			add_action( 'woocommerce_after_order_itemmeta', array( $this, 'add_after_oder_item_meta' ), 10, 3 ); //Add the custom meta to the line item in the backend
 		}
 	}
+	
+	/**
+	 * Hide the custom meta to avoid show it as code
+	 *
+	 * @param $hidden_metas
+	 *
+	 * @return array
+	 */
+	public function hidden_order_itemmeta( $hidden_metas ) {
+		return array_merge( $hidden_metas, array( 'wc4bp_groups' ) );
+	}
+	
+	/**
+	 * Add the custom meta to the line item in the backend
+	 *
+	 * @param $item_id
+	 * @param $item
+	 * @param $_product
+	 */
+	public function add_after_oder_item_meta( $item_id, $item, $_product ) {
+		if ( isset( $item['wc4bp_groups'] ) ) {
+			$groups = json_decode( $item['wc4bp_groups'], true );
+			echo '<table cellspacing="0" class="display_meta">';
+			$final_groups = array();
+			foreach ( $groups as $group_id => $group_name ) {
+				$option_group   = $this->get_product_group( absint( $_product->id ), $group_id );
+				$final_groups[] = $option_group;
+			}
+			$not_optional_groups = $this->get_product_groups_not_optional( absint( $_product->id ) ); //Process the not optional groups set in the product
+			if ( ! empty( $not_optional_groups ) ) {
+				$final_groups = array_merge( $final_groups, $not_optional_groups );
+			}
+			
+			foreach ( $final_groups as $group_id => $group ) {
+				$group_obj = new BP_Groups_Group( $group->group_id );
+				$link  = bp_get_group_permalink( $group_obj );
+				$role  = '';
+				if ( $group->member_type == '1' ) {
+					$role = '(' . wc4bp_groups_manager::translation( "Moderator" ) . ')';
+				} else if ( $group->member_type == '2' ) {
+					$role = '(' . wc4bp_groups_manager::translation( "Admin" ) . ')';
+				}
+				$optional ='';
+				if ( $group->is_optional == '1' ) {
+					$optional = '(' . wc4bp_groups_manager::translation( "Optional" ) . ')';
+				}
+				$groups_str[] = '<a target="_blank" href="' . esc_attr( $link ) . '" >' . $group->group_name . ' ' . $role . ' ' . $optional . ' </a>';
+			}
+			
+			echo '<tr><th>' . wc4bp_groups_manager::translation( "BuddyPress Group(s)" ) . ':</th><td>' . $groups_str = implode( ', ', $groups_str ) . '</td></tr>';
+			echo '</table>';
+		}
+	}
+	
+	/**
+	 * Process the item meta to show in the order in the front
+	 *
+	 * @param $output
+	 * @param WC_Order_Item_Meta $itemMeta
+	 *
+	 * @return mixed
+	 */
+	public function on_order_items_meta_display( $output, $itemMeta ) {
+		$meta_list = array();
+		foreach ( $itemMeta->get_formatted() as $meta ) {
+			if ( $meta['key'] == 'wc4bp_groups' ) {
+				$groups      = json_decode( $meta['value'], true );
+				$groups_str  = implode( ', ', $groups );
+				$meta_list[] = '
+						<dt class="variation-' . sanitize_html_class( sanitize_text_field( $meta['key'] ) ) . '">' . wc4bp_groups_manager::translation( "BuddyPress Group(s)" ) . ':</dt>
+						<dd class="variation-' . sanitize_html_class( sanitize_text_field( $meta['key'] ) ) . '">' . wp_kses_post( wpautop( $groups_str ) ) . '</dd>
+					';
+			} else {
+				$meta_list[] = '
+						<dt class="variation-' . sanitize_html_class( sanitize_text_field( $meta['key'] ) ) . '">' . wp_kses_post( $meta['label'] ) . ':</dt>
+						<dd class="variation-' . sanitize_html_class( sanitize_text_field( $meta['key'] ) ) . '">' . wp_kses_post( wpautop( make_clickable( $meta['value'] ) ) ) . '</dd>
+					';
+			}
+		}
+		$output = '<dl class="variation">' . implode( '', $meta_list ) . '</dl>';
+		
+		return $output;
+	}
+	
+	public function on_payment_complete( $order_id ) {
+		if ( bp_is_active( 'groups' ) ) {
+			$order    = new WC_Order( $order_id );
+			$customer = $order->get_user();
+			if ( $customer !== false ) {
+				$items = $order->get_items();
+				/** @var WC_Product $item */
+				foreach ( $items as $key => $item ) {
+					$product      = $order->get_product_from_item( $item );
+					$final_groups = array();
+					if ( isset( $item['wc4bp_groups'] ) ) { //Process all selected groups by the user when by the product
+						$groups = json_decode( $item['wc4bp_groups'], true );
+						foreach ( $groups as $group_id => $group_name ) {
+							$option_group              = $this->get_product_group( absint( $product->id ), $group_id );
+							$final_groups[ $group_id ] = $option_group;
+						}
+					}
+					$not_optional_groups = $this->get_product_groups_not_optional( absint( $product->id ) ); //Process the not optional groups set in the product
+					if ( ! empty( $not_optional_groups ) ) {
+						$final_groups = array_merge( $final_groups, $not_optional_groups );
+					}
+					
+					foreach ( $final_groups as $group_id => $group ) { //Process all groups related to the current item
+						$is_admin = 0;
+						$is_mod   = 0;
+						if ( $group->member_type == '2' ) {
+							$is_admin = 1;
+							$is_mod   = 0;
+						} else if ( $group->member_type == '1' ) {
+							$is_admin = 0;
+							$is_mod   = 1;
+						}
+						wc4bp_groups_model::add_member_to_group( $group->group_id, $customer->ID, $is_admin, $is_mod );
+					}
+				}
+			} else {
+				//TODO run an action when the guest is buying
+			}
+		}
+	}
+	
 	/**
 	 * Add new tab to general product tabs
 	 *
@@ -110,7 +242,7 @@ class wc4bp_groups_woo {
 			$this->output_checkbox( array(
 				'id'            => '_bp_group[]',
 				'wrapper_class' => '_bp_group_field',
-				'label'         => wc4bp_groups_manager::translation( "Select BuddyPress Group" ),
+				'label'         => wc4bp_groups_manager::translation( "Select BuddyPress Group(s)" ),
 				'options'       => $groups_to_show,
 			) );
 			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
@@ -211,7 +343,7 @@ class wc4bp_groups_woo {
 	 * @return array
 	 */
 	public function get_item_data( $item_data, $cart_item ) {
-		$item_data = $this->add_data_as_meta( $item_data, $cart_item );
+		$item_data = $this->add_data_as_meta( $item_data, $cart_item, true );
 		
 		return $item_data;
 	}
@@ -240,24 +372,32 @@ class wc4bp_groups_woo {
 	 *
 	 * @param $item_data
 	 * @param $cart_item
+	 * @param bool $output
 	 *
 	 * @return array
 	 */
-	private function add_data_as_meta( $item_data, $cart_item ) {
+	private function add_data_as_meta( $item_data, $cart_item, $output = false ) {
 		if ( isset( $cart_item['_bp_group'] ) ) {
 			$groups = $this->get_product_groups( $cart_item['product_id'] );
 			if ( ! empty( $groups ) ) {
 				$groups_str = array();
 				foreach ( $groups as $group ) {
 					if ( in_array( $group->group_id, $cart_item['_bp_group'] ) ) {
-						$groups_str[] = $group->group_name;
+						$groups_str[ $group->group_id ] = $group->group_name;
 					}
 				}
-				$groups_str  = implode( ', ', $groups_str );
-				$item_data[] = array(
-					'key'   => '<strong>' . wc4bp_groups_manager::translation( "BuddyPress Group" ) . '</strong>',
-					'value' => $groups_str
-				);
+				if ( $output ) {
+					$groups_str  = implode( ', ', $groups_str );
+					$item_data[] = array(
+						'key'   => '<strong>' . wc4bp_groups_manager::translation( "BuddyPress Group(s)" ) . '</strong>',
+						'value' => $groups_str
+					);
+				} else {
+					$item_data[] = array(
+						'key'   => 'wc4bp_groups',
+						'value' => json_encode( $groups_str )
+					);
+				}
 			}
 		}
 		
@@ -266,7 +406,7 @@ class wc4bp_groups_woo {
 	
 	
 	/**
-	 * Get the groups configuration associated to a product
+	 * Get the groups configured associated to a product
 	 *
 	 * @param $product_id
 	 *
@@ -285,4 +425,50 @@ class wc4bp_groups_woo {
 		
 		return $result;
 	}
+	
+	/**
+	 * Get the groups configured to a product not optionals
+	 *
+	 * @param $product_id
+	 *
+	 * @return array
+	 */
+	private function get_product_groups_not_optional( $product_id ) {
+		$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
+		$groups_json = html_entity_decode( $groups_json );
+		$result      = array();
+		if ( ! empty( $groups_json ) ) {
+			$groups = json_decode( $groups_json );
+			if ( is_array( $groups ) ) {
+				foreach ( $groups as $group ) {
+					if ( ! isset( $group->is_optional ) || $group->is_optional == '0' ) {
+						$result[ $group->group_id ] = $group;
+					}
+				}
+			}
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Get group save in the configuration by his id belong to product
+	 *
+	 * @param $product_id
+	 * @param $group_id
+	 *
+	 * @return bool|stdClass
+	 */
+	private function get_product_group( $product_id, $group_id ) {
+		$option_groups = $this->get_product_groups( $product_id );
+		foreach ( $option_groups as $option_group ) {
+			if ( $option_group->group_id == $group_id ) {
+				return $option_group;
+			}
+		}
+		
+		return false;
+	}
+	
+	
 }
