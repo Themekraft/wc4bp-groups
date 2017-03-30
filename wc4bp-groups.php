@@ -77,7 +77,6 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 						}
 					}
 					else{
-						//
 						add_action( 'admin_notices', array($this, 'admin_notice_need_pro') );
 					}
 				}
