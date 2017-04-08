@@ -50,7 +50,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @param $item_id
 	 * @param $item
-	 * @param $_product
+	 * @param WC_Product $_product
 	 */
 	public function add_after_oder_item_meta( $item_id, $item, $_product ) {
 		if ( isset( $item['wc4bp_groups'] ) ) {
@@ -58,10 +58,10 @@ class wc4bp_groups_woo {
 			echo '<table cellspacing="0" class="display_meta">';
 			$final_groups = array();
 			foreach ( $groups as $group_id => $group_name ) {
-				$option_group   = $this->get_product_group( absint( $_product->id ), $group_id );
+				$option_group   = $this->get_product_group( absint( $_product->get_id() ), $group_id );
 				$final_groups[] = $option_group;
 			}
-			$not_optional_groups = $this->get_product_groups_not_optional( absint( $_product->id ) ); //Process the not optional groups set in the product
+			$not_optional_groups = $this->get_product_groups_not_optional( absint( $_product->get_id() ) ); //Process the not optional groups set in the product
 			if ( ! empty( $not_optional_groups ) ) {
 				$final_groups = array_merge( $final_groups, $not_optional_groups );
 			}
@@ -130,11 +130,11 @@ class wc4bp_groups_woo {
 					if ( isset( $item['wc4bp_groups'] ) ) { //Process all selected groups by the user when by the product
 						$groups = json_decode( $item['wc4bp_groups'], true );
 						foreach ( $groups as $group_id => $group_name ) {
-							$option_group              = $this->get_product_group( absint( $product->id ), $group_id );
+							$option_group              = $this->get_product_group( absint( $product->get_id() ), $group_id );
 							$final_groups[ $group_id ] = $option_group;
 						}
 					}
-					$not_optional_groups = $this->get_product_groups_not_optional( absint( $product->id ) ); //Process the not optional groups set in the product
+					$not_optional_groups = $this->get_product_groups_not_optional( absint( $product->get_id() ) ); //Process the not optional groups set in the product
 					if ( ! empty( $not_optional_groups ) ) {
 						$final_groups = array_merge( $final_groups, $not_optional_groups );
 					}
