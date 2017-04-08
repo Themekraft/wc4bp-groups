@@ -1,4 +1,4 @@
-=== WooCommerce for Buddypress Groups===
+=== WooCommerce for Buddypress Groups ===
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: WP 4.0

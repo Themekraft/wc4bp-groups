@@ -1,38 +1,34 @@
 [![Build Status](https://travis-ci.org/Themekraft/wc4bp-groups.svg?branch=master)](https://travis-ci.org/Themekraft/wc4bp-groups)
 
-## WooCommerce for Buddypress
+## WooCommerce for Buddypress Groups
 Contributors: themekraft, svenl77, gfirem
 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WooCommerce for BuddyPress - Shop solution for your BuddyPress community. Integrates a WooCommerce installation with a BuddyPress social network.
+WooCommerce for Buddypress Groups - Integrate Buddypress Groups with Woocommerce
 
 ## Description
 
-Takes a WooCommerce installation and moves all shopping cart and checkout pages into a users BuddyPress profile.
+Takes a WooCommerce Product to handle the membership of Woocommerce Customer into existing Buddypress Groups.
+
+Requirements
+This addon need the WC4BP -> WooCommerce BuddyPress Integration with the Professional Plan.
 
 Settings managing (for both reviews and purchases)
-Posting using a special extra activity_type for reviews and purchases status updates (like: "[user] has just wrote a [review] on [HTC One S Grey]", where words in square brackets are links to appropriate places).
+To add new Group membership to Product you need to add it and set the option, this is possible from the WC4BP Groups Tabs (This tab is only available is BP Groups is enabled).
 
-Make all products a user bought available under his profile shop "history".
+Options for each Group inside the WC4BP Group Tab in the Product page:
+Membership level: This is the level of the new user inside the Group, can be Moderator, Admin or Normal.
+Is Optional: If you select Yes then the user have possibility to chose if they want to belong to the Group, if you select No the user don't see the options to chose the groups and automatically it will be add to the group with the membership level was configured.
 
-It integrates the WooCommerce with BuddyPress in the profile pages.
-Checkout, member data and payment history are available in the profile.
+How to relate the product to groups.
+You go to the WC4BP Groups tab and use the search tool. Find the desire group and press add. Is possible to add the hidden groups and multiples groups at the same time.
 
-It synchronizes all WooCommerce data with your BuddyPress.
-If you register a new account via the checkout or add data like your billing address etc. the plugin will handle all the communication between WooCommerce and BuddyPress and keep the data synchronized.
-All fields like shipping Address etc will be shown in you user edit profile section.
+The checkout process.
+Whe a product with a relation with BuddyPress Group change his status to complete the plugins come to the action to make the magic and assign the user to the the existing groups with the membership level.
 
-Fallback save
-If you turn off BuddyPress for some reason, or the user don't want to become a member the plugin falls back to the regular WooCommerce pages.
-
-Easy to use:
-No configuration needed. Just activate. That's it!
-
-Installation:
-The installation is very simple:
-Just activate the plugin and it will work. There are no admin options needed.
+Easy to use!
 
 ### Installation
 1. Download the plugin
@@ -41,16 +37,10 @@ Just activate the plugin and it will work. There are no admin options needed.
 4. Done... No options available!
 
 ### Frequently Asked Questions
-
-#### Why no options?
-
-Because we don't need any. Woocommerce takes care of that. But maybe later...
+Feel free to ask, i will include here.
 
 ### Languages
 * English
-* German
-
 
 ### Changelog
-
-2.6 first public version
+1.0.0 first public version
