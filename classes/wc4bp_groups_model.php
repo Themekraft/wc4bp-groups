@@ -74,15 +74,17 @@ class wc4bp_groups_model {
 	 */
 	public function get_group_view() {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
-		if ( ! empty( $_POST['group'] ) && wp_doing_ajax() ) {
-			$group_request     = array_map( 'esc_attr', $_POST['group'] );
-			$group             = new stdClass();
-			$group->group_id   = $group_request['id'];
-			$group->group_name = $group_request['text'];
-			ob_start();
-			include WC4BP_GROUP_VIEW_PATH . 'woo_tab_item.php';
-			$str = ob_get_clean();
-			echo "$str";
+		if ( ! empty( $_POST['group'] ) && wp_doing_ajax() && is_string( $_POST['group'] ) ) {
+			$data = json_decode( stripslashes( $_POST['group'] ) );
+			if ( is_object( $data ) ) {
+				$group             = new stdClass();
+				$group->group_id   = esc_attr( $data->id );
+				$group->group_name = esc_attr( $data->text );
+				ob_start();
+				include WC4BP_GROUP_VIEW_PATH . 'woo_tab_item.php';
+				$str = ob_get_clean();
+				echo "$str";
+			}
 		}
 		
 		die();

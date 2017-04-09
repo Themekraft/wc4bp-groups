@@ -46,9 +46,7 @@ jQuery(function ($) {
 	}
 
 	try {
-
 		$(document.body)
-
 			.on('wc-enhanced-select-init', function () {
 				$(':button.add_groups').filter(':not(.enhanced)').each(function () {
 					$(this).click(function () {
@@ -153,16 +151,16 @@ jQuery(function ($) {
 						return jQuery(this).attr('group_id');
 					}).get();
 					$.each(searched, function (index, value) {
-						var exist = false;
+						var exist = false, current_group = { id: value['id'], text: value['text']};
 						$.each(existing, function (i, v) {
-							if (value['id'] == v) {
+							if (current_group['id'] === v) {
 								exist = true;
 								jQuery('#wc4bp_item_' + v).addClass('wc4bp-group-error');
 								return false;
 							}
 						});
 						if (!exist) {
-							insert_container(value);
+							insert_container(current_group);
 						}
 					});
 				}
@@ -176,10 +174,10 @@ jQuery(function ($) {
 				jQuery(".wc4bp-group-loading").attr('style', 'display:inline-block');
 				jQuery.post(wc4bp_groups.ajax_url, {
 					'action': 'wc4bp_get_group_view',
-					'group': item,
+					'group': JSON.stringify(item),
 					'security': wc4bp_groups.search_groups_nonce
 				}, function (data) {
-					if (data || data == '0') {
+					if (data || data === '0') {
 						container.append(data);
 					}
 					else {
