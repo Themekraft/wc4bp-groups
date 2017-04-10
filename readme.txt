@@ -3,7 +3,7 @@ Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: WP 4.0
 Tested up to: WP 4.7.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,4 +78,8 @@ Feel free to ask, i will include here.
 
 == Changelog ==
 
-1.0.0 first public version
+= 1.0.1 =
+* update freemius to the correct plugin id and public key
+
+= 1.0.0 =
+* first public version
