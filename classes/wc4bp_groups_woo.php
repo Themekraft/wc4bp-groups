@@ -29,6 +29,7 @@ class wc4bp_groups_woo {
 			add_action( 'woocommerce_order_status_completed', array( $this, 'on_payment_complete' ), 10, 1 );
 			
 			add_filter( 'woocommerce_order_items_meta_display', array( $this, 'on_order_items_meta_display' ), 10, 2 ); //Process the item meta to show in the order in the front
+			add_filter( 'woocommerce_display_item_meta', array( $this, 'on_display_items_meta' ), 10, 3 ); //Process the item meta to show in the order in the front
 			add_filter( 'woocommerce_hidden_order_itemmeta', array( $this, 'hidden_order_itemmeta' ), 10, 1 ); //Hide the custom meta to avoid show it as code
 			add_action( 'woocommerce_after_order_itemmeta', array( $this, 'add_after_oder_item_meta' ), 10, 3 ); //Add the custom meta to the line item in the backend
 		}
@@ -49,7 +50,7 @@ class wc4bp_groups_woo {
 	 * Add the custom meta to the line item in the backend
 	 *
 	 * @param $item_id
-	 * @param $item
+	 * @param WC_Order_Item_Product $item
 	 * @param WC_Product $_product
 	 */
 	public function add_after_oder_item_meta( $item_id, $item, $_product ) {
@@ -68,14 +69,14 @@ class wc4bp_groups_woo {
 			
 			foreach ( $final_groups as $group_id => $group ) {
 				$group_obj = new BP_Groups_Group( $group->group_id );
-				$link  = bp_get_group_permalink( $group_obj );
-				$role  = '';
+				$link      = bp_get_group_permalink( $group_obj );
+				$role      = '';
 				if ( $group->member_type == '1' ) {
 					$role = '(' . wc4bp_groups_manager::translation( "Moderator" ) . ')';
 				} else if ( $group->member_type == '2' ) {
 					$role = '(' . wc4bp_groups_manager::translation( "Admin" ) . ')';
 				}
-				$optional ='';
+				$optional = '';
 				if ( $group->is_optional == '1' ) {
 					$optional = '(' . wc4bp_groups_manager::translation( "Optional" ) . ')';
 				}
@@ -115,6 +116,36 @@ class wc4bp_groups_woo {
 		$output = '<dl class="variation">' . implode( '', $meta_list ) . '</dl>';
 		
 		return $output;
+	}
+	
+	/**
+	 * Process the item meta to show in the thank you page
+	 *
+	 * @param String $html
+	 * @param WC_Order_Item_Product $item
+	 * @param array $args
+	 *
+	 * @return mixed
+	 */
+	public function on_display_items_meta( $html, $item, $args ) {
+		$strings = array();
+		foreach ( $item->get_formatted_meta_data() as $meta_id => $meta ) {
+			if ( $meta->key == 'wc4bp_groups' ) {
+				$groups     = json_decode( $meta->value, true );
+				$groups_str = implode( ', ', $groups );
+				$value      = $args['autop'] ? wp_kses_post( $groups_str ) : wp_kses_post( $groups_str );
+				$strings[]  = '<strong class="wc-item-meta-label">' . wc4bp_groups_manager::translation( "BuddyPress Group(s)" ) . ':</strong> ' . $value;
+			} else {
+				$value     = $args['autop'] ? wp_kses_post( wpautop( make_clickable( $meta->display_value ) ) ) : wp_kses_post( make_clickable( $meta->display_value ) );
+				$strings[] = '<strong class="wc-item-meta-label">' . wp_kses_post( $meta->display_key ) . ':</strong> ' . $value;
+			}
+		}
+		
+		if ( $strings ) {
+			$html = $args['before'] . implode( $args['separator'], $strings ) . $args['after'];
+		}
+		
+		return $html;
 	}
 	
 	public function on_payment_complete( $order_id ) {
