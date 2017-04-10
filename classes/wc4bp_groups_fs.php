@@ -33,10 +33,10 @@ class wc4bp_groups_fs {
 			require_once dirname( __FILE__ ) . '/resources/freemius/start.php';
 			
 			$wc4bp_groups_fs = fs_dynamic_init( array(
-				'id'                  => '831',
+				'id'                  => '971',
 				'slug'                => 'wc4bp-groups',
 				'type'                => 'plugin',
-				'public_key'          => 'pk_2d2829cb8c200894712200553cf86',
+				'public_key'          => 'pk_40db7d3bed7b1c44c5aab97ef5782',
 				'is_premium'          => false,
 				'has_premium_version' => false,
 				'has_paid_plans'      => false,
