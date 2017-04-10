@@ -2,8 +2,8 @@
 /**
  * Plugin Name: WC4BP -> Groups
  * Plugin URI:  http://themekraft.com/store/woocommerce-buddypress-integration-wordpress-plugin/
- * Description: Handle a WooCommerce installation with a BuddyPress social network
- * Author:      WC4BP Integration Dev Team ;)
+ * Description: WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce. Ideal for subscription and membership sites such as premium support.
+ * Author:      ThemeKraft
  * Version:     1.0.0
  * Licence:     GPLv3
  * Text Domain: wc4bp

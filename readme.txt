@@ -1,4 +1,4 @@
-=== WooCommerce for Buddypress Groups ===
+=== WC4BP -> Groups ===
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: WP 4.0
@@ -7,30 +7,62 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WooCommerce for Buddypress Groups - Integrate Buddypress Groups with Woocommerce
+WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce. Ideal for subscription and membership sites such as premium support.
 
 == Description ==
 
-Takes a WooCommerce Product to handle the membership of Woocommerce Customer into existing Buddypress Groups.
+The best solution to integrate BuddyPress Groups with WooCommerce which is perfect for any subscription and membership site or if you are offering premium support. The plugin takes a WooCommerce product to handle the membership of your WooCommerce customers into existing BuddyPress Groups.
 
-Requirements
-This addon need the WC4BP -> WooCommerce BuddyPress Integration with the Professional Plan.
+### Manage the group's membership in the product editing screen:
+1. Auto join members to groups after the payment is completed.
+2. Allow customers to select the related group(s) they would like to join that before adding the product to the cart.
 
-Settings managing (for both reviews and purchases)
-To add new Group membership to Product you need to add it and set the option, this is possible from the WC4BP Groups Tabs (This tab is only available is BP Groups is enabled).
+---
 
-Options for each Group inside the WC4BP Group Tab in the Product page:
-Membership level: This is the level of the new user inside the Group, can be Moderator, Admin or Normal.
-Is Optional: If you select Yes then the user have possibility to chose if they want to belong to the Group, if you select No the user don't see the options to chose the groups and automatically it will be add to the group with the membership level was configured.
+### Product Support
+Add your customers to a private support group after the purchase is complete and enable premium product support on your site.
 
-How to relate the product to groups.
-You go to the WC4BP Groups tab and use the search tool. Find the desire group and press add. Is possible to add the hidden groups and multiples groups at the same time.
+---
 
-The checkout process.
-Whe a product with a relation with BuddyPress Group change his status to complete the plugins come to the action to make the magic and assign the user to the the existing groups with the membership level.
+### Public and Private Groups
+* Let your customers select group membership for public and private groups around the product.
+* Auto join your customers to public and private groups which you can configure in the product editing screen.
 
-Easy to use!
+---
 
+### Membership Levels
+Predefine the membership Level ( Moderator, Admin, Normal ) that your user will become in the group.
+
+---
+
+### Easy setup from the product edit screen
+To add new group membership to your products you would need to add them and set your options. Have access to that from the WC4BP groups tab (this tab is only available if BP Groups is enabled).
+
+---
+
+### Options for each Group inside the WC4BP Group Tab in the Product page:
+* Membership level: A group member can be a moderator, admin or normal user.
+* Optional: If you select 'yes' then a user has the possibility to chose if they want to belong to the group, if you select 'no' the user is not able to see those options for choosing the groups and instead will be automatically added to the group with the membership level that was configured.
+
+---
+
+### How to relate the product to groups?
+You go to the WC4BP groups tabs and use the search tool. Find the desired group and press 'add'. It is possible to add the hidden and multiples groups at the same time.
+
+---
+
+== Frequently Asked Questions ==
+
+= Dependencies =
+This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpress.org/plugins/buddyforms/) with the Professional Plan.
+
+
+== Screenshots ==
+1. Product Edit Screen
+2. Product Single View
+3. In the Card
+4. Checkout Complete
+5. In the eMail
 
 == Installation ==
 1. Download the plugin
