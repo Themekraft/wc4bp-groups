@@ -22,7 +22,42 @@ class wc4bp_groups_fs {
 	protected static $instance = null;
 	
 	public function __construct() {
-		$this->start_freemius();
+		if ( $this->wc4bp_groups_fs_is_parent_active_and_loaded() ) {
+			// If parent already included, init add-on.
+			$this->wc4bp_groups_fs_init();
+		} else if ( $this->wc4bp_groups_fs_is_parent_active() ) {
+			// Init add-on only after the parent is loaded.
+			add_action( 'wc4bp_core_fs_loaded', array( $this, 'wc4bp_groups_fs_init' ) );
+		} else {
+			// Even though the parent is not activated, execute add-on for activation / uninstall hooks.
+			$this->wc4bp_groups_fs_init();
+		}
+	}
+	
+	public function wc4bp_groups_fs_is_parent_active_and_loaded() {
+		// Check if the parent's init SDK method exists.
+		return method_exists( 'WC4BP_Loader', 'wc4bp_fs' );
+	}
+	
+	public function wc4bp_groups_fs_is_parent_active() {
+		$active_plugins_basenames = get_option( 'active_plugins' );
+		
+		foreach ( $active_plugins_basenames as $plugin_basename ) {
+			if ( 0 === strpos( $plugin_basename, 'wc4bp/' ) ||
+			     0 === strpos( $plugin_basename, 'wc4bp-premium/' )
+			) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public function wc4bp_groups_fs_init() {
+		if ( $this->wc4bp_groups_fs_is_parent_active_and_loaded() ) {
+			// Init Freemius.
+			$this->start_freemius();
+		}
 	}
 	
 	public function start_freemius() {
@@ -46,6 +81,10 @@ class wc4bp_groups_fs {
 					'public_key' => 'pk_71d28f28e3e545100e9f859cf8554',
 					'name'       => 'WC4BP',
 				),
+//				'menu'                => array(
+//					'account' => false,
+//					'support' => false,
+//				),
 			) );
 		}
 		

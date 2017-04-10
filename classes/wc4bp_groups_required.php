@@ -70,7 +70,7 @@ class wc4bp_groups_required {
 	public static function is_wc4bp_active() {
 		self::load_plugins_dependency();
 		
-		return is_plugin_active( 'wc4bp/wc4bp-basic-integration.php' );
+		return ( is_plugin_active( 'wc4bp-premium/wc4bp-basic-integration.php' ) || is_plugin_active( 'wc4bp/wc4bp-basic-integration.php' ) );
 	}
 	
 	public static function is_current_active() {
