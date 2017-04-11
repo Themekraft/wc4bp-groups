@@ -3,7 +3,7 @@ Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: WP 4.0
 Tested up to: WP 4.7.3
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,22 +35,6 @@ Predefine the membership Level ( Moderator, Admin, Normal ) that your user will 
 
 ---
 
-### Easy setup from the product edit screen
-To add new group membership to your products you would need to add them and set your options. Have access to that from the WC4BP groups tab (this tab is only available if BP Groups is enabled).
-
----
-
-### Options for each Group inside the WC4BP Group Tab in the Product page:
-* Membership level: A group member can be a moderator, admin or normal user.
-* Optional: If you select 'yes' then a user has the possibility to chose if they want to belong to the group, if you select 'no' the user is not able to see those options for choosing the groups and instead will be automatically added to the group with the membership level that was configured.
-
----
-
-### How to relate the product to groups?
-You go to the WC4BP groups tabs and use the search tool. Find the desired group and press 'add'. It is possible to add the hidden and multiples groups at the same time.
-
----
-
 == Frequently Asked Questions ==
 
 = Dependencies =
@@ -77,6 +61,10 @@ Feel free to ask, i will include here.
 * English
 
 == Changelog ==
+
+= 1.0.2 =
+Added freemius addon support to start only when the parent is activated
+Implementing a function to process the item meta in the thank you page
 
 = 1.0.1 =
 * update freemius to the correct plugin id and public key
