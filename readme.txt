@@ -11,7 +11,7 @@ WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce
 
 == Description ==
 
-The best solution to integrate BuddyPress Groups with WooCommerce which is perfect for any subscription and membership site or if you are offering premium support. The plugin takes a WooCommerce product to handle the membership of your WooCommerce customers into existing BuddyPress Groups.
+The best solution to [Integrate BuddyPress Groups with WooCommerce](https://themekraft.com/create-groups-purchased-products-woocommerce/) which is perfect for any subscription and membership site or if you are offering premium support. The plugin takes a WooCommerce product to handle the membership of your WooCommerce customers into existing BuddyPress Groups.
 
 ### Manage the group's membership in the product editing screen:
 1. Auto join members to groups after the payment is completed.
@@ -52,13 +52,7 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 1. Download the plugin
 2. Upload to wp-content/plugins/
 3. Activate in the backend
-4. Done... No options available!
-
-== Frequently Asked Questions ==
-Feel free to ask, i will include here.
-
-== Languages ==
-* English
+4. Done ;)
 
 == Changelog ==
 
