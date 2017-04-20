@@ -80,6 +80,14 @@ class wc4bp_groups_required {
 	}
 	
 	public function setup_and_check() {
+		$wc4bp_slug = 'wc4bp';
+		if ( isset( $GLOBALS['wc4bp_loader'] ) ) {
+			/** @var WC4BP_Loader $wc4bp */
+			$wc4bp = $GLOBALS['wc4bp_loader'];
+			if ( $wc4bp::getFreemius()->has_paid_plan() ) {
+				$wc4bp_slug = 'wc4bp-premium';
+			}
+		}
 		// Create the required required_plugins array
 		$required_plugins = array(
 			array(
@@ -96,11 +104,12 @@ class wc4bp_groups_required {
 			),
 			array(
 				'name'     => 'WC4BP -> WooCommerce BuddyPress Integration',
-				'slug'     => 'wc4bp',
+				'slug'     => $wc4bp_slug,
 				'version'  => '2.5',
 				'required' => true,
 			),
 		);
+		
 		
 		$config = array(
 			'id'           => 'wc4bp-groups',                 // Unique ID for hashing notices for multiple instances of TGMPA.
