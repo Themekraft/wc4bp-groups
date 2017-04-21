@@ -3,7 +3,7 @@ Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: WP 4.0
 Tested up to: WP 4.7.3
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,12 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+
+= 1.0.3 =
+Improving the requirement library
+Updated Freemius
+Readme changes and plugin uri
+Multiple smaller fixes
 
 = 1.0.2 =
 Added freemius addon support to start only when the parent is activated
