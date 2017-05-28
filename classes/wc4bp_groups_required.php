@@ -73,6 +73,12 @@ class wc4bp_groups_required {
 		return ( is_plugin_active( 'wc4bp-premium/wc4bp-basic-integration.php' ) || is_plugin_active( 'wc4bp/wc4bp-basic-integration.php' ) );
 	}
 	
+	public static function is_woo_elem_active() {
+		self::load_plugins_dependency();
+		
+		return ( is_plugin_active( 'buddyforms-woocommerce-form-elements-premium/BuddyForms.php' ) || is_plugin_active( 'buddyforms-woocommerce-form-elements/loader.php' ) );
+	}
+	
 	public static function is_current_active() {
 		self::load_plugins_dependency();
 		
@@ -81,10 +87,10 @@ class wc4bp_groups_required {
 	
 	public function setup_and_check() {
 		$wc4bp_slug = 'wc4bp';
-		if ( isset( $GLOBALS['wc4bp_loader'] ) ) {
+		if ( ! empty( $GLOBALS['wc4bp_loader'] ) ) {
 			/** @var WC4BP_Loader $wc4bp */
 			$wc4bp = $GLOBALS['wc4bp_loader'];
-			if ( $wc4bp::getFreemius()->has_paid_plan() ) {
+			if ( ! empty( $wc4bp::getFreemius() ) && $wc4bp::getFreemius()->has_paid_plan() ) {
 				$wc4bp_slug = 'wc4bp-premium';
 			}
 		}

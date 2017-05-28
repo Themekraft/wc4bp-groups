@@ -63,10 +63,10 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_required.php';
 			new wc4bp_groups_required();
 			if ( wc4bp_groups_required::is_wc4bp_active() ) {
-				if ( isset( $GLOBALS['wc4bp_loader'] ) ) {
+				if ( ! empty( $GLOBALS['wc4bp_loader'] ) ) {
 					/** @var WC4BP_Loader $wc4bp */
 					$wc4bp = $GLOBALS['wc4bp_loader'];
-					if ( $wc4bp::getFreemius()->is_plan__premium_only( 'professional' ) ) {
+					if ( ! empty( $wc4bp::getFreemius() ) && $wc4bp::getFreemius()->is_plan__premium_only( 'professional' ) ) {
 						if ( wc4bp_groups_required::is_buddypress_active() && wc4bp_groups_required::is_woocommerce_active() ) {
 							
 							require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_manager.php';
@@ -76,17 +76,16 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 //				register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
 //				self::getFreemius()->add_action('after_uninstall', array($this, 'uninstall_cleanup') );
 						}
-					}
-					else{
-						add_action( 'admin_notices', array($this, 'admin_notice_need_pro') );
+					} else {
+						add_action( 'admin_notices', array( $this, 'admin_notice_need_pro' ) );
 					}
 				}
 			}
 		}
 		
 		public function admin_notice_need_pro() {
-			$class = 'notice notice-warning';
-			$message = __('Need WC4BP -> WooCommerce BuddyPress Integration Professional Plan to work!', 'wc4bp_groups');
+			$class   = 'notice notice-warning';
+			$message = __( 'Need WC4BP -> WooCommerce BuddyPress Integration Professional Plan to work!', 'wc4bp_groups' );
 			
 			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 		}

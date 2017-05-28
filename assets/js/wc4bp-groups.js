@@ -118,27 +118,23 @@ jQuery(function ($) {
 			})
 			.trigger('wc-enhanced-select-init');
 
-
 		function wc4bp_add_groups() {
 
-			function save_groups(e) {
-				var form = jQuery(this);
-				if (form) {
-					var json_handler = jQuery('#_wc4bp_groups_json');
-					var groups = jQuery('.wc4bp-group-item').map(function (i, v) {
-						var member_type = jQuery('#_membership_level', this),
-							optional = jQuery('#_membership_optional', this);
-						return {
-							'group_id': jQuery(this).attr('group_id'),
-							'group_name': jQuery(this).attr('group_name'),
-							'member_type': member_type.val(),
-							'is_optional': optional.val()
-						}
-					}).get();
+			function save_groups() {
+				var json_handler = jQuery('#_wc4bp_groups_json');
+				var groups = jQuery('.wc4bp-group-item').map(function (i, v) {
+					var member_type = jQuery('#_membership_level', this),
+						optional = jQuery('#_membership_optional', this);
+					return {
+						'group_id': jQuery(this).attr('group_id'),
+						'group_name': jQuery(this).attr('group_name'),
+						'member_type': member_type.val(),
+						'is_optional': optional.val()
+					}
+				}).get();
 
-					var json = JSON.stringify(groups);
-					json_handler.val(json);
-				}
+				var json = JSON.stringify(groups);
+				json_handler.val(json);
 			}
 
 			function add_group() {
@@ -151,7 +147,7 @@ jQuery(function ($) {
 						return jQuery(this).attr('group_id');
 					}).get();
 					$.each(searched, function (index, value) {
-						var exist = false, current_group = { id: value['id'], text: value['text']};
+						var exist = false, current_group = {id: value['id'], text: value['text']};
 						$.each(existing, function (i, v) {
 							if (current_group['id'] === v) {
 								exist = true;
@@ -202,16 +198,21 @@ jQuery(function ($) {
 
 			return {
 				init: function () {
-					if (document.getElementById('post') !== null) {
+					if (document.getElementById('post') !== null || document.getElementsByClassName('entry-content') !== null) {
 						// Bind event handlers for form Settings page
 						add_groups_var.formActionsInit();
 					}
 				},
 
 				formActionsInit: function () {
-					var form = jQuery('#post'),
-						items_container = jQuery('.wc4bp-group-container');
-					form.on('submit', save_groups);
+					var items_container = jQuery('.wc4bp-group-container');
+					if (wc4bp_groups.is_force === undefined || wc4bp_groups.is_force === "") {
+						jQuery('#post').on('submit', save_groups);
+					}
+					else {
+						jQuery('.bf-submit').click(save_groups);
+					}
+
 					jQuery('.add_groups').click(add_group);
 					items_container.on('click', '.wc4bp-group-item', clean_error);
 					items_container.on('click', '.wc4bp-group-group-remove', remove_item);

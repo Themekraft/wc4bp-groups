@@ -28,6 +28,12 @@ class wc4bp_groups_manager {
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ) );
+			
+			if ( wc4bp_groups_required::is_woo_elem_active() ) {
+				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_elem_integration.php';
+				new wc4bp_groups_woo_elem_integration();
+			}
+			
 		} catch ( Exception $ex ) {
 			wc4bp_groups_log::log( array(
 				'action'         => get_class( $this ),
@@ -42,10 +48,11 @@ class wc4bp_groups_manager {
 	 * Include styles in admin
 	 *
 	 * @param $hook
+	 * @param bool $force
 	 */
-	public function enqueue_style( $hook ) {
+	public static function enqueue_style( $hook, $force = false ) {
 		global $post;
-		if ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) {
+		if ( ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) || $force ) {
 			wp_enqueue_style( 'jquery' );
 			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
 		}
@@ -55,17 +62,19 @@ class wc4bp_groups_manager {
 	 * Include script
 	 *
 	 * @param $hook
+	 * @param bool $force
 	 */
-	public function enqueue_js( $hook ) {
+	public static function enqueue_js( $hook, $force = false ) {
 		global $post;
-		if ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) {
+		if ( ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) || $force ) {
 			wp_register_script( 'wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array( "jquery" ), wc4bp_groups_manager::getVersion() );
 			wp_enqueue_script( 'wc4bp_groups' );
 			wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
 				'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
+				'is_force'            => $force,
 				'general_error'       => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),
-				'remove'              => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),
+				'remove'              => wc4bp_groups_manager::translation( 'General Error, contact the admin. #2' ),
 			) );
 		}
 	}

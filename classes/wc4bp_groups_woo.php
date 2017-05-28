@@ -184,7 +184,7 @@ class wc4bp_groups_woo {
 					}
 				}
 			} else {
-				//TODO run an action when the guest is buying
+				//TODO run an action when the guest is buying for feature releases
 			}
 		}
 	}
@@ -234,7 +234,7 @@ class wc4bp_groups_woo {
 	 * @param $post_id
 	 * @param $post
 	 */
-	public function saveProductOptionsFields( $post_id, $post ) {
+	public static function saveProductOptionsFields( $post_id, $post ) {
 		if ( bp_is_active( 'groups' ) ) {
 			$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
 			$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
