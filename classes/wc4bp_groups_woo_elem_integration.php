@@ -14,14 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class wc4bp_groups_woo_elem_integration {
 	private $loaded_script = false;
-	private $load_integration = false;
 	
 	public function __construct() {
 		add_filter( 'bf_woo_element_woo_implemented_tab', array( $this, 'implemented_tab' ), 10, 1 );
 		add_filter( 'buddyforms_formbuilder_fields_options', array( $this, 'add_wc_form_element_tab' ), 10, 3 );
 		add_filter( 'buddyforms_create_edit_form_display_element', array( $this, 'form_display_element' ), 10, 2 );
 		add_action( 'buddyforms_update_post_meta', array( $this, 'buddyforms_product_save_data' ), 99, 2 );
-		add_action( 'buddyforms_after_save_post', array( $this, 'buddyforms_product_save_data_after' ), 992, 1 );
 	}
 	
 	public function implemented_tab( $existing ) {
@@ -58,7 +56,6 @@ class wc4bp_groups_woo_elem_integration {
 				$this->add_scripts( $customfield );
 			}
 		}
-		$this->load_integration = true;
 		
 		return $form;
 	}
@@ -84,9 +81,5 @@ class wc4bp_groups_woo_elem_integration {
 		if ( $post['type'] == 'woocommerce' ) {
 			wc4bp_groups_woo::saveProductOptionsFields( $post_id, $post );
 		}
-	}
-	
-	public function buddyforms_product_save_data_after( $post_id ) {
-		$t = $post_id;
 	}
 }
