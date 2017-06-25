@@ -19,6 +19,7 @@ class wc4bp_groups_manager {
 	
 	public function __construct() {
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
+		new wc4bp_groups_log();
 		try {
 			//loading_dependency
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_model.php';
