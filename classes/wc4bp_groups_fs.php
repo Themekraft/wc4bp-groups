@@ -95,9 +95,9 @@ class wc4bp_groups_fs {
 	 * @return Freemius
 	 */
 	public static function getFreemius() {
-		global $gfirem_fs;
+		global $wc4bp_groups_fs;
 		
-		return $gfirem_fs;
+		return $wc4bp_groups_fs;
 	}
 	
 	/**
