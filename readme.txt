@@ -2,8 +2,8 @@
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: WP 4.0
-Tested up to: WP 4.7.3
-Stable tag: 1.0.3
+Tested up to: WP 4.8
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,14 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+
+= 1.0.4 18. July 2017 =
+* Remove the changelog.txt. Its located in eh readme.txt
+* Integrating with WooCommerce BuddyForms Form Elements.
+* Cleaning up the code.
+* Updating freemius
+* fixing the global freemius variable
+* Idealizing the log class to get messages into activity log
 
 = 1.0.3 =
 Improving the requirement library
