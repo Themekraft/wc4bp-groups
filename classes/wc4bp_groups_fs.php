@@ -65,7 +65,7 @@ class wc4bp_groups_fs {
 		
 		if ( ! isset( $wc4bp_groups_fs ) ) {
 			// Include Freemius SDK.
-			require_once dirname( __FILE__ ) . '/resources/freemius/start.php';
+			require_once WC4BP_ABSPATH_CLASS_PATH . 'includes/freemius/start.php';
 			
 			$wc4bp_groups_fs = fs_dynamic_init( array(
 				'id'                  => '971',
@@ -81,10 +81,6 @@ class wc4bp_groups_fs {
 					'public_key' => 'pk_71d28f28e3e545100e9f859cf8554',
 					'name'       => 'WC4BP',
 				),
-//				'menu'                => array(
-//					'account' => false,
-//					'support' => false,
-//				),
 			) );
 		}
 		

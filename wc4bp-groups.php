@@ -5,7 +5,7 @@
  * Description: WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce. Ideal for subscription and membership sites such as premium support.
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
- * Version:     1.0.4
+ * Version:     1.0.5
  * Licence:     GPLv3
  * Text Domain: wc4bp
  * Domain Path: /languages
@@ -68,13 +68,8 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 					$wc4bp = $GLOBALS['wc4bp_loader'];
 					if ( ! empty( $wc4bp::getFreemius() ) && $wc4bp::getFreemius()->is_plan__premium_only( 'professional' ) ) {
 						if ( wc4bp_groups_required::is_buddypress_active() && wc4bp_groups_required::is_woocommerce_active() ) {
-							
 							require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_manager.php';
 							new wc4bp_groups_manager();
-
-//				register_activation_hook( __FILE__, array( $this, 'activation' ) );
-//				register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
-//				self::getFreemius()->add_action('after_uninstall', array($this, 'uninstall_cleanup') );
 						}
 					} else {
 						add_action( 'admin_notices', array( $this, 'admin_notice_need_pro' ) );
