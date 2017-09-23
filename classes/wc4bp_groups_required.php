@@ -51,6 +51,20 @@ class wc4bp_groups_required {
 		}
 	}
 	
+	public static function wc4bp_groups_is_plugins_active($slug, $is_premium) {
+		$active_plugins_basenames = get_option( 'active_plugins' );
+		if($is_premium){
+			$slug .= '-premium';
+		}
+		foreach ( $active_plugins_basenames as $plugin_basename ) {
+			if ( 0 === strpos( $plugin_basename, $slug . '/' ) ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public static function load_plugins_dependency() {
 		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	}
@@ -86,9 +100,8 @@ class wc4bp_groups_required {
 	}
 	
 	public function setup_and_check() {
-		self::load_plugins_dependency();
 		$wc4bp_slug = 'wc4bp';
-		if ( is_plugin_active( 'wc4bp-premium/wc4bp-basic-integration.php' ) ) {
+		if ( self::wc4bp_groups_is_plugins_active($wc4bp_slug, true)) {
 			$wc4bp_slug = 'wc4bp-premium';
 		}
 		// Create the required required_plugins array
@@ -112,7 +125,6 @@ class wc4bp_groups_required {
 				'required' => true,
 			),
 		);
-		
 		
 		$config = array(
 			'id'           => 'wc4bp-groups',                 // Unique ID for hashing notices for multiple instances of TGMPA.
