@@ -2,8 +2,8 @@
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: WP 4.0
-Tested up to: WP 4.8
-Stable tag: 1.0.6
+Tested up to: WP 4.9
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,11 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+= 1.1.0 =
+* Adding a trigger option to select when the user will be added to the desire group.
+* Fixing some typos and dependency.
+* Cleaning the code.
+
 = 1.0.6 =
 * Removing freemius to use the same from the core.
 

@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class wc4bp_groups_manager {
-	
+
 	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version = '1.0.6';
-	
+	protected static $version = '1.1.0';
+
 	public function __construct() {
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
 		new wc4bp_groups_log();
@@ -26,15 +26,14 @@ class wc4bp_groups_manager {
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo.php';
 			new wc4bp_groups_model();
 			new wc4bp_groups_woo();
-			
+
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ) );
-			
+
 			if ( wc4bp_groups_required::is_woo_elem_active() ) {
 				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_elem_integration.php';
 				new wc4bp_groups_woo_elem_integration();
 			}
-			
 		} catch ( Exception $ex ) {
 			wc4bp_groups_log::log( array(
 				'action'         => get_class( $this ),
@@ -44,7 +43,7 @@ class wc4bp_groups_manager {
 			) );
 		}
 	}
-	
+
 	/**
 	 * Include styles in admin
 	 *
@@ -58,7 +57,7 @@ class wc4bp_groups_manager {
 			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
 		}
 	}
-	
+
 	/**
 	 * Include script
 	 *
@@ -79,7 +78,7 @@ class wc4bp_groups_manager {
 			) );
 		}
 	}
-	
+
 	/**
 	 * Get plugins version
 	 *
@@ -88,7 +87,7 @@ class wc4bp_groups_manager {
 	static function getVersion() {
 		return self::$version;
 	}
-	
+
 	/**
 	 * Get plugins slug
 	 *
@@ -97,7 +96,7 @@ class wc4bp_groups_manager {
 	static function getSlug() {
 		return self::$plugin_slug;
 	}
-	
+
 	/**
 	 * Retrieve the translation for the plugins. Wrapper for @see __()
 	 *
@@ -108,8 +107,8 @@ class wc4bp_groups_manager {
 	public static function translation( $str ) {
 		return __( $str, 'wc4bp_groups' );
 	}
-	
-	
+
+
 	/**
 	 * Display the translation for the plugins. Wrapper for @see _e()
 	 *
@@ -118,7 +117,7 @@ class wc4bp_groups_manager {
 	public static function echo_translation( $str ) {
 		_e( $str, 'wc4bp_groups' );
 	}
-	
+
 	/**
 	 * Display the translation for the plugins.
 	 *

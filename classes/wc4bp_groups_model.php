@@ -13,12 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class wc4bp_groups_model {
-	
+
 	public function __construct() {
-		add_action( "wp_ajax_wc4bp_group_search", array( $this, "group_search" ) );
-		add_action( "wp_ajax_wc4bp_get_group_view", array( $this, "get_group_view" ) );
+		add_action( 'wp_ajax_wc4bp_group_search', array( $this, 'group_search' ) );
+		add_action( 'wp_ajax_wc4bp_get_group_view', array( $this, 'get_group_view' ) );
 	}
-	
+
 	/**
 	 * Filter the groups from ajax
 	 */
@@ -36,7 +36,7 @@ class wc4bp_groups_model {
 		}
 		wp_send_json( $groups_founded );
 	}
-	
+
 	/**
 	 * Get a list of groups, filtered by a search string, including the hidden groups.
 	 *
@@ -52,11 +52,11 @@ class wc4bp_groups_model {
 	public function search_groups( $filter ) {
 		$args = array(
 			'search_terms' => $filter,
-			'show_hidden'  => true
+			'show_hidden'  => true,
 		);
-		
+
 		$groups = BP_Groups_Group::get( $args );
-		
+
 		// Modify the results to match the old format.
 		$paged_groups = array();
 		$i            = 0;
@@ -65,10 +65,13 @@ class wc4bp_groups_model {
 			$paged_groups[ $i ]->group_id = $group->id;
 			$i ++;
 		}
-		
-		return array( 'groups' => $paged_groups, 'total' => $groups['total'] );
+
+		return array(
+			'groups' => $paged_groups,
+			'total'  => $groups['total'],
+		);
 	}
-	
+
 	/**
 	 * Return the view to add a group
 	 */
@@ -86,10 +89,10 @@ class wc4bp_groups_model {
 				echo "$str";
 			}
 		}
-		
+
 		die();
 	}
-	
+
 	/**
 	 * Add member to group as admin
 	 * credits go to boon georges. This function is coppyed from the group management plugin.
@@ -146,8 +149,8 @@ class wc4bp_groups_model {
 		groups_update_groupmeta( $group_id, 'total_member_count', (int) groups_get_groupmeta( $group_id, 'total_member_count' ) + 1 );
 		groups_update_groupmeta( $group_id, 'last_activity', gmdate( "Y-m-d H:i:s" ) );
 		do_action( 'groups_join_group', $group_id, $user_id );
-		
+
 		return true;
 	}
-	
+
 }
