@@ -90,7 +90,7 @@ class wc4bp_groups_required {
 	public static function is_woo_elem_active() {
 		self::load_plugins_dependency();
 		
-		return ( is_plugin_active( 'buddyforms-woocommerce-form-elements-premium/BuddyForms.php' ) || is_plugin_active( 'buddyforms-woocommerce-form-elements/loader.php' ) );
+		return ( is_plugin_active( 'buddyforms-woocommerce-form-elements-premium/loader.php' ) || is_plugin_active( 'buddyforms-woocommerce-form-elements/loader.php' ) );
 	}
 	
 	public static function is_current_active() {
