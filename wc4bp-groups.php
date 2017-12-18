@@ -5,7 +5,7 @@
  * Description: WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce. Ideal for subscription and membership sites such as premium support.
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
- * Version:     1.1.0
+ * Version:     1.1.1
  * Licence:     GPLv3
  * Text Domain: wc4bp
  * Domain Path: /languages
