@@ -49,11 +49,34 @@
 					'cancelled'  => wc4bp_groups_manager::translation( 'Cancelled' ),
 				),
 			);
+
 			if ( isset( $group->trigger ) ) {
 				$trigger['value'] = $group->trigger;
 			}
 
 			woocommerce_wp_select( $trigger );
+
+			$product = wc_get_product( $post_id );
+			$type    = $product->get_type();
+			if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+				$variations        = $product->get_available_variations();
+				$variations_options = array();
+                foreach ( $variations as $variation ) {
+	                $variation_attributes = wc_get_product($variation['variation_id']);
+                    $variations_options[$variation['variation_id']] = $variation_attributes->get_name();
+                }
+				$variations_select = array(
+					'id'      => '_variation',
+					'label'   => wc4bp_groups_manager::translation( 'Variation:' ),
+					'options' => $variations_options
+				);
+
+				if ( isset( $group->variation ) ) {
+					$variations_select['value'] = $group->variation;
+				}
+
+				woocommerce_wp_select( $variations_select );
+			}
 			?>
         </div>
     </div>
