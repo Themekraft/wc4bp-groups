@@ -44,6 +44,5 @@ button.button.wc4bp.add_groups {
 
 ._bp_group_field{
 	clear: both;
-	margin-top: 1em;
-	margin-bottom: 1em;
+    padding: 1em;
 }
