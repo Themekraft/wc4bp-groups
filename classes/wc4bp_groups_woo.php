@@ -24,7 +24,7 @@ class wc4bp_groups_woo {
 			add_filter( 'woocommerce_add_cart_item_data', array( $this, 'add_cart_item_data' ), 10, 2 );
 			add_filter( 'woocommerce_get_cart_item_from_session', array( $this, 'get_cart_item_from_session' ), 10, 2 );
 			add_filter( 'woocommerce_get_item_data', array( $this, 'get_item_data' ), 10, 2 );
-			add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_meta' ), 10, 2 );
+			add_action( 'woocommerce_new_order_item', array( $this, 'add_order_item_meta' ), 10, 3 );
 			//Create the user in the group, depend on the current selected status from the backend
 			add_action( 'woocommerce_order_status_changed', array( $this, 'on_process_complete' ), 10, 4 );
 			add_filter( 'woocommerce_order_items_meta_display', array( $this, 'on_order_items_meta_display' ), 10, 2 ); //Process the item meta to show in the order in the front
@@ -153,7 +153,7 @@ class wc4bp_groups_woo {
 			$customer = $order->get_user();
 			if ( false !== $customer ) {
 				$items = $order->get_items();
-				/** @var WC_Product $item */
+				/** @var WC_Order_Item $item */
 				foreach ( $items as $key => $item ) {
 					$product      = $order->get_product_from_item( $item );
 					$final_groups = array();
@@ -266,7 +266,7 @@ class wc4bp_groups_woo {
 			if ( is_array( $groups ) ) {
 				foreach ( $groups as $group ) {
 					if ( $group->is_optional == '1' ) {
-						$groups_to_show[ $group->group_id ] = $group->group_name;
+						$groups_to_show[ $group->group_id ] = array( 'name' => $group->group_name, 'variation' => $group->variation );
 					}
 				}
 			}
@@ -298,18 +298,26 @@ class wc4bp_groups_woo {
 		$field['value']         = isset( $field['value'] ) ? $field['value'] : get_post_meta( $thepostid, $field['id'], true );
 		$field['name']          = isset( $field['name'] ) ? $field['name'] : $field['id'];
 
-		echo '<fieldset class="form-field ' . esc_attr( $field['id'] ) . '_field ' . esc_attr( $field['wrapper_class'] ) . '"><legend>' . wp_kses_post( $field['label'] ) . '</legend><ul class="wc4bp-group-radios">';
+		$is_variation = '';
+		$product      = wc_get_product( $thepostid );
+		if ( $product instanceof WC_Product_Variable ) {
+			$is_variation = 'style="display:none;"';
+		}
+
+		echo '<div ' . $is_variation . ' class="form-field ' . esc_attr( $field['id'] ) . '_field ' . esc_attr( $field['wrapper_class'] ) . '"><legend>' . wp_kses_post( $field['label'] ) . '</legend><ul class="wc4bp-group-radios">';
 
 		foreach ( $field['options'] as $key => $value ) {
-
+			$variation = ( ! empty( $value['variation'] ) ) ? ' data-variation-id="' . $value['variation'] . '"' : '';
 			echo '<li><label><input
 				name="' . esc_attr( $field['name'] ) . '"
 				value="' . esc_attr( $key ) . '"
-				type="checkbox"
+				type="checkbox" 
+				' . $variation . '
+				data-product-id="' . esc_attr( $thepostid ) . '"
 				class="' . esc_attr( $field['class'] ) . '"
 				style="' . esc_attr( $field['style'] ) . '"
 				' . checked( esc_attr( $field['value'] ), esc_attr( $key ), false ) . '
-				/> ' . esc_html( $value ) . '</label>
+				/> ' . esc_html( $value['name'] ) . '</label>
 		</li>';
 		}
 		echo '</ul>';
@@ -323,7 +331,7 @@ class wc4bp_groups_woo {
 			}
 		}
 
-		echo '</fieldset>';
+		echo '</div>';
 	}
 
 	/**
@@ -387,9 +395,9 @@ class wc4bp_groups_woo {
 	 *
 	 * @param mixed $item_id
 	 * @param $cart_item
-	 *
+	 * @param $order_id
 	 */
-	public function add_order_item_meta( $item_id, $cart_item ) {
+	public function add_order_item_meta( $item_id, $cart_item, $order_id ) {
 		$item_data = $this->add_data_as_meta( array(), $cart_item );
 
 		if ( empty ( $item_data ) ) {
@@ -447,6 +455,10 @@ class wc4bp_groups_woo {
 	 * @return array
 	 */
 	private function get_product_groups( $product_id ) {
+		$product = wc_get_product( $product_id );
+		if ( $product instanceof WC_Product_Variation ) {
+			$product_id = $product->get_parent_id();
+		}
 		$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
 		$groups_json = html_entity_decode( $groups_json );
 		$result      = array();

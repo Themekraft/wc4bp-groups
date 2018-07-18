@@ -3,7 +3,7 @@ Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
 Tested up to: 4.9.4
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,10 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+= 1.3.0 =
+* Integrating with the product variations types.
+*
+
 = 1.2.1 =
 * Adding custom message to check dependency.
 * Changing the requirement library to use a custom internal id.

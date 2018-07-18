@@ -125,13 +125,15 @@ jQuery(function ($) {
                 var groups = jQuery('.wc4bp-group-item').map(function (i, v) {
                     var member_type = jQuery('#_membership_level', this),
                         optional = jQuery('#_membership_optional', this),
+                        variation = jQuery('#_variation', this),
                         woo_trigger = jQuery('#_trigger', this);
                     return {
                         'group_id': jQuery(this).attr('group_id'),
                         'group_name': jQuery(this).attr('group_name'),
                         'member_type': member_type.val(),
                         'is_optional': optional.val(),
-                        'trigger': woo_trigger.val()
+                        'trigger': woo_trigger.val(),
+                        'variation': variation.val()
                     }
                 }).get();
 

@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class wc4bp_groups_manager {
 
 	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version = '1.2.1';
+	protected static $version = '1.3.0';
 
 	public function __construct() {
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
@@ -30,6 +30,8 @@ class wc4bp_groups_manager {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ) );
 
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
 			if ( wc4bp_groups_required::is_woo_elem_active() ) {
 				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_elem_integration.php';
 				new wc4bp_groups_woo_elem_integration();
@@ -41,6 +43,19 @@ class wc4bp_groups_manager {
 				'object_subtype' => 'loading_dependency',
 				'object_name'    => $ex->getMessage(),
 			) );
+		}
+	}
+
+	/**
+	 * Add scripts to the frontend in the product page.
+	 *
+	 * @param $hook
+	 */
+	public function enqueue_scripts( $hook ) {
+		global $post;
+		if ( isset( $post ) && isset( $post->post_type ) && $post->post_type == 'product' ) {
+			wp_register_script( 'wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array( "jquery" ), wc4bp_groups_manager::getVersion() );
+			wp_enqueue_script( 'wc4bp_groups_frontend' );
 		}
 	}
 
