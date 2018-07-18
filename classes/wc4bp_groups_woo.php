@@ -304,7 +304,7 @@ class wc4bp_groups_woo {
 			$is_variation = 'style="display:none;"';
 		}
 
-		echo '<div ' .$is_variation . ' class="form-field ' . esc_attr( $field['id'] ) . '_field ' . esc_attr( $field['wrapper_class'] ) . '"><legend>' . wp_kses_post( $field['label'] ) . '</legend><ul class="wc4bp-group-radios">';
+		echo '<div ' . $is_variation . ' class="form-field ' . esc_attr( $field['id'] ) . '_field ' . esc_attr( $field['wrapper_class'] ) . '"><legend>' . wp_kses_post( $field['label'] ) . '</legend><ul class="wc4bp-group-radios">';
 
 		foreach ( $field['options'] as $key => $value ) {
 			$variation = ( ! empty( $value['variation'] ) ) ? ' data-variation-id="' . $value['variation'] . '"' : '';
@@ -342,10 +342,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @return mixed
 	 */
-	public
-	function add_cart_item_data(
-		$cart_item_meta, $product_id
-	) {
+	public function add_cart_item_data( $cart_item_meta, $product_id ) {
 		if ( ! empty( $_POST['_bp_group'] ) ) {
 			$groups = array();
 			if ( is_array( $_POST['_bp_group'] ) ) {
@@ -371,10 +368,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @return mixed
 	 */
-	public
-	function get_cart_item_from_session(
-		$cart_item, $values
-	) {
+	public function get_cart_item_from_session( $cart_item, $values ) {
 		if ( ! empty( $values['_bp_group'] ) ) {
 			$cart_item['_bp_group'] = $values['_bp_group'];
 		}
@@ -390,10 +384,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @return array
 	 */
-	public
-	function get_item_data(
-		$item_data, $cart_item
-	) {
+	public function get_item_data( $item_data, $cart_item ) {
 		$item_data = $this->add_data_as_meta( $item_data, $cart_item, true );
 
 		return $item_data;
@@ -406,10 +397,7 @@ class wc4bp_groups_woo {
 	 * @param $cart_item
 	 * @param $order_id
 	 */
-	public
-	function add_order_item_meta(
-		$item_id, $cart_item, $order_id
-	) {
+	public function add_order_item_meta( $item_id, $cart_item, $order_id ) {
 		$item_data = $this->add_data_as_meta( array(), $cart_item );
 
 		if ( empty ( $item_data ) ) {
@@ -430,10 +418,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @return array
 	 */
-	private
-	function add_data_as_meta(
-		$item_data, $cart_item, $output = false
-	) {
+	private function add_data_as_meta( $item_data, $cart_item, $output = false ) {
 		if ( isset( $cart_item['_bp_group'] ) ) {
 			$groups = $this->get_product_groups( $cart_item['product_id'] );
 			if ( ! empty( $groups ) ) {
@@ -469,10 +454,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @return array
 	 */
-	private
-	function get_product_groups(
-		$product_id
-	) {
+	private function get_product_groups( $product_id ) {
 		$product = wc_get_product( $product_id );
 		if ( $product instanceof WC_Product_Variation ) {
 			$product_id = $product->get_parent_id();
@@ -497,10 +479,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @return array
 	 */
-	private
-	function get_product_groups_not_optional(
-		$product_id
-	) {
+	private function get_product_groups_not_optional( $product_id ) {
 		$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
 		$groups_json = html_entity_decode( $groups_json );
 		$result      = array();
@@ -526,10 +505,7 @@ class wc4bp_groups_woo {
 	 *
 	 * @return bool|stdClass
 	 */
-	private
-	function get_product_group(
-		$product_id, $group_id
-	) {
+	private function get_product_group( $product_id, $group_id ) {
 		$option_groups = $this->get_product_groups( $product_id );
 		foreach ( $option_groups as $option_group ) {
 			if ( intval( $option_group->group_id ) === intval( $group_id ) ) {
