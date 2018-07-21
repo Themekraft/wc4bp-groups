@@ -175,7 +175,8 @@ jQuery(function ($) {
                 jQuery.post(wc4bp_groups.ajax_url, {
                     'action': 'wc4bp_get_group_view',
                     'group': JSON.stringify(item),
-                    'security': wc4bp_groups.search_groups_nonce
+                    'security': wc4bp_groups.search_groups_nonce,
+                    'post_id':wc4bp_groups.post_id
                 }, function (data) {
                     if (data || data === '0') {
                         container.append(data);

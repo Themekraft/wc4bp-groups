@@ -86,6 +86,7 @@ class wc4bp_groups_manager {
 			wp_enqueue_script( 'wc4bp_groups' );
 			wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
+				'post_id'             =>$post->ID,
 				'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
 				'is_force'            => $force,
 				'general_error'       => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),

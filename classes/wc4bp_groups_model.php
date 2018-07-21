@@ -26,7 +26,7 @@ class wc4bp_groups_model {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
 		$groups_founded = array();
 		if ( ! empty( $_GET['term'] ) ) {
-			$groups = $this->search_groups( wc_clean( stripslashes( $_GET['term'] ) ) );
+			$groups = $this->search_groups( wc_clean( stripslashes( $_GET['term']['term'] ) ) );
 			if ( ! empty( $groups['groups'] ) ) {
 				foreach ( $groups['groups'] as $group_id ) {
 					$group                                 = new BP_Groups_Group( $group_id->group_id );
@@ -77,6 +77,7 @@ class wc4bp_groups_model {
 	 */
 	public function get_group_view() {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
+		$post_id = isset($_POST['post_id']) ? $_POST['post_id'] : 0;
 		if ( ! empty( $_POST['group'] ) && wp_doing_ajax() && is_string( $_POST['group'] ) ) {
 			$data = json_decode( stripslashes( $_POST['group'] ) );
 			if ( is_object( $data ) ) {
