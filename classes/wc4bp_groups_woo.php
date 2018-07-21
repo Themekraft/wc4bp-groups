@@ -385,6 +385,7 @@ class wc4bp_groups_woo {
 	 * @return array
 	 */
 	public function get_item_data( $item_data, $cart_item ) {
+
 		$item_data = $this->add_data_as_meta( $item_data, $cart_item, true );
 
 		return $item_data;
@@ -398,6 +399,11 @@ class wc4bp_groups_woo {
 	 * @param $order_id
 	 */
 	public function add_order_item_meta( $item_id, $cart_item, $order_id ) {
+        if (!isset($cart_item['_bp_group'])){
+            $cart_item['_bp_group'] = $cart_item->legacy_values['_bp_group'];
+
+
+        }
 		$item_data = $this->add_data_as_meta( array(), $cart_item );
 
 		if ( empty ( $item_data ) ) {
