@@ -57,7 +57,6 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 == Changelog ==
 = 1.3.0 =
 * Integrating with the product variations types.
-*
 
 = 1.2.1 =
 * Adding custom message to check dependency.
