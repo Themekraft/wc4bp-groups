@@ -53,6 +53,7 @@ class wc4bp_groups_woo {
 	 * @param WC_Product $_product
 	 */
 	public function add_after_oder_item_meta( $item_id, $item, $_product ) {
+        $groups_str = array();
 		if ( isset( $item['wc4bp_groups'] ) ) {
 			$groups = json_decode( $item['wc4bp_groups'], true );
 			echo '<table cellspacing="0" class="display_meta">';
