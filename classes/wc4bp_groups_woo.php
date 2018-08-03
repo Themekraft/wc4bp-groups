@@ -239,6 +239,12 @@ class wc4bp_groups_woo {
 	 */
 	public static function saveProductOptionsFields( $post_id, $post ) {
 		if ( bp_is_active( 'groups' ) ) {
+            $product = wc_get_product( $post_id );
+            $type    = $product->get_type();
+
+            if($type === 'variable'){
+                $post_id = isset($_POST['_variation']) ? $_POST['_variation'] : $post_id;
+            }
 			$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
 			$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
 			if ( ! empty( $wc4bp_groups_json ) ) {
