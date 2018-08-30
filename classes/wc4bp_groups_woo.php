@@ -215,11 +215,31 @@ class wc4bp_groups_woo {
 	 */
 	public function addProductOptionPanelTab() {
 		global $woocommerce, $post;
-		$groups_json = get_post_meta( $post->ID, '_wc4bp_groups_json', true );
-		$groups_json = html_entity_decode( $groups_json );
-		if ( ! empty( $groups_json ) ) {
-			$groups = json_decode( $groups_json );
-		}
+        $product = wc_get_product( $post->ID );
+        $type    = $product->get_type();
+        $groups = array();
+        if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+            $variations        = $product->get_available_variations();
+            foreach ( $variations as $variation ) {
+              $variation_id =  $variation['variation_id'];
+              $groups_json = get_post_meta( $variation_id, '_wc4bp_groups_json', true );
+
+                if ( ! empty( $groups_json ) ) {
+                    $trimmed = trim(html_entity_decode($groups_json),'[');
+                    $lastrim = trim($trimmed,']');
+                    $groups[] = json_decode($lastrim);
+                }
+            }
+
+        }else{
+            $groups_json = get_post_meta( $post->ID, '_wc4bp_groups_json', true );
+            $groups_json = html_entity_decode( $groups_json );
+            if ( ! empty( $groups_json ) ) {
+                $groups = json_decode( $groups_json );
+            }
+        }
+
+
 		include WC4BP_GROUP_VIEW_PATH . 'woo_tab_conatiner.php';
 	}
 
@@ -265,19 +285,40 @@ class wc4bp_groups_woo {
 	 */
 	public function add_field_to_product_page() {
 		global $product;
-		$groups_json    = get_post_meta( $product->get_id(), '_wc4bp_groups_json', true );
-		$groups_json    = html_entity_decode( $groups_json );
-		$groups_to_show = array();
-		if ( ! empty( $groups_json ) ) {
-			$groups = json_decode( $groups_json );
-			if ( is_array( $groups ) ) {
-				foreach ( $groups as $group ) {
-					if ( $group->is_optional == '1' ) {
-						$groups_to_show[ $group->group_id ] = array( 'name' => $group->group_name, 'variation' => $group->variation );
-					}
-				}
-			}
-		}
+        $type    = $product->get_type();
+        $groups = array();
+        if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+            $variations        = $product->get_available_variations();
+            foreach ( $variations as $variation ) {
+                $variation_id =  $variation['variation_id'];
+                $groups_json = get_post_meta( $variation_id, '_wc4bp_groups_json', true );
+                if ( ! empty( $groups_json ) ) {
+                    $trimmed = trim(html_entity_decode($groups_json),'[');
+                    $lastrim = trim($trimmed,']');
+                    $groups[] = json_decode($lastrim);
+                }
+            }
+
+        }
+        else{
+            $groups_json    = get_post_meta( $product->get_id(), '_wc4bp_groups_json', true );
+            $groups_json    = html_entity_decode( $groups_json );
+            if ( ! empty( $groups_json ) ) {
+                $groups = json_decode( $groups_json );
+            }
+        }
+        $groups_to_show = array();
+
+        if ( is_array( $groups ) ) {
+            foreach ( $groups as $group ) {
+                if ( $group->is_optional == '1' ) {
+                        $groups_to_show[ $group->group_id ] = array( 'name' => $group->group_name, 'variation' => $group->variation );
+                }
+            }
+        }
+
+
+
 
 		if ( ! empty( $groups_to_show ) ) {
 			$this->output_checkbox( array(
@@ -469,18 +510,36 @@ class wc4bp_groups_woo {
 	 */
 	private function get_product_groups( $product_id ) {
 		$product = wc_get_product( $product_id );
-		if ( $product instanceof WC_Product_Variation ) {
-			$product_id = $product->get_parent_id();
+        $type    = $product->get_type();
+        $groups = array();
+        if ( $type === 'variable' && $product instanceof WC_Product_Variable )  {
+            $variations        = $product->get_available_variations();
+            foreach ( $variations as $variation ) {
+                $variation_id =  $variation['variation_id'];
+                $groups_json = get_post_meta( $variation_id, '_wc4bp_groups_json', true );
+
+                if ( ! empty( $groups_json ) ) {
+                    $trimmed = trim(html_entity_decode($groups_json),'[');
+                    $lastrim = trim($trimmed,']');
+                    $groups[] = json_decode($lastrim);
+                }
+            }
 		}
-		$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
-		$groups_json = html_entity_decode( $groups_json );
+		else{
+            $groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
+            $groups_json = html_entity_decode( $groups_json );
+            if ( ! empty( $groups_json ) ) {
+                $groups = json_decode( $groups_json );
+            }
+
+        }
+
 		$result      = array();
-		if ( ! empty( $groups_json ) ) {
-			$groups = json_decode( $groups_json );
-			if ( is_array( $groups ) ) {
-				$result = $groups;
-			}
-		}
+
+        if ( is_array( $groups ) ) {
+            $result = $groups;
+        }
+
 
 		return $result;
 	}
