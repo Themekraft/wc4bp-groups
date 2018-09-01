@@ -62,18 +62,28 @@
                 if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
                     $variations        = $product->get_available_variations();
                     $variations_options = array();
+                    $wc4bp_groups_available_variation ='';
                     foreach ( $variations as $variation ) {
+                        $wc4bp_groups_available_variation .= $variation['variation_id'] .',';
                         $variation_attributes = wc_get_product($variation['variation_id']);
                         $variations_options[$variation['variation_id']] = $variation_attributes->get_name();
                     }
                     $variations_select = array(
                         'id'      => '_variation',
+                        'custom_attributes' =>array('data-previouSel'=>'',
+                            'data-availableVariations'=> rtrim( trim( $wc4bp_groups_available_variation ), ',' )
+                            ,'data-groupId'=>$group->group_id,),
+                        'class'   => 'variation_list',
                         'label'   => wc4bp_groups_manager::translation( 'Variation:' ),
                         'options' => $variations_options
                     );
 
                     if ( isset( $group->variation ) ) {
+                        $variations_select['id']    = '_variation_'.$group->group_id .'_' .$group->variation;
                         $variations_select['value'] = $group->variation;
+                        $variations_select['custom_attributes']['data-previouSel'] = $group->variation;
+
+
                     }
 
                     woocommerce_wp_select( $variations_select );

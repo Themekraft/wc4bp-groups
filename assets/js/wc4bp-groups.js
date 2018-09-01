@@ -121,6 +121,7 @@ jQuery(function ($) {
         function wc4bp_add_groups() {
 
             function save_groups() {
+
                 var json_handler = jQuery('#_wc4bp_groups_json');
                 var groups = jQuery('.wc4bp-group-item').map(function (i, v) {
                     var member_type = jQuery('#_membership_level', this),
@@ -134,7 +135,7 @@ jQuery(function ($) {
                         'is_optional': optional.val(),
                         'trigger': woo_trigger.val(),
                         'variation': variation.val()
-                    }
+                    };
                 }).get();
 
                 var json = JSON.stringify(groups);
@@ -142,7 +143,10 @@ jQuery(function ($) {
             }
 
             function add_group() {
+
                 var searched = jQuery('#wc4bp-group-ids').select2('data');
+                var isvariation = jQuery('#wc4bp-group-ids').data('isvariation');
+
                 if (searched) {
                     var group_item = jQuery('.wc4bp-group-item'),
                         inserted = false;
@@ -152,15 +156,70 @@ jQuery(function ($) {
                     }).get();
                     $.each(searched, function (index, value) {
                         var exist = false, current_group = {id: value['id'], text: value['text']};
-                        $.each(existing, function (i, v) {
-                            if (current_group['id'] === v) {
+                        if(isvariation===false){
+                            //If is not a variation product then run this validation
+                            $.each(existing, function (i, v) {
+                                if (current_group['id'] === v) {
+                                    exist = true;
+                                    jQuery('#wc4bp_item_' + v).addClass('wc4bp-group-error');
+                                    return false;
+                                }
+                            });
+                        }else{
+                            var variation_already_added = jQuery('.variation_list[data-groupId="'+current_group.id+'"]');
+                            var available_variations ='';
+
+
+                            $.each(variation_already_added, function (i, v) {
+                                 var getvariations = jQuery('#'+v.id).data('availablevariations');
+                                 if(getvariations !== undefined && getvariations !== ''){
+                                     available_variations = getvariations.split(",");
+                                 }
+                                 return;
+                            });
+
+                            var one_missing = false;
+                            var found_variation = false;
+                            $.each(available_variations, function (i, v) {
+
+                                //begin to find the variation N.
+                                found_variation = false;
+
+                                $.each(variation_already_added, function (key, item) {
+                                    if (v === item.value) {
+                                        //If the variation N is already added to the group
+                                        found_variation = true;
+                                        return;
+
+                                    }
+                                });
+                                if(found_variation === false){
+
+                                    // If the N variation has not been added to the group,
+
+                                    one_missing = true;
+                                    return;
+                                }
+                            });
+
+                            if(one_missing===false){
+                                //If all the variation where added to the group then..
                                 exist = true;
-                                jQuery('#wc4bp_item_' + v).addClass('wc4bp-group-error');
+
+                                alert("Group : "+ current_group.text + " already contains all the avaliable variations for this product");
                                 return false;
+
                             }
-                        });
+
+
+
+                        }
+
                         if (!exist) {
                             insert_container(current_group);
+
+
+
                         }
                     });
                 }
@@ -180,6 +239,7 @@ jQuery(function ($) {
                 }, function (data) {
                     if (data || data === '0') {
                         container.append(data);
+
                     }
                     else {
                         alert(wc4bp_groups.general_error);
@@ -189,6 +249,31 @@ jQuery(function ($) {
                 }).always(function () {
                     jQuery(".wc4bp-group-loading").attr('style', 'display:none');
                 });
+            }
+
+            function set_previous_selection(){
+                var current_variation = this;
+                jQuery('#'+current_variation.id).data('previouSel',current_variation.value);
+
+
+            }
+
+            function validate_variation_selection(){
+                var current_variation = this;
+
+                var variation_list = jQuery('.variation_list');
+                $.each(variation_list, function (i, v) {
+                    if(v.id !== current_variation.id){
+                        if(v.value === current_variation.value){
+
+                            current_variation.value = jQuery('#'+current_variation.id).data('previouSel');
+
+                            return false;
+                        }
+                    }
+                });
+
+
             }
 
             function clean_error(e) {
@@ -218,7 +303,12 @@ jQuery(function ($) {
                         jQuery('.bf-submit').click(save_groups);
                     }
 
-                    jQuery('.add_groups').click(add_group);
+                    jQuery('.add_groups').on('click',add_group);
+
+
+
+                    items_container.on('change', '.variation_list', validate_variation_selection);
+                    items_container.on('click', '.variation_list', set_previous_selection);
                     items_container.on('click', '.wc4bp-group-item', clean_error);
                     items_container.on('click', '.wc4bp-group-group-remove', remove_item);
                 }
@@ -228,6 +318,7 @@ jQuery(function ($) {
         var add_groups_var = wc4bp_add_groups();
         jQuery(document).ready(function ($) {
             add_groups_var.init();
+
         });
 
     } catch (err) {
