@@ -12,8 +12,16 @@
 			$added_groups = array();
 			if ( ! empty( $groups ) ) {
 				foreach ( $groups as $group ) {
-					$added_groups[] = $group->group_id;
-					$this->show_woo_tab_item_for_group( $post->ID, $group );
+                    if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+
+                        foreach($group as $key => $value){
+                            $this->show_woo_tab_item_for_group( $post->ID, $value );
+                        }
+                    }else{
+                        $added_groups[] = $group->group_id;
+                        $this->show_woo_tab_item_for_group( $post->ID, $group );
+                    }
+
 				}
 			}
 			?>

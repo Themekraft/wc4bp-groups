@@ -166,52 +166,54 @@ jQuery(function ($) {
                                 }
                             });
                         }else{
-                            var variation_already_added = jQuery('.variation_list[data-groupId="'+current_group.id+'"]');
+                            var variation_already_added = jQuery('.variation_list[groupId="'+current_group.id+'"]');
                             var available_variations ='';
 
+                            if(variation_already_added.length > 0){
+                                $.each(variation_already_added, function (i, v) {
+                                    var getvariations = v.getAttribute('availableVariations');
+                                    if(getvariations !== undefined && getvariations !== ''){
+                                        available_variations = getvariations.split(",");
+                                    }
+                                    return;
+                                });
 
-                            $.each(variation_already_added, function (i, v) {
-                                 var getvariations = jQuery('#'+v.id).data('availablevariations');
-                                 if(getvariations !== undefined && getvariations !== ''){
-                                     available_variations = getvariations.split(",");
-                                 }
-                                 return;
-                            });
+                                if(available_variations.length > 0){
+                                    var one_missing = false;
+                                    var found_variation = false;
+                                    $.each(available_variations, function (i, v) {
 
-                            var one_missing = false;
-                            var found_variation = false;
-                            $.each(available_variations, function (i, v) {
+                                        //begin to find the variation N.
+                                        found_variation = false;
 
-                                //begin to find the variation N.
-                                found_variation = false;
+                                        $.each(variation_already_added, function (key, item) {
+                                            if (v === item.value) {
+                                                //If the variation N is already added to the group
+                                                found_variation = true;
+                                                return;
 
-                                $.each(variation_already_added, function (key, item) {
-                                    if (v === item.value) {
-                                        //If the variation N is already added to the group
-                                        found_variation = true;
-                                        return;
+                                            }
+                                        });
+                                        if(found_variation === false){
+
+                                            // If the N variation has not been added to the group,
+
+                                            one_missing = true;
+                                            return;
+                                        }
+                                    });
+
+                                    if(one_missing===false){
+                                        //If all the variation where added to the group then..
+                                        exist = true;
+
+                                        alert("Group : "+ current_group.text + " already contains all the avaliable variations for this product");
+                                        return false;
 
                                     }
-                                });
-                                if(found_variation === false){
-
-                                    // If the N variation has not been added to the group,
-
-                                    one_missing = true;
-                                    return;
                                 }
-                            });
-
-                            if(one_missing===false){
-                                //If all the variation where added to the group then..
-                                exist = true;
-
-                                alert("Group : "+ current_group.text + " already contains all the avaliable variations for this product");
-                                return false;
 
                             }
-
-
 
                         }
 
@@ -253,27 +255,28 @@ jQuery(function ($) {
 
             function set_previous_selection(){
                 var current_variation = this;
-                jQuery('#'+current_variation.id).data('previouSel',current_variation.value);
-
-
+                var prev_selection =  current_variation.getAttribute('previouSel');
+                current_variation.setAttribute('previouSel',current_variation.value);
             }
 
             function validate_variation_selection(){
                 var current_variation = this;
 
-                var variation_list = jQuery('.variation_list');
-                $.each(variation_list, function (i, v) {
-                    if(v.id !== current_variation.id){
+                //Get  the variation group
+                var variation_group = current_variation.getAttribute("groupId");
+                //Get all the variations already added to the group
+                var variation_already_added = jQuery('.variation_list[groupId="'+variation_group+'"]');
+
+
+                $.each(variation_already_added, function (i, v) {
+
+                    if(v !== current_variation){
                         if(v.value === current_variation.value){
-
-                            current_variation.value = jQuery('#'+current_variation.id).data('previouSel');
-
+                            current_variation.value = current_variation.getAttribute('previouSel');
                             return false;
                         }
                     }
                 });
-
-
             }
 
             function clean_error(e) {

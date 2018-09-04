@@ -227,7 +227,7 @@ class wc4bp_groups_woo {
                 if ( ! empty( $groups_json ) ) {
                     $trimmed = trim(html_entity_decode($groups_json),'[');
                     $lastrim = trim($trimmed,']');
-                    $groups[] = json_decode($lastrim);
+                    $groups[] = json_decode(html_entity_decode($groups_json));
                 }
             }
 
@@ -265,18 +265,67 @@ class wc4bp_groups_woo {
 
             if($type === 'variable'){
                 $post_id = isset($_POST['_variation']) ? $_POST['_variation'] : $post_id;
+                $wc4bp_groups_json     = isset( $_POST['_wc4bp_groups_json'] )? stripslashes($_POST['_wc4bp_groups_json']) : '';
+                if(!empty($wc4bp_groups_json)){
+                    $wc4bp_groups_json = html_entity_decode( $wc4bp_groups_json);
+                    $groups = json_decode( $wc4bp_groups_json );
+                    $variation_dictionary = array();
+                    foreach($groups as $key => $value){
+                        if(!empty($value->group_id)){
+                            $entity =  json_encode($value);
+                            $variation_dictionary[$value->variation].= $entity.',';
+                        }
+                    }
+
+
+
+
+                    foreach($variation_dictionary as $key =>$value){
+                        $variation_groups = rtrim($value,',');
+                        $variation_groups = '['.$variation_groups.']';
+
+                        $wc4bp_groups_json_old = get_post_meta( $key, '_wc4bp_groups_json', true );
+                        if ( $variation_groups != $wc4bp_groups_json_old ) {
+                            update_post_meta( $key, '_wc4bp_groups_json', esc_attr( $variation_groups ) );
+                        }
+
+                    }
+
+                    //Delete the variation group information if the variation id is not present in the current json sent on the form submit
+                    $variations        = $product->get_available_variations();
+                    foreach ( $variations as $variation ) {
+                        $variation_id = $variation['variation_id'];
+                        //search if the variation is in the list of variation submitted
+                        $found_variation_in_dictionary = false;
+                        foreach($variation_dictionary as $key =>$value){
+                            if($key==$variation_id){
+                                $found_variation_in_dictionary =true;
+                                break;
+                            }
+                        }
+                        //If the variation is not included in the submission then
+                        if(!$found_variation_in_dictionary){
+                            delete_post_meta( $variation_id, '_wc4bp_groups_json' );
+                        }
+
+                    }
+
+                }
             }
-			$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
-			$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
-			if ( ! empty( $wc4bp_groups_json ) ) {
-				if ( $wc4bp_groups_json != $wc4bp_groups_json_old ) {
-					update_post_meta( $post_id, '_wc4bp_groups_json', esc_attr( $wc4bp_groups_json ) );
-				}
-			} else {
-				if ( ! empty( $wc4bp_groups_json_old ) ) {
-					delete_post_meta( $post_id, '_wc4bp_groups_json' );
-				}
-			}
+            else{
+                $wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
+                $wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
+                if ( ! empty( $wc4bp_groups_json ) ) {
+                    if ( $wc4bp_groups_json != $wc4bp_groups_json_old ) {
+                        update_post_meta( $post_id, '_wc4bp_groups_json', esc_attr( $wc4bp_groups_json ) );
+                    }
+                } else {
+                    if ( ! empty( $wc4bp_groups_json_old ) ) {
+                        delete_post_meta( $post_id, '_wc4bp_groups_json' );
+                    }
+                }
+            }
+
 		}
 	}
 

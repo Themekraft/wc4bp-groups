@@ -70,18 +70,19 @@
                     }
                     $variations_select = array(
                         'id'      => '_variation',
-                        'custom_attributes' =>array('data-previouSel'=>'',
-                            'data-availableVariations'=> rtrim( trim( $wc4bp_groups_available_variation ), ',' )
-                            ,'data-groupId'=>$group->group_id,),
+                        'name'    => '_variation[]',
+                        'custom_attributes' =>array('previouSel'=>'',
+                            'availableVariations'=> rtrim( trim( $wc4bp_groups_available_variation ), ',' )
+                            ,'groupId'=>$group->group_id,),
                         'class'   => 'variation_list',
                         'label'   => wc4bp_groups_manager::translation( 'Variation:' ),
                         'options' => $variations_options
                     );
 
                     if ( isset( $group->variation ) ) {
-                        $variations_select['id']    = '_variation_'.$group->group_id .'_' .$group->variation;
+                      //  $variations_select['id']    = '_variation_'.$group->group_id .'_' .$group->variation;
                         $variations_select['value'] = $group->variation;
-                        $variations_select['custom_attributes']['data-previouSel'] = $group->variation;
+                        $variations_select['custom_attributes']['previouSel'] = $group->variation;
 
 
                     }
