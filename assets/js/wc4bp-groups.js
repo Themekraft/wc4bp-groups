@@ -120,7 +120,36 @@ jQuery(function ($) {
 
         function wc4bp_add_groups() {
 
-            function save_groups() {
+            function validate_variation_submission(variation_to_add){
+
+                var isvariation = jQuery('#wc4bp-group-ids').data('isvariation');
+                var group_variations = {}; // create an empty array
+                var result = true;
+
+                if(isvariation === true){
+                    //fill a key pair dictionary with key as a gripus id and value the variatiosnadded to the group
+                    $.each(variation_to_add, function (index, value) {
+                        var concat_group_value =  group_variations[ value.group_id] === undefined ? '' : group_variations[ value.group_id] ;
+                        var group_value_array = concat_group_value.split(",");
+                        if(group_value_array.length > 0){
+                            var validation_result = jQuery.inArray( value.variation, group_value_array );
+                            if(validation_result > 0){
+                                alert("The : "+value.group_name+ " Group  have duplicate variations. Please check and try again.")
+                                result = false;
+                                return false;//break the loop
+                            }
+                        }
+
+                        group_variations[value.group_id] = concat_group_value+','+value.variation;
+                    });
+
+                    return result;
+
+                }
+            }
+            function save_groups(event) {
+                var target = event.target.name;
+                if (target === 'submitted' || target === 'save') {
 
                 var json_handler = jQuery('#_wc4bp_groups_json');
                 var groups = jQuery('.wc4bp-group-item').map(function (i, v) {
@@ -138,8 +167,13 @@ jQuery(function ($) {
                     };
                 }).get();
 
+
                 var json = JSON.stringify(groups);
                 json_handler.val(json);
+                return  validate_variation_submission(groups);
+
+
+             }
             }
 
             function add_group() {
@@ -166,7 +200,7 @@ jQuery(function ($) {
                                 }
                             });
                         }else{
-                            var variation_already_added = jQuery('.variation_list[groupId="'+current_group.id+'"]');
+                            var variation_already_added = jQuery('.variation_list[groupid="'+current_group.id+'"]');
                             var available_variations ='';
 
                             if(variation_already_added.length > 0){
@@ -300,11 +334,13 @@ jQuery(function ($) {
                 formActionsInit: function () {
                     var items_container = jQuery('.wc4bp-group-container');
                     if (wc4bp_groups.is_force === undefined || wc4bp_groups.is_force === "") {
-                        jQuery('#post').on('submit', save_groups);
+                        jQuery('#post').on('click', save_groups);
                     }
                     else {
                         jQuery('.bf-submit').click(save_groups);
                     }
+
+
 
                     jQuery('.add_groups').on('click',add_group);
 

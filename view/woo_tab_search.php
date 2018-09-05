@@ -6,6 +6,19 @@
     <select multiple class="select2-hidden-accessible wc4bp-group-search" style="width: 50%;" id="wc4bp-group-ids" name="wc4bp-group-ids"
            data-placeholder="<?php wc4bp_groups_manager::echo_esc_attr_translation( 'Search for a group' ); ?>" data-action="wc4bp_group_search"
            data-multiple="true" data-exclude="<?php echo intval( $post->ID ); ?>"
+            avalibaleProductVariations="<?php
+
+            $product = wc_get_product( $post->ID );
+            $type    = $product->get_type();
+            if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+                $variations        = $product->get_available_variations();
+                $wc4bp_groups_available_variation ='';
+                foreach ( $variations as $variation ) {
+                    $wc4bp_groups_available_variation .= $variation['variation_id'] .',';
+                }
+                echo (rtrim( trim( $wc4bp_groups_available_variation ), ',' ));
+            }
+            ?>"
             data-isvariation="<?php
             $product = wc_get_product( $post->ID );
             $type    = $product->get_type();
