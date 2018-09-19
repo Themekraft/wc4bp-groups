@@ -507,7 +507,12 @@ class wc4bp_groups_woo {
 	 */
 	public function add_order_item_meta( $item_id, $cart_item, $order_id ) {
         if (!isset($cart_item['_bp_group'])){
-            $cart_item['_bp_group'] = $cart_item->legacy_values['_bp_group'];
+            if(isset($cart_item->legacy_values['_bp_group'])){
+                $cart_item['_bp_group'] = $cart_item->legacy_values['_bp_group'];
+            }else{
+                return;
+            }
+
 
 
         }
