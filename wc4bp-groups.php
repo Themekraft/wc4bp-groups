@@ -69,8 +69,9 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 				if ( ! empty( $GLOBALS['wc4bp_loader'] ) ) {
 					/** @var WC4BP_Loader $wc4bp */
 					$wc4bp    = $GLOBALS['wc4bp_loader'];
+					/** @var Freemius $freemius */
 					$freemius = $wc4bp::getFreemius();
-					if ( ! empty( $freemius ) && $freemius->is_plan__premium_only( 'professional' ) ) {
+					if ( ! empty( $freemius ) && $freemius->is_plan_or_trial__premium_only( 'professional' ) ) {
 						if ( wc4bp_groups_required::is_buddypress_active() && wc4bp_groups_required::is_woocommerce_active() ) {
 							require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_manager.php';
 							new wc4bp_groups_manager();
