@@ -38,7 +38,7 @@ Predefine the membership Level ( Moderator, Admin, Normal ) that your user will 
 == Frequently Asked Questions ==
 
 = Dependencies =
-This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpress.org/plugins/buddyforms/) with the Professional Plan.
+This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpress.org/plugins/wc4bp/) with the Professional Plan.
 
 
 == Screenshots ==
