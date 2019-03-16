@@ -3,7 +3,7 @@ Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
 Tested up to: 5.0.3
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+= 1.3.2 =
+* Fixed a Typo in the requirement message.
+
 = 1.3.1 =
 * Added a hook to not show the tab content in the product page. `wc4bp_groups_show_product_tab`
 
