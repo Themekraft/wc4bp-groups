@@ -3,7 +3,7 @@ Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
 Tested up to: 5.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,7 +56,7 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 
 == Changelog ==
 
-= 1.3 04. May. 2019 =
+= 1.3.1 04. May. 2019 =
 * Added the list of variations to the option.
 * Added the variation option to save as an option and load it again.
 * Updating woocommerce hooks to avoid deprecation.
