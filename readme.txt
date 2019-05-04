@@ -2,8 +2,8 @@
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
-Tested up to: 4.9.4
-Stable tag: 1.2.1
+Tested up to: 5.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,28 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+
+= 1.3 04. May. 2019 =
+* Added the list of variations to the option.
+* Added the variation option to save as an option and load it again.
+* Updating woocommerce hooks to avoid deprecation.
+* Added a code to get the product id from a product variation.
+* Added frontend js to handle the variations.
+* Added group variation to the product page.
+* Fixed : Check the product item is not working + Error adding the group
+* Updated composer and package.sh
+* Added codeship badge
+* show product variation group in the backend when group is mandatory
+* Fixed an error in the orders, in the BuddyPress Groups option
+* Fixed  errors in the backend and front when the add group t a product type variation
+* Fixed validation for variation: avoid set an existing variation to the group when editing the product. If all the variation of the product have been added to a group prevent this group to be added again to any of the variations of the product
+* Fixed server internal error when shipping is enabled in woocommerce
+* Added the trial of wc4bp as requirement to groups works.
+* Fixing the dependency link in the readme.txt
+* Update the readme.
+* Added a hook to not show the tab content in the product page. `wc4bp_groups_show_product_tab`
+* Cleaning the code
+
 = 1.2.1 =
 * Adding custom message to check dependency.
 * Changing the requirement library to use a custom internal id.
