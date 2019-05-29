@@ -14,8 +14,8 @@
  * @package wc4bp_groups
  *
  *****************************************************************************
- * WC requires at least: 3.0.0
- * WC tested up to: 3.5.3
+ * WC requires at least: 3.6.4
+ * WC tested up to: 3.6.4
  *****************************************************************************
  *
  * This script is free software; you can redistribute it and/or modify
