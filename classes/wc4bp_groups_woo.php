@@ -376,7 +376,11 @@ class wc4bp_groups_woo {
 				foreach ( $groups as $group ) {
 
 					if ( $group->is_optional == '1' ) {
-						$groups_to_show[ $group->group_id ] = array( 'group_id' => $group->group_id, 'name' => $group->group_name, 'variation' => $group->variation );
+						$group_array = array( 'group_id' => $group->group_id, 'name' => $group->group_name );
+						if ( ! empty( $group->variation ) ) {
+							$group_array['variation'] = $group->variation;
+						}
+						$groups_to_show[ $group->group_id ] = $group_array;
 					}
 				}
 			}

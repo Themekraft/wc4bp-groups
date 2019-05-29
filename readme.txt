@@ -2,8 +2,8 @@
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
-Tested up to: 5.0.3
-Stable tag: 1.3.2
+Tested up to: 5.1.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+= 1.3.3 29 May 2019 =
+* Fixed minor issue to avoid a notice in the product details in the frontend when the groups are optional.
+
 = 1.3.2 =
 * Fixed a Typo in the requirement message.
 
