@@ -277,13 +277,23 @@ class wc4bp_groups_woo {
 				$post_id           = isset( $_POST['_variation'] ) ? $_POST['_variation'] : $post_id;
 				$wc4bp_groups_json = isset( $_POST['_wc4bp_groups_json'] ) ? stripslashes( $_POST['_wc4bp_groups_json'] ) : '';
 				if ( ! empty( $wc4bp_groups_json ) ) {
-					$wc4bp_groups_json    = html_entity_decode( $wc4bp_groups_json );
-					$groups               = json_decode( $wc4bp_groups_json );
+					$wc4bp_groups_json = html_entity_decode( $wc4bp_groups_json );
+					$groups_array      = json_decode( $wc4bp_groups_json );
+					$groups            = array();
+					foreach ( $groups_array as $key => $value ) {
+						$groups[ $key ]             = $value;
+						$groups[ $key ]->group_name = mb_convert_encoding($value->group_name, "HTML-ENTITIES", "UTF-8");
+					}
+
 					$variation_dictionary = array();
 					foreach ( $groups as $key => $value ) {
-						if ( ! empty( $value->group_id ) ) {
-							$entity                                    = json_encode( $value );
-							$variation_dictionary[ $value->variation ] .= $entity . ',';
+						if ( ! empty( $value->group_id ) && ! empty( $value->variation ) ) {
+							$entity = json_encode( $value );
+							if ( isset( $variation_dictionary[ $value->variation ] ) ) {
+								$variation_dictionary[ $value->variation ] .= $entity . ',';
+							} else {
+								$variation_dictionary[ $value->variation ] = $entity . ',';
+							}
 						}
 					}
 
