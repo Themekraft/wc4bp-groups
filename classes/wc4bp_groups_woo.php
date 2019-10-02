@@ -24,7 +24,7 @@ class wc4bp_groups_woo {
 			add_filter( 'woocommerce_add_cart_item_data', array( $this, 'add_cart_item_data' ), 10, 2 );
 			add_filter( 'woocommerce_get_cart_item_from_session', array( $this, 'get_cart_item_from_session' ), 10, 2 );
 			add_filter( 'woocommerce_get_item_data', array( $this, 'get_item_data' ), 10, 2 );
-			add_action( 'woocommerce_add_order_item_meta', array( $this, 'add_order_item_meta' ), 10, 2 );
+			add_action( 'woocommerce_new_order_item', array( $this, 'add_order_item_meta' ), 10, 3 );
 			//Create the user in the group, depend on the current selected status from the backend
 			add_action( 'woocommerce_order_status_changed', array( $this, 'on_process_complete' ), 10, 4 );
 			add_filter( 'woocommerce_order_items_meta_display', array( $this, 'on_order_items_meta_display' ), 10, 2 ); //Process the item meta to show in the order in the front
@@ -53,6 +53,7 @@ class wc4bp_groups_woo {
 	 * @param WC_Product $_product
 	 */
 	public function add_after_oder_item_meta( $item_id, $item, $_product ) {
+		$groups_str = array();
 		if ( isset( $item['wc4bp_groups'] ) ) {
 			$groups = json_decode( $item['wc4bp_groups'], true );
 			echo '<table cellspacing="0" class="display_meta">';
@@ -153,7 +154,7 @@ class wc4bp_groups_woo {
 			$customer = $order->get_user();
 			if ( false !== $customer ) {
 				$items = $order->get_items();
-				/** @var WC_Product $item */
+				/** @var WC_Order_Item $item */
 				foreach ( $items as $key => $item ) {
 					$product      = $order->get_product_from_item( $item );
 					$final_groups = array();
@@ -200,6 +201,12 @@ class wc4bp_groups_woo {
 	 * @return mixed
 	 */
 	public function addProductOptionSection( $sections ) {
+		$is_active = apply_filters( 'wc4bp_groups_show_product_tab', true );
+
+		if ( ! $is_active ) {
+			return $sections;
+		}
+
 		$sections[ wc4bp_groups_manager::getSlug() ] = array(
 			'label'  => wc4bp_groups_manager::translation( 'WC4BP Groups' ),
 			'target' => wc4bp_groups_manager::getSlug(),
@@ -213,12 +220,36 @@ class wc4bp_groups_woo {
 	 * Add content to generated tab
 	 */
 	public function addProductOptionPanelTab() {
-		global $woocommerce, $post;
-		$groups_json = get_post_meta( $post->ID, '_wc4bp_groups_json', true );
-		$groups_json = html_entity_decode( $groups_json );
-		if ( ! empty( $groups_json ) ) {
-			$groups = json_decode( $groups_json );
+		$is_active = apply_filters( 'wc4bp_groups_show_product_tab', true );
+
+		if ( ! $is_active ) {
+			return;
 		}
+
+		global $woocommerce, $post;
+		$product = wc_get_product( $post->ID );
+		$type    = $product->get_type();
+		$groups  = array();
+		if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+			$variations = $product->get_available_variations();
+			foreach ( $variations as $variation ) {
+				$variation_id = $variation['variation_id'];
+				$groups_json  = get_post_meta( $variation_id, '_wc4bp_groups_json', true );
+
+				if ( ! empty( $groups_json ) ) {
+					$groups[] = json_decode( html_entity_decode( $groups_json ) );
+				}
+			}
+
+		} else {
+			$groups_json = get_post_meta( $post->ID, '_wc4bp_groups_json', true );
+			$groups_json = html_entity_decode( $groups_json );
+			if ( ! empty( $groups_json ) ) {
+				$groups = json_decode( $groups_json );
+			}
+		}
+
+
 		include WC4BP_GROUP_VIEW_PATH . 'woo_tab_conatiner.php';
 	}
 
@@ -239,17 +270,79 @@ class wc4bp_groups_woo {
 	 */
 	public static function saveProductOptionsFields( $post_id, $post ) {
 		if ( bp_is_active( 'groups' ) ) {
-			$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
-			$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
-			if ( ! empty( $wc4bp_groups_json ) ) {
-				if ( $wc4bp_groups_json != $wc4bp_groups_json_old ) {
-					update_post_meta( $post_id, '_wc4bp_groups_json', esc_attr( $wc4bp_groups_json ) );
+			$product = wc_get_product( $post_id );
+			$type    = $product->get_type();
+
+			if ( $type === 'variable' ) {
+				$post_id           = isset( $_POST['_variation'] ) ? $_POST['_variation'] : $post_id;
+				$wc4bp_groups_json = isset( $_POST['_wc4bp_groups_json'] ) ? stripslashes( $_POST['_wc4bp_groups_json'] ) : '';
+				if ( ! empty( $wc4bp_groups_json ) ) {
+					$wc4bp_groups_json = html_entity_decode( $wc4bp_groups_json );
+					$groups_array      = json_decode( $wc4bp_groups_json );
+					$groups            = array();
+					foreach ( $groups_array as $key => $value ) {
+						$groups[ $key ]             = $value;
+						$groups[ $key ]->group_name = mb_convert_encoding($value->group_name, "HTML-ENTITIES", "UTF-8");
+					}
+
+					$variation_dictionary = array();
+					foreach ( $groups as $key => $value ) {
+						if ( ! empty( $value->group_id ) && ! empty( $value->variation ) ) {
+							$entity = json_encode( $value );
+							if ( isset( $variation_dictionary[ $value->variation ] ) ) {
+								$variation_dictionary[ $value->variation ] .= $entity . ',';
+							} else {
+								$variation_dictionary[ $value->variation ] = $entity . ',';
+							}
+						}
+					}
+
+
+					foreach ( $variation_dictionary as $key => $value ) {
+						$variation_groups = rtrim( $value, ',' );
+						$variation_groups = '[' . $variation_groups . ']';
+
+						$wc4bp_groups_json_old = get_post_meta( $key, '_wc4bp_groups_json', true );
+						if ( $variation_groups != $wc4bp_groups_json_old ) {
+							update_post_meta( $key, '_wc4bp_groups_json', esc_attr( $variation_groups ) );
+						}
+
+					}
+
+					//Delete the variation group information if the variation id is not present in the current json sent on the form submit
+					$variations = $product->get_available_variations();
+					foreach ( $variations as $variation ) {
+						$variation_id = $variation['variation_id'];
+						//search if the variation is in the list of variation submitted
+						$found_variation_in_dictionary = false;
+						foreach ( $variation_dictionary as $key => $value ) {
+							if ( $key == $variation_id ) {
+								$found_variation_in_dictionary = true;
+								break;
+							}
+						}
+						//If the variation is not included in the submission then
+						if ( ! $found_variation_in_dictionary ) {
+							delete_post_meta( $variation_id, '_wc4bp_groups_json' );
+						}
+
+					}
+
 				}
 			} else {
-				if ( ! empty( $wc4bp_groups_json_old ) ) {
-					delete_post_meta( $post_id, '_wc4bp_groups_json' );
+				$wc4bp_groups_json     = esc_attr( $_POST['_wc4bp_groups_json'] );
+				$wc4bp_groups_json_old = get_post_meta( $post_id, '_wc4bp_groups_json', true );
+				if ( ! empty( $wc4bp_groups_json ) ) {
+					if ( $wc4bp_groups_json != $wc4bp_groups_json_old ) {
+						update_post_meta( $post_id, '_wc4bp_groups_json', esc_attr( $wc4bp_groups_json ) );
+					}
+				} else {
+					if ( ! empty( $wc4bp_groups_json_old ) ) {
+						delete_post_meta( $post_id, '_wc4bp_groups_json' );
+					}
 				}
 			}
+
 		}
 	}
 
@@ -258,19 +351,52 @@ class wc4bp_groups_woo {
 	 */
 	public function add_field_to_product_page() {
 		global $product;
-		$groups_json    = get_post_meta( $product->get_id(), '_wc4bp_groups_json', true );
-		$groups_json    = html_entity_decode( $groups_json );
+		$type   = $product->get_type();
+		$groups = array();
+		if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+			$variations = $product->get_available_variations();
+			foreach ( $variations as $variation ) {
+				$variation_id = $variation['variation_id'];
+				$groups_json  = get_post_meta( $variation_id, '_wc4bp_groups_json', true );
+				if ( ! empty( $groups_json ) ) {
+					$groups[] = json_decode( html_entity_decode( $groups_json ) );
+				}
+			}
+
+		} else {
+			$groups_json = get_post_meta( $product->get_id(), '_wc4bp_groups_json', true );
+			$groups_json = html_entity_decode( $groups_json );
+			if ( ! empty( $groups_json ) ) {
+				$groups = json_decode( $groups_json );
+			}
+		}
 		$groups_to_show = array();
-		if ( ! empty( $groups_json ) ) {
-			$groups = json_decode( $groups_json );
-			if ( is_array( $groups ) ) {
+
+		if ( is_array( $groups ) ) {
+
+			if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
 				foreach ( $groups as $group ) {
+					foreach ( $group as $key => $value ) {
+						if ( $value->is_optional == '1' ) {
+							$groups_to_show[] = array( 'group_id' => $value->group_id, 'name' => $value->group_name, 'variation' => $value->variation );
+						}
+					}
+				}
+			} else {
+				foreach ( $groups as $group ) {
+
 					if ( $group->is_optional == '1' ) {
-						$groups_to_show[ $group->group_id ] = $group->group_name;
+						$group_array = array( 'group_id' => $group->group_id, 'name' => $group->group_name );
+						if ( ! empty( $group->variation ) ) {
+							$group_array['variation'] = $group->variation;
+						}
+						$groups_to_show[ $group->group_id ] = $group_array;
 					}
 				}
 			}
+
 		}
+
 
 		if ( ! empty( $groups_to_show ) ) {
 			$this->output_checkbox( array(
@@ -298,18 +424,26 @@ class wc4bp_groups_woo {
 		$field['value']         = isset( $field['value'] ) ? $field['value'] : get_post_meta( $thepostid, $field['id'], true );
 		$field['name']          = isset( $field['name'] ) ? $field['name'] : $field['id'];
 
-		echo '<fieldset class="form-field ' . esc_attr( $field['id'] ) . '_field ' . esc_attr( $field['wrapper_class'] ) . '"><legend>' . wp_kses_post( $field['label'] ) . '</legend><ul class="wc4bp-group-radios">';
+		$is_variation = '';
+		$product      = wc_get_product( $thepostid );
+		if ( $product instanceof WC_Product_Variable ) {
+			$is_variation = 'style="display:none;"';
+		}
+
+		echo '<div ' . $is_variation . ' class="form-field ' . esc_attr( $field['id'] ) . '_field ' . esc_attr( $field['wrapper_class'] ) . '"><legend>' . wp_kses_post( $field['label'] ) . '</legend><ul class="wc4bp-group-radios">';
 
 		foreach ( $field['options'] as $key => $value ) {
-
+			$variation = ( ! empty( $value['variation'] ) ) ? ' data-variation-id="' . $value['variation'] . '"' : '';
 			echo '<li><label><input
 				name="' . esc_attr( $field['name'] ) . '"
-				value="' . esc_attr( $key ) . '"
-				type="checkbox"
+				value="' . esc_attr( $value['group_id'] ) . '"
+				type="checkbox" 
+				' . $variation . '
+				data-product-id="' . esc_attr( $thepostid ) . '"
 				class="' . esc_attr( $field['class'] ) . '"
 				style="' . esc_attr( $field['style'] ) . '"
 				' . checked( esc_attr( $field['value'] ), esc_attr( $key ), false ) . '
-				/> ' . esc_html( $value ) . '</label>
+				/> ' . esc_html( $value['name'] ) . '</label>
 		</li>';
 		}
 		echo '</ul>';
@@ -323,7 +457,7 @@ class wc4bp_groups_woo {
 			}
 		}
 
-		echo '</fieldset>';
+		echo '</div>';
 	}
 
 	/**
@@ -377,6 +511,7 @@ class wc4bp_groups_woo {
 	 * @return array
 	 */
 	public function get_item_data( $item_data, $cart_item ) {
+
 		$item_data = $this->add_data_as_meta( $item_data, $cart_item, true );
 
 		return $item_data;
@@ -387,9 +522,18 @@ class wc4bp_groups_woo {
 	 *
 	 * @param mixed $item_id
 	 * @param $cart_item
-	 *
+	 * @param $order_id
 	 */
-	public function add_order_item_meta( $item_id, $cart_item ) {
+	public function add_order_item_meta( $item_id, $cart_item, $order_id ) {
+		if ( ! isset( $cart_item['_bp_group'] ) ) {
+			if ( isset( $cart_item->legacy_values['_bp_group'] ) ) {
+				$cart_item['_bp_group'] = $cart_item->legacy_values['_bp_group'];
+			} else {
+				return;
+			}
+
+
+		}
 		$item_data = $this->add_data_as_meta( array(), $cart_item );
 
 		if ( empty ( $item_data ) ) {
@@ -415,11 +559,26 @@ class wc4bp_groups_woo {
 			$groups = $this->get_product_groups( $cart_item['product_id'] );
 			if ( ! empty( $groups ) ) {
 				$groups_str = array();
-				foreach ( $groups as $group ) {
-					if ( in_array( $group->group_id, $cart_item['_bp_group'] ) ) {
-						$groups_str[ $group->group_id ] = $group->group_name;
+				$product    = wc_get_product( $cart_item['product_id'] );
+				$type       = $product->get_type();
+				if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+
+					foreach ( $groups as $group ) {
+						foreach ( $group as $key => $value ) {
+							if ( in_array( $value->group_id, $cart_item['_bp_group'] ) ) {
+								$groups_str[ $value->group_id ] = $value->group_name;
+							}
+						}
+
+					}
+				} else {
+					foreach ( $groups as $group ) {
+						if ( in_array( $group->group_id, $cart_item['_bp_group'] ) ) {
+							$groups_str[ $group->group_id ] = $group->group_name;
+						}
 					}
 				}
+
 				if ( $output ) {
 					$groups_str  = implode( ', ', $groups_str );
 					$item_data[] = array(
@@ -447,15 +606,34 @@ class wc4bp_groups_woo {
 	 * @return array
 	 */
 	private function get_product_groups( $product_id ) {
-		$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
-		$groups_json = html_entity_decode( $groups_json );
-		$result      = array();
-		if ( ! empty( $groups_json ) ) {
-			$groups = json_decode( $groups_json );
-			if ( is_array( $groups ) ) {
-				$result = $groups;
+		$product = wc_get_product( $product_id );
+		$type    = $product->get_type();
+		$groups  = array();
+		if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
+			$variations = $product->get_available_variations();
+			foreach ( $variations as $variation ) {
+				$variation_id = $variation['variation_id'];
+				$groups_json  = get_post_meta( $variation_id, '_wc4bp_groups_json', true );
+
+				if ( ! empty( $groups_json ) ) {
+					$groups[] = json_decode( html_entity_decode( $groups_json ) );
+				}
 			}
+		} else {
+			$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
+			$groups_json = html_entity_decode( $groups_json );
+			if ( ! empty( $groups_json ) ) {
+				$groups = json_decode( $groups_json );
+			}
+
 		}
+
+		$result = array();
+
+		if ( is_array( $groups ) ) {
+			$result = $groups;
+		}
+
 
 		return $result;
 	}

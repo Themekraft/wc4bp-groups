@@ -1,14 +1,23 @@
 {
-	"name": "wc4bp-group",
-	"description": "WooCommerce for BuddyPress - Shop solution for your BuddyPress community. Integrates a WooCommerce installation with a BuddyPress social network.",
-	"keywords": [
-		"buddypress", "social networking", "woocommerce", "e-commerce"
-	],
-	"homepage": "http://www.themekraft.com",
-	"license": "GPL-2.0+",
-	"type": "wordpress-plugin",
-	"require": {
-		"composer/installers": "~1.0",
-		"xrstf/composer-php52": "^1.0.19"
-	}
+  "name": "themekraft/wc4bp-group",
+  "description": "WooCommerce for BuddyPress - Shop solution for your BuddyPress community. Integrates a WooCommerce installation with a BuddyPress social network.",
+  "keywords": [
+    "buddypress",
+    "social networking",
+    "woocommerce",
+    "e-commerce"
+  ],
+  "homepage": "http://www.themekraft.com",
+  "license": "GPL-2.0+",
+  "type": "wordpress-plugin",
+  "require": {
+    "composer/installers": "~1.0",
+    "xrstf/composer-php52": "^1.0.19"
+  },
+  "scripts": {
+    "package": "sh .tk/package.sh wc4bp-groups",
+    "wp-release": "sh .tk/wp_release.sh",
+    "beta-release": "sh .tk/full-deploy.sh wc4bp-groups 971 false beta",
+    "full-release": "sh .tk/full-deploy.sh wc4bp-groups 971 false released"
+  }
 }

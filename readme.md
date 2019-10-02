@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Themekraft/wc4bp-groups.svg?branch=master)](https://travis-ci.org/Themekraft/wc4bp-groups)
+[ ![Codeship Status for Themekraft/wc4bp-groups](https://app.codeship.com/projects/2b0f9ff0-7297-0136-a4f5-16905de121f2/status?branch=master)](https://app.codeship.com/projects/299450)
 
 ## WooCommerce for Buddypress Groups
 Contributors: themekraft, svenl77, gfirem

@@ -5,16 +5,17 @@
  * Description: WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce. Ideal for subscription and membership sites such as premium support.
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
- * Version:     1.3.1
+ * Version:     1.3.4
  * Licence:     GPLv3
  * Text Domain: wc4bp
  * Domain Path: /languages
+ * Svn: wc4bp-groups
  *
  * @package wc4bp_groups
  *
  *****************************************************************************
- * WC requires at least: 3.0.0
- * WC tested up to: 3.3.3
+ * WC requires at least: 3.6.4
+ * WC tested up to: 3.7.0
  *****************************************************************************
  *
  * This script is free software; you can redistribute it and/or modify
@@ -69,8 +70,9 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 				if ( ! empty( $GLOBALS['wc4bp_loader'] ) ) {
 					/** @var WC4BP_Loader $wc4bp */
 					$wc4bp    = $GLOBALS['wc4bp_loader'];
+					/** @var Freemius $freemius */
 					$freemius = $wc4bp::getFreemius();
-					if ( ! empty( $freemius ) && $freemius->is_plan__premium_only( 'professional' ) ) {
+					if ( ! empty( $freemius ) && $freemius->is_plan_or_trial__premium_only( 'professional' ) ) {
 						if ( wc4bp_groups_required::is_buddypress_active() && wc4bp_groups_required::is_woocommerce_active() ) {
 							require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_manager.php';
 							new wc4bp_groups_manager();
@@ -84,7 +86,7 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 
 		public function admin_notice_need_pro() {
 			$class   = 'notice notice-warning';
-			$message = __( 'Need WC4BP -> WooCommerce BuddyPress Integration Professional Plan to work!', 'wc4bp_groups' );
+			$message = __( '<strong>WC4BP-Groups</strong> need <strong>WC4BP -> WooCommerce BuddyPress Integration</strong> Professional Plan to work!', 'wc4bp_groups' );
 
 			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 		}
