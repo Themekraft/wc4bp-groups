@@ -2,8 +2,8 @@
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
-Tested up to: 5.1.2
-Stable tag: 1.3.4
+Tested up to: 5.3.2
+Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+= 1.3.5 - 15 Jan 2020 =
+* Fixed the error trigger when the code was executed with an empty product.  
+
 = 1.3.4 1 Oct 2019 =
 * Added support for Unicode characters, thanks to `Ju Hyung Kang` we start supporting Korean.
 

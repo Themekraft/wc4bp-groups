@@ -73,7 +73,7 @@ class wc4bp_groups_woo {
 				$role      = '';
 				if ( $group->member_type == '1' ) {
 					$role = '(' . wc4bp_groups_manager::translation( "Moderator" ) . ')';
-				} else if ( $group->member_type == '2' ) {
+				} elseif ( $group->member_type == '2' ) {
 					$role = '(' . wc4bp_groups_manager::translation( "Admin" ) . ')';
 				}
 				$optional = '';
@@ -228,8 +228,11 @@ class wc4bp_groups_woo {
 
 		global $woocommerce, $post;
 		$product = wc_get_product( $post->ID );
-		$type    = $product->get_type();
-		$groups  = array();
+		if ( empty( $product ) ) {
+			return;
+		}
+		$type   = $product->get_type();
+		$groups = array();
 		if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
 			$variations = $product->get_available_variations();
 			foreach ( $variations as $variation ) {
@@ -270,8 +273,14 @@ class wc4bp_groups_woo {
 	 */
 	public static function saveProductOptionsFields( $post_id, $post ) {
 		if ( bp_is_active( 'groups' ) ) {
+			/** @var WC_Product $product */
 			$product = wc_get_product( $post_id );
-			$type    = $product->get_type();
+
+			if ( empty( $product ) ) {
+				return;
+			}
+
+			$type = $product->get_type();
 
 			if ( $type === 'variable' ) {
 				$post_id           = isset( $_POST['_variation'] ) ? $_POST['_variation'] : $post_id;
@@ -282,7 +291,7 @@ class wc4bp_groups_woo {
 					$groups            = array();
 					foreach ( $groups_array as $key => $value ) {
 						$groups[ $key ]             = $value;
-						$groups[ $key ]->group_name = mb_convert_encoding($value->group_name, "HTML-ENTITIES", "UTF-8");
+						$groups[ $key ]->group_name = mb_convert_encoding( $value->group_name, "HTML-ENTITIES", "UTF-8" );
 					}
 
 					$variation_dictionary = array();
@@ -351,6 +360,9 @@ class wc4bp_groups_woo {
 	 */
 	public function add_field_to_product_page() {
 		global $product;
+		if ( empty( $product ) ) {
+			return;
+		}
 		$type   = $product->get_type();
 		$groups = array();
 		if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
@@ -560,7 +572,10 @@ class wc4bp_groups_woo {
 			if ( ! empty( $groups ) ) {
 				$groups_str = array();
 				$product    = wc_get_product( $cart_item['product_id'] );
-				$type       = $product->get_type();
+				if ( empty( $product ) ) {
+					return $item_data;
+				}
+				$type = $product->get_type();
 				if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
 
 					foreach ( $groups as $group ) {
@@ -607,8 +622,11 @@ class wc4bp_groups_woo {
 	 */
 	private function get_product_groups( $product_id ) {
 		$product = wc_get_product( $product_id );
-		$type    = $product->get_type();
-		$groups  = array();
+		if ( empty( $product ) ) {
+			return array();
+		}
+		$type   = $product->get_type();
+		$groups = array();
 		if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
 			$variations = $product->get_available_variations();
 			foreach ( $variations as $variation ) {
