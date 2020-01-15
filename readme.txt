@@ -56,7 +56,7 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 
 == Changelog ==
 = 1.3.5 - 15 Jan 2020 =
-* Fixed the error trigger when the code was executed with an empty product.  
+* Fixed the error trigger when the code was executed with an empty product.
 
 = 1.3.4 1 Oct 2019 =
 * Added support for Unicode characters, thanks to `Ju Hyung Kang` we start supporting Korean.
