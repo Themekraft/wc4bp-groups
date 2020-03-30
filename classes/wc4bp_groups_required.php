@@ -75,6 +75,12 @@ class wc4bp_groups_required {
 		return is_plugin_active( 'woocommerce/woocommerce.php' );
 	}
 
+	public static function is_woo_subscription_active() {
+		self::load_plugins_dependency();
+
+		return is_plugin_active( 'woocommerce-subscriptions/woocommerce-subscriptions.php' );
+	}
+
 	public static function is_buddypress_active() {
 		self::load_plugins_dependency();
 
@@ -135,26 +141,26 @@ class wc4bp_groups_required {
 			'dismissable'  => false,                    // If false, a user cannot dismiss the nag message.
 			'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
 			'is_automatic' => false,                   // Automatically activate plugins after installation or not.
-			'strings' => array(
-				'notice_can_install_required'     => _n_noop(
+			'strings'      => array(
+				'notice_can_install_required'    => _n_noop(
 				/* translators: 1: plugin name(s). */
 					'<u>WC4BP -> Groups</u> plugin requires the following plugin: %1$s.',
 					'<u>WC4BP -> Groups</u> plugin requires the following plugins: %1$s.',
 					'wc4bp_groups'
 				),
-				'notice_can_install_recommended'  => _n_noop(
+				'notice_can_install_recommended' => _n_noop(
 				/* translators: 1: plugin name(s). */
 					'<u>WC4BP -> Groups</u> plugin recommends the following plugin: %1$s.',
 					'<u>WC4BP -> Groups</u> plugin recommends the following plugins: %1$s.',
 					'wc4bp_groups'
 				),
-				'notice_can_activate_required'    => _n_noop(
+				'notice_can_activate_required'   => _n_noop(
 				/* translators: 1: plugin name(s). */
 					'The following is a required plugin for <u>WC4BP -> Groups</u> and is currently inactive: %1$s.',
 					'The following is a required plugins for <u>WC4BP -> Groups</u> and they are currently inactive: %1$s.',
 					'wc4bp_groups'
 				),
-				'notice_ask_to_update'            => _n_noop(
+				'notice_ask_to_update'           => _n_noop(
 				/* translators: 1: plugin name(s). */
 					'The following plugin needs to be updated to its latest version to ensure maximum compatibility with this plugin: %1$s.',
 					'The following plugins need to be updated to their latest version to ensure maximum compatibility with this plugin: %1$s.',

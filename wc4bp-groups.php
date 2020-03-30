@@ -86,9 +86,9 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 
 		public function admin_notice_need_pro() {
 			$class   = 'notice notice-warning';
-			$message = __( '<strong>WC4BP-Groups</strong> need <strong>WC4BP -> WooCommerce BuddyPress Integration</strong> Professional Plan to work!', 'wc4bp_groups' );
+			$message = sprintf(__( '%s need %s Professional Plan to work!', 'wc4bp_groups' ),'<strong>WC4BP-Groups</strong>', '<strong>WC4BP -> WooCommerce BuddyPress Integration</strong>');
 
-			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+			echo sprintf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ),  $message );
 		}
 
 		/**

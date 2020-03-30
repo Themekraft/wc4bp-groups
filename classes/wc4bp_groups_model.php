@@ -77,7 +77,7 @@ class wc4bp_groups_model {
 	 */
 	public function get_group_view() {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
-		$post_id = isset($_POST['post_id']) ? $_POST['post_id'] : 0;
+		$post_id = isset( $_POST['post_id'] ) ? $_POST['post_id'] : 0;
 		if ( ! empty( $_POST['group'] ) && wp_doing_ajax() && is_string( $_POST['group'] ) ) {
 			$data = json_decode( stripslashes( $_POST['group'] ) );
 			if ( is_object( $data ) ) {
@@ -98,14 +98,14 @@ class wc4bp_groups_model {
 	 * Add member to group as admin
 	 * credits go to boon georges. This function is coppyed from the group management plugin.
 	 *
-	 * @package wc4bp_groups
-	 *
 	 * @param $group_id
 	 * @param bool $user_id
 	 * @param int $is_admin
 	 * @param int $is_mod
 	 *
 	 * @return bool
+	 * @package wc4bp_groups
+	 *
 	 */
 	public static function add_member_to_group( $group_id, $user_id = false, $is_admin = 0, $is_mod = 0 ) {
 		global $bp;
@@ -150,6 +150,40 @@ class wc4bp_groups_model {
 		groups_update_groupmeta( $group_id, 'total_member_count', (int) groups_get_groupmeta( $group_id, 'total_member_count' ) + 1 );
 		groups_update_groupmeta( $group_id, 'last_activity', gmdate( "Y-m-d H:i:s" ) );
 		do_action( 'groups_join_group', $group_id, $user_id );
+
+		return true;
+	}
+
+	public static function remove_member_from_group( $group_id, $user_id = false ) {
+		if ( empty( $user_id ) ) {
+			$user_id = bp_loggedin_user_id();
+		}
+
+		// Don't let single admins leave the group.
+		if ( count( groups_get_group_admins( $group_id ) ) < 2 ) {
+			if ( groups_is_user_admin( $user_id, $group_id ) ) {
+				bp_core_add_message( __( 'As the only admin, you cannot leave the group.', 'buddypress' ), 'error' );
+
+				return false;
+			}
+		}
+
+		if ( ! BP_Groups_Member::delete( $user_id, $group_id ) ) {
+			return false;
+		}
+
+		bp_core_add_message( __( 'You successfully left the group.', 'buddypress' ) );
+
+		/**
+		 * Fires after a user leaves a group.
+		 *
+		 * @param int $group_id ID of the group.
+		 * @param int $user_id ID of the user leaving the group.
+		 *
+		 * @since 1.0.0
+		 *
+		 */
+		do_action( 'groups_leave_group', $group_id, $user_id );
 
 		return true;
 	}

@@ -22,10 +22,15 @@ class wc4bp_groups_manager {
 		new wc4bp_groups_log();
 		try {
 			//loading_dependency
+			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_base.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_model.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo.php';
 			new wc4bp_groups_model();
 			new wc4bp_groups_woo();
+			if ( wc4bp_groups_required::is_woo_subscription_active() ) {
+				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_subscription.php';
+				new wc4bp_groups_woo_subscription();
+			}
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ) );
@@ -86,7 +91,7 @@ class wc4bp_groups_manager {
 			wp_enqueue_script( 'wc4bp_groups' );
 			wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
 				'ajax_url'            => admin_url( 'admin-ajax.php' ),
-				'post_id'             =>$post->ID,
+				'post_id'             => $post->ID,
 				'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
 				'is_force'            => $force,
 				'general_error'       => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),
@@ -114,11 +119,11 @@ class wc4bp_groups_manager {
 	}
 
 	/**
-	 * Retrieve the translation for the plugins. Wrapper for @see __()
-	 *
-	 * @param $str
+	 * Retrieve the translation for the plugins. Wrapper for @param $str
 	 *
 	 * @return string
+	 * @see __()
+	 *
 	 */
 	public static function translation( $str ) {
 		return __( $str, 'wc4bp_groups' );
@@ -126,9 +131,9 @@ class wc4bp_groups_manager {
 
 
 	/**
-	 * Display the translation for the plugins. Wrapper for @see _e()
+	 * Display the translation for the plugins. Wrapper for @param $str
+	 * @see _e()
 	 *
-	 * @param $str
 	 */
 	public static function echo_translation( $str ) {
 		_e( $str, 'wc4bp_groups' );

@@ -55,6 +55,9 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+= 1.4.0 - 30 March 2020 =
+* Added support for Woocommerce Subscription.
+
 = 1.3.5 - 15 Jan 2020 =
 * Fixed the error trigger when the code was executed with an empty product.
 

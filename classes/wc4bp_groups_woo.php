@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class wc4bp_groups_woo {
+class wc4bp_groups_woo extends wc4bp_groups_woo_base {
 
 	public function __construct() {
 		add_filter( 'woocommerce_product_data_tabs', array( $this, 'addProductOptionSection' ), 10, 1 ); // Add section
@@ -171,6 +171,7 @@ class wc4bp_groups_woo {
 					}
 					foreach ( $final_groups as $group_id => $group ) { //Process all groups related to the current item
 						$final_trigger = ( ! isset( $group->trigger ) ) ? 'completed' : $group->trigger;
+						$final_trigger = apply_filters('wc4bp_groups_trigger_complete_status', $final_trigger, $order, $product);
 						if ( stripos( $to, $final_trigger ) !== false ) { //Check the trigger set for the group
 							$is_admin = 0;
 							$is_mod   = 0;
@@ -535,6 +536,8 @@ class wc4bp_groups_woo {
 	 * @param mixed $item_id
 	 * @param $cart_item
 	 * @param $order_id
+	 *
+	 * @throws Exception
 	 */
 	public function add_order_item_meta( $item_id, $cart_item, $order_id ) {
 		if ( ! isset( $cart_item['_bp_group'] ) ) {
@@ -611,94 +614,4 @@ class wc4bp_groups_woo {
 
 		return $item_data;
 	}
-
-
-	/**
-	 * Get the groups configured associated to a product
-	 *
-	 * @param $product_id
-	 *
-	 * @return array
-	 */
-	private function get_product_groups( $product_id ) {
-		$product = wc_get_product( $product_id );
-		if ( empty( $product ) ) {
-			return array();
-		}
-		$type   = $product->get_type();
-		$groups = array();
-		if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
-			$variations = $product->get_available_variations();
-			foreach ( $variations as $variation ) {
-				$variation_id = $variation['variation_id'];
-				$groups_json  = get_post_meta( $variation_id, '_wc4bp_groups_json', true );
-
-				if ( ! empty( $groups_json ) ) {
-					$groups[] = json_decode( html_entity_decode( $groups_json ) );
-				}
-			}
-		} else {
-			$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
-			$groups_json = html_entity_decode( $groups_json );
-			if ( ! empty( $groups_json ) ) {
-				$groups = json_decode( $groups_json );
-			}
-
-		}
-
-		$result = array();
-
-		if ( is_array( $groups ) ) {
-			$result = $groups;
-		}
-
-
-		return $result;
-	}
-
-	/**
-	 * Get the groups configured to a product not optionals
-	 *
-	 * @param $product_id
-	 *
-	 * @return array
-	 */
-	private function get_product_groups_not_optional( $product_id ) {
-		$groups_json = get_post_meta( $product_id, '_wc4bp_groups_json', true );
-		$groups_json = html_entity_decode( $groups_json );
-		$result      = array();
-		if ( ! empty( $groups_json ) ) {
-			$groups = json_decode( $groups_json );
-			if ( is_array( $groups ) ) {
-				foreach ( $groups as $group ) {
-					if ( ! isset( $group->is_optional ) || $group->is_optional == '0' ) {
-						$result[ $group->group_id ] = $group;
-					}
-				}
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Get group save in the configuration by his id belong to product
-	 *
-	 * @param $product_id
-	 * @param $group_id
-	 *
-	 * @return bool|stdClass
-	 */
-	private function get_product_group( $product_id, $group_id ) {
-		$option_groups = $this->get_product_groups( $product_id );
-		foreach ( $option_groups as $option_group ) {
-			if ( intval( $option_group->group_id ) === intval( $group_id ) ) {
-				return $option_group;
-			}
-		}
-
-		return false;
-	}
-
-
 }
