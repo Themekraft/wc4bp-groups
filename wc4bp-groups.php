@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: WC4BP -> Groups
+ * Plugin Name: WooBuddy -> Groups
  * Plugin URI:  https://themekraft.com/woocommerce-buddypress-integration/
- * Description: WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce. Ideal for subscription and membership sites such as premium support.
+ * Description: WooBuddy -> Groups, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
- * Version:     1.4.0
+ * Version:     1.4.1
  * Licence:     GPLv3
  * Text Domain: wc4bp
  * Domain Path: /languages
@@ -15,7 +15,7 @@
  *
  *****************************************************************************
  * WC requires at least: 3.6.4
- * WC tested up to: 3.8.1
+ * WC tested up to: 4.8.0
  *****************************************************************************
  *
  * This script is free software; you can redistribute it and/or modify
@@ -86,7 +86,7 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 
 		public function admin_notice_need_pro() {
 			$class   = 'notice notice-warning';
-			$message = sprintf(__( '%s need %s Professional Plan to work!', 'wc4bp_groups' ),'<strong>WC4BP-Groups</strong>', '<strong>WC4BP -> WooCommerce BuddyPress Integration</strong>');
+			$message = sprintf(__( '%s need %s Professional Plan to work!', 'wc4bp_groups' ),'<strong>WooBuddy -> Groups</strong>', '<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>');
 
 			echo sprintf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ),  $message );
 		}

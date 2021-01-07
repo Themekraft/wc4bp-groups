@@ -1,13 +1,13 @@
-=== WC4BP -> Groups ===
+=== WooBuddy -> Groups ===
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
 Tested up to: 5.3.2
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WooCommerce for BuddyPress Groups - Integrate BuddyPress Groups with WooCommerce. Ideal for subscription and membership sites such as premium support.
+WooBuddy -> Groups, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
 
 == Description ==
 
@@ -38,7 +38,7 @@ Predefine the membership Level ( Moderator, Admin, Normal ) that your user will 
 == Frequently Asked Questions ==
 
 = Dependencies =
-This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpress.org/plugins/wc4bp/) with the Professional Plan.
+This addon need the [WooBuddy -> WooCommerce BuddyPress Integration](https://wordpress.org/plugins/wc4bp/) with the Professional Plan.
 
 
 == Screenshots ==
@@ -55,6 +55,10 @@ This addon need the [WC4BP -> WooCommerce BuddyPress Integration](https://wordpr
 4. Done ;)
 
 == Changelog ==
+= 1.4.1 - 7 Jan 2021 =
+* Change name to WooBuddy -> Subscriptions.
+* Maintenance review.
+
 = 1.4.0 - 30 March 2020 =
 * Added support for Woocommerce Subscription.
 

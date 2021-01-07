@@ -1,19 +1,19 @@
 [ ![Codeship Status for Themekraft/wc4bp-groups](https://app.codeship.com/projects/2b0f9ff0-7297-0136-a4f5-16905de121f2/status?branch=master)](https://app.codeship.com/projects/299450)
 
-## WooCommerce for Buddypress Groups
+## WooBuddy -> Groups
 Contributors: themekraft, svenl77, gfirem
 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WooCommerce for Buddypress Groups - Integrate Buddypress Groups with Woocommerce
+WooBuddy -> Groups, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
 
 ## Description
 
-Takes a WooCommerce Product to handle the membership of Woocommerce Customer into existing Buddypress Groups.
+Takes a WooCommerce Product to handle the membership of WooCommerce Customer into existing Buddypress Groups.
 
 Requirements
-This addon need the WC4BP -> WooCommerce BuddyPress Integration with the Professional Plan.
+This addon need the WooBuddy -> WooCommerce BuddyPress Integration with the Professional Plan.
 
 Settings managing (for both reviews and purchases)
 To add new Group membership to Product you need to add it and set the option, this is possible from the WC4BP Groups Tabs (This tab is only available is BP Groups is enabled).
