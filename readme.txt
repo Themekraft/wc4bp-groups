@@ -3,7 +3,7 @@ Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
 Tested up to: 5.7
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,9 @@ This addon need the [WooBuddy -> WooCommerce BuddyPress Integration](https://wor
 4. Done ;)
 
 == Changelog ==
+= 1.4.2 - 29 Mar 2021 =
+* Fix issue (hotfix) related with visible php code inside Front-end views.
+
 = 1.4.1 - 7 Jan 2021 =
 * Change name to WooBuddy -> Groups
 * Tested up with WordPress 5.7
