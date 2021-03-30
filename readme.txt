@@ -64,7 +64,7 @@ This addon need the [WooBuddy -> WooCommerce BuddyPress Integration](https://wor
 
 == Changelog ==
 = 1.4.2 - 29 Mar 2021 =
-* Fix issue (hotfix) related with visible php code inside Front-end views.
+* Fixed issue (hotfix) related with visible PHP code inside Front-end views.
 
 = 1.4.1 - 7 Jan 2021 =
 * Change name to WooBuddy -> Groups
