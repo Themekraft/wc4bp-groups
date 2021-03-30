@@ -1,3 +1,6 @@
+<?php
+//Leaven empty tag to let automation add the path disclosure line
+?>
 <div id="<?php echo wc4bp_groups_manager::getSlug(); ?>" class="panel woocommerce_options_panel wc-metaboxes-wrapper">
 	<?php if ( ! bp_is_active( 'groups' ) ): ?>
         <div id="message" class="inline notice woocommerce-message">

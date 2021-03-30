@@ -1,3 +1,6 @@
+<?php
+//Leaven empty tag to let automation add the path disclosure line
+?>
 <p class="form-field">
     <span class="expand-close">
         <a href="#" class="expand_all"><?php wc4bp_groups_manager::echo_translation( 'Expand' ); ?></a> / <a href="#" class="close_all"><?php wc4bp_groups_manager::echo_translation( 'Close' ); ?></a>
