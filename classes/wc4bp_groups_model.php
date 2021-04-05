@@ -139,13 +139,17 @@ class wc4bp_groups_model {
 		if ( ! $new_member->save() ) {
 			return false;
 		}
+		
 		/* Record this in activity streams */
-		groups_record_activity( array(
-			'user_id' => $user_id,
-			'action'  => apply_filters( 'groups_activity_joined_group', sprintf( __( '%s joined the group %s', 'buddyforms' ), bp_core_get_userlink( $user_id ), '<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_html( $bp->groups->current_group->name ) . '</a>' ) ),
-			'type'    => 'joined_group',
-			'item_id' => $group_id
-		) );
+		if ( bp_is_active( 'activity' ) ) {
+			groups_record_activity( array(
+				'user_id' => $user_id,
+				'action'  => apply_filters( 'groups_activity_joined_group', sprintf( __( '%s joined the group %s', 'buddyforms' ), bp_core_get_userlink( $user_id ), '<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_html( $bp->groups->current_group->name ) . '</a>' ) ),
+				'type'    => 'joined_group',
+				'item_id' => $group_id
+			) );
+		}
+
 		/* Modify group meta */
 		groups_update_groupmeta( $group_id, 'total_member_count', (int) groups_get_groupmeta( $group_id, 'total_member_count' ) + 1 );
 		groups_update_groupmeta( $group_id, 'last_activity', gmdate( "Y-m-d H:i:s" ) );
