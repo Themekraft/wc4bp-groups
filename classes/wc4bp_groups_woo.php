@@ -157,6 +157,9 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base {
 				/** @var WC_Order_Item_Product $item */
 				foreach ( $items as $key => $item ) {
 					$product      = $item->get_product();
+					if ( ! is_object( $product ) ) {
+						continue;
+					}
 					$final_groups = array();
 					if ( isset( $item['wc4bp_groups'] ) ) { //Process all selected groups by the user when buy the product
 						$groups = json_decode( $item['wc4bp_groups'], true );
