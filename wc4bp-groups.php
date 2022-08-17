@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: WooBuddy -> Groups
+ * Plugin Name: BuddyPress Groups Integration for WooCommerce
  * Plugin URI:  https://themekraft.com/woocommerce-buddypress-integration/
- * Description: WooBuddy -> Groups, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
+ * Description: BuddyPress Groups Integration for WooCommerce, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
- * Version:     1.4.6
+ * Version:     1.4.7
  * Licence:     GPLv3
  * Text Domain: wc4bp
  * Domain Path: /languages

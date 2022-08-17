@@ -1,13 +1,13 @@
-=== WooBuddy -> Groups ===
+=== BuddyPress Groups Integration for WooCommerce ===
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.0
-Tested up to: 5.9.3
-Stable tag: 1.4.6
+Tested up to: 6.0.1
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WooBuddy -> Groups, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
+BuddyPress Groups Integration for WooCommerce , integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
 
 == Description ==
 
@@ -22,8 +22,8 @@ The best solution to [Integrate BuddyPress Groups with WooCommerce](https://them
 ### Addons
 
 > * [Shop solution for your BuddyPress community. Integrates a WooCommerce installation with a BuddyPress social network.](https://wordpress.org/plugins/wc4bp)
-> * [WooBuddy -> Checkout Manager: Add your BuddyPress Profile Fields into the WooCommerce Checkout. Customize your WooCommerce Checkout field and remove unwanted fields for example "phone number" from the checkout form.](https://wordpress.org/plugins/woocommerce-buddypress-integration-xprofile-checkout-manager/)
-> * [WooBuddy -> Subscriptions, integrate BuddyPress with WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.](https://themekraft.com/products/buddypress-woocommerce-subscriptions-integration/)
+> * [BuddyPress xProfile Checkout Manager for WooCommerce: Add your BuddyPress Profile Fields into the WooCommerce Checkout. Customize your WooCommerce Checkout field and remove unwanted fields for example "phone number" from the checkout form.](https://wordpress.org/plugins/woocommerce-buddypress-integration-xprofile-checkout-manager/)
+> * [BuddyPress Subscriptions for WooCommerce: Integrate BuddyPress with WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.](https://themekraft.com/products/buddypress-woocommerce-subscriptions-integration/)
 
 ---
 
@@ -46,7 +46,7 @@ Predefine the membership Level ( Moderator, Admin, Normal ) that your user will 
 == Frequently Asked Questions ==
 
 = Dependencies =
-This addon need the [WooBuddy -> WooCommerce BuddyPress Integration](https://wordpress.org/plugins/wc4bp/) with the Professional Plan.
+This addon need the [BuddyPress Groups Integration for WooCommerce](https://wordpress.org/plugins/wc4bp/) with the Professional Plan.
 
 
 == Screenshots ==
@@ -63,6 +63,11 @@ This addon need the [WooBuddy -> WooCommerce BuddyPress Integration](https://wor
 4. Done ;)
 
 == Changelog ==
+= 1.4.7 - 16 Aug 2022 =
+* Fixed vulnerability issue.
+* Updated plugin name.
+* Tested up to WordPress 6.0.1
+
 = 1.4.6 - 17 May 2022 =
 * Updated readme.txt
 
