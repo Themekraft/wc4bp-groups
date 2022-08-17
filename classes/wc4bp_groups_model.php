@@ -26,7 +26,7 @@ class wc4bp_groups_model {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
 		$groups_founded = array();
 		if ( ! empty( $_GET['term'] ) ) {
-			$groups = $this->search_groups( wc_clean( stripslashes( $_GET['term']['term'] ) ) );
+			$groups = $this->search_groups( wc_clean( wp_unslash( $_GET['term']['term'] ) ) );
 			if ( ! empty( $groups['groups'] ) ) {
 				foreach ( $groups['groups'] as $group_id ) {
 					$group                                 = new BP_Groups_Group( $group_id->group_id );
@@ -39,7 +39,6 @@ class wc4bp_groups_model {
 
 	/**
 	 * Get a list of groups, filtered by a search string, including the hidden groups.
-	 *
 	 *
 	 * @param string $filter Search term. Matches against 'name' and
 	 *                             'description' fields.
@@ -61,7 +60,7 @@ class wc4bp_groups_model {
 		$paged_groups = array();
 		$i            = 0;
 		foreach ( $groups['groups'] as $group ) {
-			$paged_groups[ $i ]           = new stdClass;
+			$paged_groups[ $i ]           = new stdClass();
 			$paged_groups[ $i ]->group_id = $group->id;
 			$i ++;
 		}
@@ -77,9 +76,9 @@ class wc4bp_groups_model {
 	 */
 	public function get_group_view() {
 		check_ajax_referer( 'wc4bp-nonce', 'security' );
-		$post_id = isset( $_POST['post_id'] ) ? $_POST['post_id'] : 0;
+		$post_id = isset( $_POST['post_id'] ) ? sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : 0;
 		if ( ! empty( $_POST['group'] ) && wp_doing_ajax() && is_string( $_POST['group'] ) ) {
-			$data = json_decode( stripslashes( $_POST['group'] ) );
+			$data = json_decode( sanitize_text_field( wp_unslash( $_POST['group'] ) ) );
 			if ( is_object( $data ) ) {
 				$group             = new stdClass();
 				$group->group_id   = esc_attr( $data->id );
@@ -87,7 +86,7 @@ class wc4bp_groups_model {
 				ob_start();
 				include WC4BP_GROUP_VIEW_PATH . 'woo_tab_item.php';
 				$str = ob_get_clean();
-				echo "$str";
+				echo wp_kses_post( $str );
 			}
 		}
 
@@ -99,13 +98,12 @@ class wc4bp_groups_model {
 	 * credits go to boon georges. This function is coppyed from the group management plugin.
 	 *
 	 * @param $group_id
-	 * @param bool $user_id
-	 * @param int $is_admin
-	 * @param int $is_mod
+	 * @param bool     $user_id
+	 * @param int      $is_admin
+	 * @param int      $is_mod
 	 *
 	 * @return bool
 	 * @package wc4bp_groups
-	 *
 	 */
 	public static function add_member_to_group( $group_id, $user_id = false, $is_admin = 0, $is_mod = 0 ) {
 		global $bp;
@@ -127,32 +125,34 @@ class wc4bp_groups_model {
 		if ( ! $bp->groups->current_group ) {
 			$bp->groups->current_group = new BP_Groups_Group( $group_id );
 		}
-		$new_member                = new BP_Groups_Member;
+		$new_member                = new BP_Groups_Member();
 		$new_member->group_id      = $group_id;
 		$new_member->user_id       = $user_id;
 		$new_member->inviter_id    = 0;
 		$new_member->is_admin      = $is_admin;
 		$new_member->is_mod        = $is_mod;
 		$new_member->user_title    = '';
-		$new_member->date_modified = gmdate( "Y-m-d H:i:s" );
+		$new_member->date_modified = gmdate( 'Y-m-d H:i:s' );
 		$new_member->is_confirmed  = 1;
 		if ( ! $new_member->save() ) {
 			return false;
 		}
-		
+
 		/* Record this in activity streams */
 		if ( bp_is_active( 'activity' ) ) {
-			groups_record_activity( array(
-				'user_id' => $user_id,
-				'action'  => apply_filters( 'groups_activity_joined_group', sprintf( __( '%s joined the group %s', 'buddyforms' ), bp_core_get_userlink( $user_id ), '<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_html( $bp->groups->current_group->name ) . '</a>' ) ),
-				'type'    => 'joined_group',
-				'item_id' => $group_id
-			) );
+			groups_record_activity(
+				array(
+					'user_id' => $user_id,
+					'action'  => apply_filters( 'groups_activity_joined_group', sprintf( __( '%1$s joined the group %2$s', 'buddyforms' ), bp_core_get_userlink( $user_id ), '<a href="' . bp_get_group_permalink( $bp->groups->current_group ) . '">' . esc_html( $bp->groups->current_group->name ) . '</a>' ) ),
+					'type'    => 'joined_group',
+					'item_id' => $group_id,
+				)
+			);
 		}
 
 		/* Modify group meta */
 		groups_update_groupmeta( $group_id, 'total_member_count', (int) groups_get_groupmeta( $group_id, 'total_member_count' ) + 1 );
-		groups_update_groupmeta( $group_id, 'last_activity', gmdate( "Y-m-d H:i:s" ) );
+		groups_update_groupmeta( $group_id, 'last_activity', gmdate( 'Y-m-d H:i:s' ) );
 		do_action( 'groups_join_group', $group_id, $user_id );
 
 		return true;
@@ -185,7 +185,6 @@ class wc4bp_groups_model {
 		 * @param int $user_id ID of the user leaving the group.
 		 *
 		 * @since 1.0.0
-		 *
 		 */
 		do_action( 'groups_leave_group', $group_id, $user_id );
 

@@ -15,13 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class wc4bp_groups_manager {
 
 	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version = '1.4.6';
+	protected static $version   = '1.4.6';
 
 	public function __construct() {
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
 		new wc4bp_groups_log();
 		try {
-			//loading_dependency
+			// loading_dependency
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_base.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_model.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo.php';
@@ -42,12 +42,14 @@ class wc4bp_groups_manager {
 				new wc4bp_groups_woo_elem_integration();
 			}
 		} catch ( Exception $ex ) {
-			wc4bp_groups_log::log( array(
-				'action'         => get_class( $this ),
-				'object_type'    => wc4bp_groups_manager::getSlug(),
-				'object_subtype' => 'loading_dependency',
-				'object_name'    => $ex->getMessage(),
-			) );
+			wc4bp_groups_log::log(
+				array(
+					'action'         => get_class( $this ),
+					'object_type'    => self::getSlug(),
+					'object_subtype' => 'loading_dependency',
+					'object_name'    => $ex->getMessage(),
+				)
+			);
 		}
 	}
 
@@ -59,7 +61,7 @@ class wc4bp_groups_manager {
 	public function enqueue_scripts( $hook ) {
 		global $post;
 		if ( isset( $post ) && isset( $post->post_type ) && $post->post_type == 'product' ) {
-			wp_register_script( 'wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array( "jquery" ), wc4bp_groups_manager::getVersion() );
+			wp_register_script( 'wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array( 'jquery' ), self::getVersion() );
 			wp_enqueue_script( 'wc4bp_groups_frontend' );
 		}
 	}
@@ -74,7 +76,7 @@ class wc4bp_groups_manager {
 		global $post;
 		if ( ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) || $force ) {
 			wp_enqueue_style( 'jquery' );
-			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
+			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), self::getVersion() );
 		}
 	}
 
@@ -87,16 +89,20 @@ class wc4bp_groups_manager {
 	public static function enqueue_js( $hook, $force = false ) {
 		global $post;
 		if ( ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) || $force ) {
-			wp_register_script( 'wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array( "jquery" ), wc4bp_groups_manager::getVersion() );
+			wp_register_script( 'wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array( 'jquery' ), self::getVersion() );
 			wp_enqueue_script( 'wc4bp_groups' );
-			wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
-				'ajax_url'            => admin_url( 'admin-ajax.php' ),
-				'post_id'             => $post->ID,
-				'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
-				'is_force'            => $force,
-				'general_error'       => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),
-				'remove'              => wc4bp_groups_manager::translation( 'General Error, contact the admin. #2' ),
-			) );
+			wp_localize_script(
+				'wc4bp_groups',
+				'wc4bp_groups',
+				array(
+					'ajax_url'            => admin_url( 'admin-ajax.php' ),
+					'post_id'             => $post->ID,
+					'search_groups_nonce' => wp_create_nonce( 'wc4bp-nonce' ),
+					'is_force'            => $force,
+					'general_error'       => self::translation( 'General Error, contact the admin. #1' ),
+					'remove'              => self::translation( 'General Error, contact the admin. #2' ),
+				)
+			);
 		}
 	}
 
@@ -123,7 +129,6 @@ class wc4bp_groups_manager {
 	 *
 	 * @return string
 	 * @see __()
-	 *
 	 */
 	public static function translation( $str ) {
 		return __( $str, 'wc4bp_groups' );
@@ -132,11 +137,11 @@ class wc4bp_groups_manager {
 
 	/**
 	 * Display the translation for the plugins. Wrapper for @param $str
-	 * @see _e()
 	 *
+	 * @see _e()
 	 */
 	public static function echo_translation( $str ) {
-		_e( $str, 'wc4bp_groups' );
+		esc_html_e( $str, 'wc4bp_groups' );
 	}
 
 	/**

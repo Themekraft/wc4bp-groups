@@ -13,10 +13,10 @@
  *
  * @package wc4bp_groups
  *
- *****************************************************************************
+ * ****************************************************************************
  * WC requires at least: 3.6.4
  * WC tested up to: 6.3.1
- *****************************************************************************
+ * ****************************************************************************
  *
  * This script is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- ****************************************************************************
+ * ***************************************************************************
  */
 
 if ( ! defined( 'WPINC' ) ) {
@@ -69,7 +69,7 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 			if ( wc4bp_groups_required::is_wc4bp_active() ) {
 				if ( ! empty( $GLOBALS['wc4bp_loader'] ) ) {
 					/** @var WC4BP_Loader $wc4bp */
-					$wc4bp    = $GLOBALS['wc4bp_loader'];
+					$wc4bp = $GLOBALS['wc4bp_loader'];
 					/** @var Freemius $freemius */
 					$freemius = $wc4bp::getFreemius();
 					if ( ! empty( $freemius ) && $freemius->is_plan_or_trial__premium_only( 'professional' ) ) {
@@ -86,9 +86,9 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 
 		public function admin_notice_need_pro() {
 			$class   = 'notice notice-warning';
-			$message = sprintf(__( '%s need %s Professional Plan to work!', 'wc4bp_groups' ),'<strong>WooBuddy -> Groups</strong>', '<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>');
+			$message = sprintf( __( '%1$s need %2$s Professional Plan to work!', 'wc4bp_groups' ), '<strong>WooBuddy -> Groups</strong>', '<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>' );
 
-			echo sprintf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ),  $message );
+			echo sprintf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 		}
 
 		/**
@@ -99,7 +99,7 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		public static function get_instance() {
 			// If the single instance hasn't been set, set it now.
 			if ( null == self::$instance ) {
-				self::$instance = new self;
+				self::$instance = new self();
 			}
 
 			return self::$instance;
