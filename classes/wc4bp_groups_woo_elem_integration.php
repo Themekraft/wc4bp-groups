@@ -8,10 +8,6 @@
  * @license        http://www.opensource.org/licenses/gpl-2.0.php GPL License
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 class wc4bp_groups_woo_elem_integration {
 	private $loaded_script = false;
 

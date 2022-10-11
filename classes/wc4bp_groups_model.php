@@ -79,6 +79,7 @@ class wc4bp_groups_model {
 		$post_id = isset( $_POST['post_id'] ) ? sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : 0;
 		if ( ! empty( $_POST['group'] ) && wp_doing_ajax() && is_string( $_POST['group'] ) ) {
 			$data = json_decode( sanitize_text_field( wp_unslash( $_POST['group'] ) ) );
+			update_post_meta( $post_id, '_wc4bp_groups_data', serialize( $data ) );
 			if ( is_object( $data ) ) {
 				$group             = new stdClass();
 				$group->group_id   = esc_attr( $data->id );

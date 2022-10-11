@@ -1,5 +1,8 @@
 <?php
 // Leaven empty tag to let automation add the path disclosure line
+$group_info = unserialize( get_post_meta( $post_id, '_wc4bp_groups_data', true ) );
+$group->group_id = $group_info->id;
+$group->group_name = $group_info->text;
 ?>
 <div id="wc4bp_item_<?php echo esc_attr( $group->group_id ); ?>" data-taxonomy="" class="woocommerce_attribute wc-metabox closed wc4bp-group-item" rel="0" group_name="<?php echo esc_attr( $group->group_name ); ?>" group_id="<?php echo esc_attr( $group->group_id ); ?>">
 	<h3>

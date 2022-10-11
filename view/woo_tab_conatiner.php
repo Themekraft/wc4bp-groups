@@ -15,8 +15,12 @@
 			$added_groups = array();
 			if ( ! empty( $groups ) ) {
 				foreach ( $groups as $group ) {
+					if ( ! isset( $group->group_id ) || ! isset( $group->group_name ) ) {
+						$group_info = unserialize( get_post_meta( $post->ID, '_wc4bp_groups_data', true ) );
+						$group->group_id = $group_info->id;
+						$group->group_name = $group_info->text;
+					}
 					if ( $type === 'variable' && $product instanceof WC_Product_Variable ) {
-
 						foreach ( $group as $key => $value ) {
 							$value->group_name = html_entity_decode( $value->group_name );
 							$this->show_woo_tab_item_for_group( $post->ID, $value );
