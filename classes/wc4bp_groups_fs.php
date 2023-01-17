@@ -72,11 +72,20 @@ class wc4bp_groups_fs {
 					'is_premium'          => true,
 					'is_premium_only'     => true,
 					'has_paid_plans'      => true,
+					'is_org_compliant'    => false,
+					'trial'               => array(
+						'days'               => 7,
+						'is_require_payment' => false,
+					),
 					'parent'              => array(
 						'id'         => '425',
 						'slug'       => 'wc4bp',
 						'public_key' => 'pk_71d28f28e3e545100e9f859cf8554',
 						'name'       => 'WC4BP',
+					),
+					'menu'                => array(
+						'first-path' => 'plugins.php',
+						'support'        => false,
 					),
 					'bundle_license_auto_activation' => true,
 				)
