@@ -41,6 +41,9 @@ class wc4bp_groups_woo_subscription extends wc4bp_groups_woo_base {
 				foreach ( $items as $key => $item ) {
 					/** @var WC_Product $product */
 					$product = $item->get_product();
+					if( $product->get_type() == 'subscription_variation' ){
+						$product = wc_get_product( $product->get_parent_id() );
+					}
 					if ( ! empty( $product ) ) {
 						$final_groups = array();
 						if ( isset( $item['wc4bp_groups'] ) ) { // Process all selected groups by the user when buy the product
