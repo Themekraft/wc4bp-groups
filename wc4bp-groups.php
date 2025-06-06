@@ -1,12 +1,19 @@
 <?php
+
 /**
  * Plugin Name: BuddyPress Groups Integration for WooCommerce
  * Plugin URI:  https://themekraft.com/woocommerce-buddypress-integration/
  * Description: BuddyPress Groups Integration for WooCommerce, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
+<<<<<<< HEAD
  * Version:     1.4.10
  * Licence:     GPLv3
+=======
+ * Version:     1.4.4
+ * License:     GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+>>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
  * Text Domain: wc4bp
  * Domain Path: /languages
  * Svn: wc4bp-groups
@@ -15,7 +22,11 @@
  *
  * ****************************************************************************
  * WC requires at least: 3.6.4
+<<<<<<< HEAD
  * WC tested up to: 6.3.1
+=======
+ * WC tested up to: 5.1.0
+>>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
  * ****************************************************************************
  *
  * This script is free software; you can redistribute it and/or modify
@@ -34,18 +45,16 @@
  *
  * ***************************************************************************
  */
-
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die;
 }
 
-if ( ! class_exists( 'wc4bp_groups' ) ) {
-
-	require_once dirname( __FILE__ ) . '/classes/wc4bp_groups_fs.php';
+if (!class_exists('wc4bp_groups')) {
+	require_once dirname(__FILE__) . '/classes/wc4bp_groups_fs.php';
 	new wc4bp_groups_fs();
 
-	class wc4bp_groups {
-
+	class wc4bp_groups
+	{
 		/**
 		 * Instance of this class.
 		 *
@@ -56,39 +65,64 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		/**
 		 * Initialize the plugin.
 		 */
-		public function __construct() {
-			define( 'WC4BP_GROUP_CSS_PATH', plugin_dir_url( __FILE__ ) . 'assets/css/' );
-			define( 'WC4BP_GROUP_JS_PATH', plugin_dir_url( __FILE__ ) . 'assets/js/' );
-			define( 'WC4BP_GROUP_VIEW_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR );
-			define( 'WC4BP_GROUP_CLASSES_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+		public function __construct()
+		{
+			define('WC4BP_GROUP_CSS_PATH', plugin_dir_url(__FILE__) . 'assets/css/');
+			define('WC4BP_GROUP_JS_PATH', plugin_dir_url(__FILE__) . 'assets/js/');
+			define('WC4BP_GROUP_VIEW_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR);
+			define('WC4BP_GROUP_CLASSES_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR);
+			add_action('before_woocommerce_init', [$this, 'before_init']);
 
 			$this->load_plugin_textdomain();
 			require_once WC4BP_GROUP_CLASSES_PATH . 'resources' . DIRECTORY_SEPARATOR . 'class-tgm-plugin-activation.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_required.php';
 			new wc4bp_groups_required();
-			if ( wc4bp_groups_required::is_wc4bp_active() ) {
-				if ( ! empty( $GLOBALS['wc4bp_loader'] ) ) {
+			if (wc4bp_groups_required::is_wc4bp_active()) {
+				if (!empty($GLOBALS['wc4bp_loader'])) {
 					/** @var WC4BP_Loader $wc4bp */
 					$wc4bp = $GLOBALS['wc4bp_loader'];
 					/** @var Freemius $freemius */
 					$freemius = $wc4bp::getFreemius();
-					if ( ! empty( $freemius ) && $freemius->is_plan_or_trial__premium_only( 'professional' ) ) {
-						if ( wc4bp_groups_required::is_buddypress_active() && wc4bp_groups_required::is_woocommerce_active() ) {
+					if (!empty($freemius) && $freemius->is_plan_or_trial__premium_only('professional')) {
+						if (wc4bp_groups_required::is_buddypress_active() && wc4bp_groups_required::is_woocommerce_active()) {
 							require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_manager.php';
 							new wc4bp_groups_manager();
 						}
 					} else {
-						add_action( 'admin_notices', array( $this, 'admin_notice_need_pro' ) );
+						add_action('admin_notices', array($this, 'admin_notice_need_pro'));
 					}
 				}
 			}
 		}
 
-		public function admin_notice_need_pro() {
-			$class   = 'notice notice-warning';
-			$message = sprintf( __( '%1$s need %2$s Professional Plan to work!', 'wc4bp_groups' ), '<strong>WooBuddy -> Groups</strong>', '<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>' );
+		/**
+		 * Before init action.
+		 */
+		public function before_init()
+		{
+			if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
+				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+					'custom_order_tables',
+					__FILE__,
+					true
+				);
+			}
+		}
 
-			echo sprintf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+		public function admin_notice_need_pro()
+		{
+			$class = 'notice notice-warning';
+			// translators: 1: Plugin name, 2: Required plugin name.
+			$message = sprintf(
+				__('%1$s needs %2$s Professional Plan to work!', 'wc4bp_groups'),
+				'<strong>WooBuddy -> Groups</strong>',
+				'<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>'
+			);
+			echo sprintf(
+				'<div class="%1$s"><p>%2$s</p></div>',
+				esc_attr($class),
+				esc_html($message)
+			);
 		}
 
 		/**
@@ -96,10 +130,16 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		 *
 		 * @return object A single instance of this class.
 		 */
-		public static function get_instance() {
+		public static function get_instance()
+		{
 			// If the single instance hasn't been set, set it now.
+<<<<<<< HEAD
 			if ( null == self::$instance ) {
 				self::$instance = new self();
+=======
+			if (null == self::$instance) {
+				self::$instance = new self;
+>>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
 			}
 
 			return self::$instance;
@@ -108,10 +148,11 @@ if ( ! class_exists( 'wc4bp_groups' ) ) {
 		/**
 		 * Load the plugin text domain for translation.
 		 */
-		public function load_plugin_textdomain() {
-			load_plugin_textdomain( 'wc4bp_groups', false, basename( dirname( __FILE__ ) ) . '/languages' );
+		public function load_plugin_textdomain()
+		{
+			load_plugin_textdomain('wc4bp_groups', false, basename(dirname(__FILE__)) . '/languages');
 		}
 	}
 
-	add_action( 'plugins_loaded', array( 'wc4bp_groups', 'get_instance' ) );
+	add_action('plugins_loaded', array('wc4bp_groups', 'get_instance'));
 }
