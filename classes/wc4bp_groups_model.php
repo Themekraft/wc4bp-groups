@@ -28,7 +28,13 @@ class wc4bp_groups_model
 		check_ajax_referer('wc4bp-nonce', 'security');
 		$groups_founded = array();
 		if (!empty($_GET['term'])) {
-			$groups = $this->search_groups(wc_clean(stripslashes($_GET['term']['term'])));
+			$search_term = '';
+			if (isset($_GET['term']['term'])) {
+				$search_term = sanitize_text_field(wc_clean(wp_unslash($_GET['term']['term'])));
+			}
+
+			$groups = $this->search_groups($search_term);
+
 			if (!empty($groups['groups'])) {
 				foreach ($groups['groups'] as $group_id) {
 					$group = new BP_Groups_Group($group_id->group_id);

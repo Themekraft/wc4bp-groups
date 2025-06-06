@@ -1,9 +1,9 @@
 === BuddyPress Groups Integration for WooCommerce ===
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
-Requires at least: 7.4
+Requires at least: 4.5
 Tested up to: 6.8
-Stable tag: 4
+Stable tag: 1.4.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
