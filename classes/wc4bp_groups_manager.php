@@ -8,13 +8,6 @@
  * @link           http://themekraft.com/store/woocommerce-buddypress-integration-wordpress-plugin/
  * @license        http://www.opensource.org/licenses/gpl-2.0.php GPL License
  */
-<<<<<<< HEAD
-
-class wc4bp_groups_manager {
-
-	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version   = '1.4.10';
-=======
 if (!defined('ABSPATH')) {
 	exit;
 }
@@ -22,8 +15,7 @@ if (!defined('ABSPATH')) {
 class wc4bp_groups_manager
 {
 	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version = '1.4.4';
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
+	protected static $version = '1.4.11';
 
 	public function __construct()
 	{
@@ -50,17 +42,6 @@ class wc4bp_groups_manager
 				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_elem_integration.php';
 				new wc4bp_groups_woo_elem_integration();
 			}
-<<<<<<< HEAD
-		} catch ( Exception $ex ) {
-			wc4bp_groups_log::log(
-				array(
-					'action'         => get_class( $this ),
-					'object_type'    => self::getSlug(),
-					'object_subtype' => 'loading_dependency',
-					'object_name'    => $ex->getMessage(),
-				)
-			);
-=======
 		} catch (Exception $ex) {
 			wc4bp_groups_log::log(array(
 				'action' => get_class($this),
@@ -68,7 +49,6 @@ class wc4bp_groups_manager
 				'object_subtype' => 'loading_dependency',
 				'object_name' => $ex->getMessage(),
 			));
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
 		}
 	}
 
@@ -80,15 +60,9 @@ class wc4bp_groups_manager
 	public function enqueue_scripts($hook)
 	{
 		global $post;
-<<<<<<< HEAD
-		if ( isset( $post ) && isset( $post->post_type ) && $post->post_type == 'product' ) {
-			wp_register_script( 'wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array( 'jquery' ), self::getVersion() );
-			wp_enqueue_script( 'wc4bp_groups_frontend' );
-=======
 		if (isset($post) && isset($post->post_type) && $post->post_type == 'product') {
 			wp_register_script('wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array('jquery'), wc4bp_groups_manager::getVersion());
 			wp_enqueue_script('wc4bp_groups_frontend');
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
 		}
 	}
 
@@ -101,15 +75,9 @@ class wc4bp_groups_manager
 	public static function enqueue_style($hook, $force = false)
 	{
 		global $post;
-<<<<<<< HEAD
-		if ( ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) || $force ) {
-			wp_enqueue_style( 'jquery' );
-			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), self::getVersion() );
-=======
 		if ((($hook == 'post.php' || $hook == 'post-new.php') && $post->post_type == 'product') || $force) {
 			wp_enqueue_style('jquery');
 			wp_enqueue_style('wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion());
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
 		}
 	}
 
