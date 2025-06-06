@@ -6,14 +6,9 @@
  * Description: BuddyPress Groups Integration for WooCommerce, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
-<<<<<<< HEAD
- * Version:     1.4.10
- * Licence:     GPLv3
-=======
  * Version:     1.4.4
  * License:     GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
  * Text Domain: wc4bp
  * Domain Path: /languages
  * Svn: wc4bp-groups
@@ -22,11 +17,7 @@
  *
  * ****************************************************************************
  * WC requires at least: 3.6.4
-<<<<<<< HEAD
- * WC tested up to: 6.3.1
-=======
  * WC tested up to: 5.1.0
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
  * ****************************************************************************
  *
  * This script is free software; you can redistribute it and/or modify
@@ -133,13 +124,8 @@ if (!class_exists('wc4bp_groups')) {
 		public static function get_instance()
 		{
 			// If the single instance hasn't been set, set it now.
-<<<<<<< HEAD
-			if ( null == self::$instance ) {
-				self::$instance = new self();
-=======
 			if (null == self::$instance) {
 				self::$instance = new self;
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
 			}
 
 			return self::$instance;
