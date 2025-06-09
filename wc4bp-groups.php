@@ -7,8 +7,8 @@
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
  * Version:     1.4.11
- * License:     GPLv2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * License:     GPLv3
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: wc4bp
  * Domain Path: /languages
  * Svn: wc4bp-groups
@@ -18,6 +18,7 @@
  * ****************************************************************************
  * WC requires at least: 3.6.4
  * WC tested up to: 5.1.0
+ * WC HPOS support: yes
  * ****************************************************************************
  *
  * This script is free software; you can redistribute it and/or modify
