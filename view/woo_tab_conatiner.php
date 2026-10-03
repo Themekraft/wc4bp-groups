@@ -30,7 +30,7 @@
 				}
 			}
 			?>
-        <<<<<<< HEAD </div>
+        </div>
 
             <div class="toolbar wc4bp-bottom-toolbar">
                 <span class="expand-close">
@@ -50,22 +50,3 @@
 		?>
             <?php endif; ?>
     </div>
-    =======
-</div>
-
-<div class="toolbar wc4bp-bottom-toolbar">
-    <span class="expand-close">
-        <a href="#" class="expand_all"><?php wc4bp_groups_manager::echo_translation('Expand'); ?></a> / <a href="#"
-            class="close_all"><?php wc4bp_groups_manager::echo_translation('Close'); ?></a>
-    </span>
-</div>
-<input type="hidden" id="wc4bp_groups_existing_ids" value="<?php echo esc_attr(json_encode($added_groups)); ?>">
-<?php
-		woocommerce_wp_hidden_input(array(
-			'id' => '_wc4bp_groups_json',
-			'class' => wc4bp_groups_manager::getSlug()
-		));
-		?>
-<?php endif; ?>
-</div>
->>>>>>> df601f8 (Fix: Woocommerce HPOS compliance + Plugin check validation)
