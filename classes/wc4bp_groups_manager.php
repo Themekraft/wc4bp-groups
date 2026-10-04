@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package        WordPress
  * @subpackage     BuddyPress, Woocommerce, WC4BP
@@ -7,47 +8,47 @@
  * @link           http://themekraft.com/store/woocommerce-buddypress-integration-wordpress-plugin/
  * @license        http://www.opensource.org/licenses/gpl-2.0.php GPL License
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit;
 }
 
-class wc4bp_groups_manager {
-
+class wc4bp_groups_manager
+{
 	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version = '1.4.3';
+	protected static $version = '1.4.11';
 
-	public function __construct() {
+	public function __construct()
+	{
 		require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_log.php';
 		new wc4bp_groups_log();
 		try {
-			//loading_dependency
+			// loading_dependency
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_base.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_model.php';
 			require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo.php';
 			new wc4bp_groups_model();
 			new wc4bp_groups_woo();
-			if ( wc4bp_groups_required::is_woo_subscription_active() ) {
+			if (wc4bp_groups_required::is_woo_subscription_active()) {
 				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_subscription.php';
 				new wc4bp_groups_woo_subscription();
 			}
 
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_style' ) );
+			add_action('admin_enqueue_scripts', array($this, 'enqueue_js'));
+			add_action('admin_enqueue_scripts', array($this, 'enqueue_style'));
 
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 
-			if ( wc4bp_groups_required::is_woo_elem_active() ) {
+			if (wc4bp_groups_required::is_woo_elem_active()) {
 				require_once WC4BP_GROUP_CLASSES_PATH . 'wc4bp_groups_woo_elem_integration.php';
 				new wc4bp_groups_woo_elem_integration();
 			}
-		} catch ( Exception $ex ) {
-			wc4bp_groups_log::log( array(
-				'action'         => get_class( $this ),
-				'object_type'    => wc4bp_groups_manager::getSlug(),
+		} catch (Exception $ex) {
+			wc4bp_groups_log::log(array(
+				'action' => get_class($this),
+				'object_type' => wc4bp_groups_manager::getSlug(),
 				'object_subtype' => 'loading_dependency',
-				'object_name'    => $ex->getMessage(),
-			) );
+				'object_name' => $ex->getMessage(),
+			));
 		}
 	}
 
@@ -56,11 +57,12 @@ class wc4bp_groups_manager {
 	 *
 	 * @param $hook
 	 */
-	public function enqueue_scripts( $hook ) {
+	public function enqueue_scripts($hook)
+	{
 		global $post;
-		if ( isset( $post ) && isset( $post->post_type ) && $post->post_type == 'product' ) {
-			wp_register_script( 'wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array( "jquery" ), wc4bp_groups_manager::getVersion() );
-			wp_enqueue_script( 'wc4bp_groups_frontend' );
+		if (isset($post) && isset($post->post_type) && $post->post_type == 'product') {
+			wp_register_script('wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array('jquery'), wc4bp_groups_manager::getVersion());
+			wp_enqueue_script('wc4bp_groups_frontend');
 		}
 	}
 
@@ -70,11 +72,12 @@ class wc4bp_groups_manager {
 	 * @param $hook
 	 * @param bool $force
 	 */
-	public static function enqueue_style( $hook, $force = false ) {
+	public static function enqueue_style($hook, $force = false)
+	{
 		global $post;
-		if ( ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) || $force ) {
-			wp_enqueue_style( 'jquery' );
-			wp_enqueue_style( 'wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion() );
+		if ((($hook == 'post.php' || $hook == 'post-new.php') && $post->post_type == 'product') || $force) {
+			wp_enqueue_style('jquery');
+			wp_enqueue_style('wc4bp-groups', WC4BP_GROUP_CSS_PATH . 'wc4bp-groups.css', array(), wc4bp_groups_manager::getVersion());
 		}
 	}
 
@@ -84,19 +87,20 @@ class wc4bp_groups_manager {
 	 * @param $hook
 	 * @param bool $force
 	 */
-	public static function enqueue_js( $hook, $force = false ) {
+	public static function enqueue_js($hook, $force = false)
+	{
 		global $post;
-		if ( ( ( $hook == 'post.php' || $hook == 'post-new.php' ) && $post->post_type == 'product' ) || $force ) {
-			wp_register_script( 'wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array( "jquery" ), wc4bp_groups_manager::getVersion() );
-			wp_enqueue_script( 'wc4bp_groups' );
-			wp_localize_script( 'wc4bp_groups', 'wc4bp_groups', array(
-				'ajax_url'            => admin_url( 'admin-ajax.php' ),
-				'post_id'             => $post->ID,
-				'search_groups_nonce' => wp_create_nonce( "wc4bp-nonce" ),
-				'is_force'            => $force,
-				'general_error'       => wc4bp_groups_manager::translation( 'General Error, contact the admin. #1' ),
-				'remove'              => wc4bp_groups_manager::translation( 'General Error, contact the admin. #2' ),
-			) );
+		if ((($hook == 'post.php' || $hook == 'post-new.php') && $post->post_type == 'product') || $force) {
+			wp_register_script('wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array('jquery'), wc4bp_groups_manager::getVersion());
+			wp_enqueue_script('wc4bp_groups');
+			wp_localize_script('wc4bp_groups', 'wc4bp_groups', array(
+				'ajax_url' => admin_url('admin-ajax.php'),
+				'post_id' => $post->ID,
+				'search_groups_nonce' => wp_create_nonce('wc4bp-nonce'),
+				'is_force' => $force,
+				'general_error' => wc4bp_groups_manager::translation('General Error, contact the admin. #1'),
+				'remove' => wc4bp_groups_manager::translation('General Error, contact the admin. #2'),
+			));
 		}
 	}
 
@@ -105,7 +109,8 @@ class wc4bp_groups_manager {
 	 *
 	 * @return mixed
 	 */
-	static function getVersion() {
+	static function getVersion()
+	{
 		return self::$version;
 	}
 
@@ -114,7 +119,8 @@ class wc4bp_groups_manager {
 	 *
 	 * @return string
 	 */
-	static function getSlug() {
+	static function getSlug()
+	{
 		return self::$plugin_slug;
 	}
 
@@ -123,20 +129,20 @@ class wc4bp_groups_manager {
 	 *
 	 * @return string
 	 * @see __()
-	 *
 	 */
-	public static function translation( $str ) {
-		return __( $str, 'wc4bp_groups' );
+	public static function translation($str)
+	{
+		return __($str, 'wc4bp_groups');
 	}
-
 
 	/**
 	 * Display the translation for the plugins. Wrapper for @param $str
 	 * @see _e()
-	 *
 	 */
-	public static function echo_translation( $str ) {
-		_e( $str, 'wc4bp_groups' );
+	public static function echo_translation($str)
+	{
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Bypass this.
+		_e($str, 'wc4bp_groups');
 	}
 
 	/**
@@ -144,7 +150,8 @@ class wc4bp_groups_manager {
 	 *
 	 * @param $str
 	 */
-	public static function echo_esc_attr_translation( $str ) {
-		echo esc_attr( self::translation( $str ) );
+	public static function echo_esc_attr_translation($str)
+	{
+		echo esc_attr(self::translation($str));
 	}
 }

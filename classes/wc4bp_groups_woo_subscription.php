@@ -8,10 +8,6 @@
  * @license        http://www.opensource.org/licenses/gpl-2.0.php GPL License
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 class wc4bp_groups_woo_subscription extends wc4bp_groups_woo_base {
 
 	/**
@@ -45,20 +41,23 @@ class wc4bp_groups_woo_subscription extends wc4bp_groups_woo_base {
 				foreach ( $items as $key => $item ) {
 					/** @var WC_Product $product */
 					$product = $item->get_product();
+					if( $product->get_type() == 'subscription_variation' ){
+						$product = wc_get_product( $product->get_parent_id() );
+					}
 					if ( ! empty( $product ) ) {
 						$final_groups = array();
-						if ( isset( $item['wc4bp_groups'] ) ) { //Process all selected groups by the user when buy the product
+						if ( isset( $item['wc4bp_groups'] ) ) { // Process all selected groups by the user when buy the product
 							$groups = json_decode( $item['wc4bp_groups'], true );
 							foreach ( $groups as $group_id => $group_name ) {
 								$option_group              = $this->get_product_group( absint( $product->get_id() ), $group_id );
 								$final_groups[ $group_id ] = $option_group;
 							}
 						}
-						$not_optional_groups = $this->get_product_groups_not_optional( absint( $product->get_id() ) ); //Process the not optional groups set in the product
+						$not_optional_groups = $this->get_product_groups_not_optional( absint( $product->get_id() ) ); // Process the not optional groups set in the product
 						if ( ! empty( $not_optional_groups ) ) {
 							$final_groups = array_merge( $final_groups, $not_optional_groups );
 						}
-						foreach ( $final_groups as $group_id => $group ) { //Process all groups related to the current item
+						foreach ( $final_groups as $group_id => $group ) { // Process all groups related to the current item
 							if ( in_array( $new_status, $add_status ) ) {
 								$is_admin = 0;
 								$is_mod   = 0;

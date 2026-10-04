@@ -1,10 +1,10 @@
 #!/bin/bash
 wd=$PWD
 pluginfolder=$wd
-originalfoldername=$(basename "$pluginfolder"| awk -F' ' '{print $1}')
+originalfoldername=$(basename "$pluginfolder" | awk -F' ' '{print $1}')
 packagename=$originalfoldername
 
-r=$(( RANDOM % 10 ));
+r=$((RANDOM % 10))
 foldername="$originalfoldername-$r"
 
 echo "Create tmp folder"
@@ -24,9 +24,11 @@ echo "-Generating the zip in progress..."
 echo "-Cleaning in Progress..."
 rm -rf ./.git*
 rm -rf ./.sass-cache
+rm -rf ./.tk
 rm -rf ./.directory
 rm -rf ./node_modules
 rm -rf ./wp-config-test.php
+rm -rf ./RoboFile.php
 rm -rf ./*.yml
 rm -rf ./*.xml
 rm -rf ./*.dist
@@ -51,9 +53,9 @@ rm -rf ./*.sh
 if [ -f composer.json ]; then
     #Detect if there are composer dependencies
     dep=$(cat composer.json | python -c "import json,sys;sys.stdout.write('true') if 'require' in json.load(sys.stdin)==False else sys.stdout.write('')")
-    if [ ! -z ${dep// } ]; then
+    if [ ! -z ${dep// /} ]; then
         echo "-Downloading clean composer dependencies..."
-        composer update --no-dev &> /dev/null
+        composer update --no-dev &>/dev/null
     else
         rm -rf composer.json
     fi
@@ -63,7 +65,7 @@ echo "Zip to"
 
 echo "$wd"/"$packagename"-"$version".zip
 
-zip -r "$wd"/"$packagename"-"$version".zip ./ &> /dev/null
+zip -r "$wd"/"$packagename"-"$version".zip ./ &>/dev/null
 
 rm -rf /tmp/"$foldername"
 
