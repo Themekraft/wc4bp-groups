@@ -41,7 +41,7 @@ class wc4bp_groups_woo_subscription extends wc4bp_groups_woo_base {
 				foreach ( $items as $key => $item ) {
 					/** @var WC_Product $product */
 					$product = $item->get_product();
-					if( $product->get_type() == 'subscription_variation' ){
+					if ( $product && $product->get_type() == 'subscription_variation' ) {
 						$product = wc_get_product( $product->get_parent_id() );
 					}
 					if ( ! empty( $product ) ) {

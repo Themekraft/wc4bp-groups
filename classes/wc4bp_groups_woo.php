@@ -158,12 +158,18 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 	{
 		if (bp_is_active('groups')) {
 			$order = wc_get_order($order_id);
+			if (!$order) {
+				return;
+			}
 			$customer = $order->get_user();
 			if (false !== $customer) {
 				$items = $order->get_items();
 				/** @var WC_Order_Item_Product $item */
 				foreach ($items as $key => $item) {
 					$product = $item->get_product();
+					if (!$product) {  // The product was deleted after the purchase.
+						continue;
+					}
 					$final_groups = array();
 					if (isset($item['wc4bp_groups'])) {  // Process all selected groups by the user when buy the product
 						$groups = json_decode($item['wc4bp_groups'], true);
