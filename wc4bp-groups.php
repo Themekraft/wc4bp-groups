@@ -7,6 +7,7 @@
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
  * Version:     1.4.12
+ * Requires Plugins: woocommerce, wc4bp
  * License:     GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: wc4bp
@@ -39,6 +40,25 @@
  */
 if (!defined('WPINC')) {
 	die;
+}
+
+if ( ! function_exists( 'wc4bp_addon_plugin_dependencies_slug' ) ) {
+	/**
+	 * Let the running WooBuddy copy (free or premium) satisfy "Requires Plugins: wc4bp".
+	 *
+	 * @param string $slug Dependency slug.
+	 *
+	 * @return string
+	 */
+	function wc4bp_addon_plugin_dependencies_slug( $slug ) {
+		if ( 'wc4bp' === $slug && defined( 'WC4BP_FOLDER' ) ) {
+			return WC4BP_FOLDER;
+		}
+
+		return $slug;
+	}
+
+	add_filter( 'wp_plugin_dependencies_slug', 'wc4bp_addon_plugin_dependencies_slug' );
 }
 
 if (!class_exists('wc4bp_groups')) {
