@@ -2,6 +2,7 @@
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.5
+Requires PHP: 7.4
 Tested up to: 7.1
 Stable tag: 1.4.12
 License: GPLv2 or later

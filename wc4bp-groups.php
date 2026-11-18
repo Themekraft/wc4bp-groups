@@ -7,6 +7,7 @@
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
  * Version:     1.4.12
+ * Requires PHP: 7.4
  * Requires Plugins: woocommerce, wc4bp
  * License:     GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
