@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 class wc4bp_groups_manager
 {
 	private static $plugin_slug = 'wc4bp_groups';
-	protected static $version = '1.4.12';
+	protected static $version = '1.4.13';
 
 	public function __construct()
 	{
