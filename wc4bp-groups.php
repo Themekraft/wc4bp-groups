@@ -134,7 +134,7 @@ if (!class_exists('wc4bp_groups')) {
 			echo sprintf(
 				'<div class="%1$s"><p>%2$s</p></div>',
 				esc_attr($class),
-				esc_html($message)
+				wp_kses($message, array('strong' => array()))
 			);
 		}
 
