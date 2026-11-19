@@ -160,7 +160,7 @@ class wc4bp_groups_model
 						/* translators: 1: User link, 2: Group name with link. */
 						__('%1$s joined the group %2$s', 'wc4bp-groups'),
 						bp_core_get_userlink($user_id),
-						'<a href="' . bp_get_group_permalink($bp->groups->current_group) . '">' . esc_html($bp->groups->current_group->name) . '</a>'
+						'<a href="' . (function_exists('bp_get_group_url') ? bp_get_group_url($bp->groups->current_group) : bp_get_group_permalink($bp->groups->current_group)) . '">' . esc_html($bp->groups->current_group->name) . '</a>'
 					)
 				),
 				'type' => 'joined_group',
