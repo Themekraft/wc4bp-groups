@@ -41,7 +41,7 @@ class wc4bp_groups_woo_elem_integration
 			return $form_fields;
 		}
 
-		$form_fields['WC4BP-Groups']['hide_wc4bp_groups'] = new Element_Checkbox('<b>' . __('Tab WC4BP Groups: ', 'buddyforms') . '</b>', 'buddyforms_options[form_fields][' . $field_id . '][hide_wc4bp_groups]', array('hidden' => __('Hide WC4BP Groups Tab', 'buddyforms')), array(
+		$form_fields['WC4BP-Groups']['hide_wc4bp_groups'] = new Element_Checkbox('<b>' . __('Tab WC4BP Groups: ', 'wc4bp_groups') . '</b>', 'buddyforms_options[form_fields][' . $field_id . '][hide_wc4bp_groups]', array('hidden' => __('Hide WC4BP Groups Tab', 'wc4bp_groups')), array(
 			'id' => 'hide_wc4bp_groups_' . $field_id,
 			'value' => isset($buddyform['form_fields'][$field_id]['hide_wc4bp_groups']) ? $buddyform['form_fields'][$field_id]['hide_wc4bp_groups'] : 'false'
 		));
