@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template included inside wc4bp_groups_woo / wc4bp_groups_model methods; its variables are local.
 // Leaven empty tag to let automation add the path disclosure line
 ?>
 <p class="form-field">
