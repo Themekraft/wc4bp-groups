@@ -2,8 +2,9 @@
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.5
+Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 1.4.12
+Stable tag: 1.4.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +67,10 @@ This addon need the [BuddyPress Groups Integration for WooCommerce](https://word
 4. Done ;)
 
 == Changelog ==
+= 1.4.13 - 18 Nov 2026 =
+* WooCommerce and WooBuddy are now declared as required plugins.
+* Requires PHP 7.4.
+
 = 1.4.12 - 05 Oct 2026 =
 * Fixed a fatal error when an order contains a product that was deleted after the purchase.
 * Tested up to WooCommerce 11.1.
