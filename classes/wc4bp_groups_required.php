@@ -160,25 +160,25 @@ class wc4bp_groups_required
 				'notice_can_install_required' => _n_noop(
 					'<u>WooBuddy -> Groups</u> plugin requires the following plugin: %1$s.',
 					'<u>WooBuddy -> Groups</u> plugin requires the following plugins: %1$s.',
-					'wc4bp_groups'
+					'wc4bp-groups'
 				),
 				// translators: %1$s is the plugin name(s).
 				'notice_can_install_recommended' => _n_noop(
 					'<u>WooBuddy -> Groups</u> plugin recommends the following plugin: %1$s.',
 					'<u>WooBuddy -> Groups</u> plugin recommends the following plugins: %1$s.',
-					'wc4bp_groups'
+					'wc4bp-groups'
 				),
 				// translators: %1$s is the plugin name(s).
 				'notice_can_activate_required' => _n_noop(
 					'The following is a required plugin for <u>WooBuddy -> Groups</u> and is currently inactive: %1$s.',
 					'The following are required plugins for <u>WooBuddy -> Groups</u> and they are currently inactive: %1$s.',
-					'wc4bp_groups'
+					'wc4bp-groups'
 				),
 				// translators: %1$s is the plugin name(s).
 				'notice_ask_to_update' => _n_noop(
 					'The following plugin needs to be updated to its latest version to ensure maximum compatibility with this plugin: %1$s.',
 					'The following plugins need to be updated to their latest version to ensure maximum compatibility with this plugin: %1$s.',
-					'wc4bp_groups'
+					'wc4bp-groups'
 				),
 			),
 		);

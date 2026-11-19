@@ -7,12 +7,12 @@
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
  * Version:     1.4.14
+ * Requires at least: 5.9
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce, wc4bp
- * License:     GPLv3
- * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: wc4bp
- * Domain Path: /languages
+ * License:     GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: wc4bp-groups
  * Svn: wc4bp-groups
  *
  * @package wc4bp_groups
@@ -125,16 +125,16 @@ if (!class_exists('wc4bp_groups')) {
 		public function admin_notice_need_pro()
 		{
 			$class = 'notice notice-warning';
-			// translators: 1: Plugin name, 2: Required plugin name.
 			$message = sprintf(
-				__('%1$s needs %2$s Professional Plan to work!', 'wc4bp_groups'),
+				/* translators: 1: Plugin name, 2: Required plugin name. */
+				__('%1$s needs %2$s Professional Plan to work!', 'wc4bp-groups'),
 				'<strong>WooBuddy -> Groups</strong>',
 				'<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>'
 			);
 			echo sprintf(
 				'<div class="%1$s"><p>%2$s</p></div>',
 				esc_attr($class),
-				esc_html($message)
+				wp_kses($message, array('strong' => array()))
 			);
 		}
 
@@ -158,7 +158,8 @@ if (!class_exists('wc4bp_groups')) {
 		 */
 		public function load_plugin_textdomain()
 		{
-			load_plugin_textdomain('wc4bp_groups', false, basename(dirname(__FILE__)) . '/languages');
+			// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- Kept on purpose: premium copies and builds not hosted on wordpress.org load their own translations from /languages.
+			load_plugin_textdomain('wc4bp-groups', false, basename(dirname(__FILE__)) . '/languages');
 		}
 	}
 

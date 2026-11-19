@@ -61,7 +61,7 @@ class wc4bp_groups_manager
 	{
 		global $post;
 		if (isset($post) && isset($post->post_type) && $post->post_type == 'product') {
-			wp_register_script('wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array('jquery'), wc4bp_groups_manager::getVersion());
+			wp_register_script('wc4bp_groups_frontend', WC4BP_GROUP_JS_PATH . 'wc4bp-groups-frontend.js', array('jquery'), wc4bp_groups_manager::getVersion(), false);
 			wp_enqueue_script('wc4bp_groups_frontend');
 		}
 	}
@@ -91,7 +91,7 @@ class wc4bp_groups_manager
 	{
 		global $post;
 		if ((($hook == 'post.php' || $hook == 'post-new.php') && $post->post_type == 'product') || $force) {
-			wp_register_script('wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array('jquery'), wc4bp_groups_manager::getVersion());
+			wp_register_script('wc4bp_groups', WC4BP_GROUP_JS_PATH . 'wc4bp-groups.js', array('jquery'), wc4bp_groups_manager::getVersion(), false);
 			wp_enqueue_script('wc4bp_groups');
 			wp_localize_script('wc4bp_groups', 'wc4bp_groups', array(
 				'ajax_url' => admin_url('admin-ajax.php'),
@@ -132,7 +132,7 @@ class wc4bp_groups_manager
 	 */
 	public static function translation($str)
 	{
-		return __($str, 'wc4bp_groups');
+		return __($str, 'wc4bp-groups');
 	}
 
 	/**
@@ -141,8 +141,7 @@ class wc4bp_groups_manager
 	 */
 	public static function echo_translation($str)
 	{
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Bypass this.
-		_e($str, 'wc4bp_groups');
+		echo esc_html(self::translation($str));
 	}
 
 	/**

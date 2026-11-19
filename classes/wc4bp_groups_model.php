@@ -30,7 +30,7 @@ class wc4bp_groups_model
 		if (!empty($_GET['term'])) {
 			$search_term = '';
 			if (isset($_GET['term']['term'])) {
-				$search_term = sanitize_text_field(wc_clean(wp_unslash($_GET['term']['term'])));
+				$search_term = sanitize_text_field(wc_clean(wp_unslash($_GET['term']['term']))); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized with sanitize_text_field(); the sniff does not follow the nested key.
 			}
 
 			$groups = $this->search_groups($search_term);
@@ -86,9 +86,9 @@ class wc4bp_groups_model
 	public function get_group_view()
 	{
 		check_ajax_referer('wc4bp-nonce', 'security');
-		$post_id = isset($_POST['post_id']) ? $_POST['post_id'] : 0;
+		$post_id = isset($_POST['post_id']) ? sanitize_text_field(wp_unslash($_POST['post_id'])) : 0;
 		if (!empty($_POST['group']) && wp_doing_ajax() && is_string($_POST['group'])) {
-			$data = json_decode(stripslashes($_POST['group']));
+			$data = json_decode(wp_unslash($_POST['group'])); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload; the decoded id and text are escaped below.
 			if (is_object($data)) {
 				$group = new stdClass();
 				$group->group_id = esc_attr($data->id);
@@ -152,13 +152,13 @@ class wc4bp_groups_model
 
 		/* Record this in activity streams */
 		if (bp_is_active('activity')) {
-			// translators: 1: User link, 2: Group name with link.
 			groups_record_activity(array(
 				'user_id' => $user_id,
 				'action' => apply_filters(
-					'groups_activity_joined_group',
+					'groups_activity_joined_group', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- BuddyPress hook, fired like BuddyPress does when a member joins or leaves a group.
 					sprintf(
-						__('%1$s joined the group %2$s', 'buddyforms'),
+						/* translators: 1: User link, 2: Group name with link. */
+						__('%1$s joined the group %2$s', 'wc4bp-groups'),
 						bp_core_get_userlink($user_id),
 						'<a href="' . (function_exists('bp_get_group_url') ? bp_get_group_url($bp->groups->current_group) : bp_get_group_permalink($bp->groups->current_group)) . '">' . esc_html($bp->groups->current_group->name) . '</a>'
 					)
@@ -171,7 +171,7 @@ class wc4bp_groups_model
 		/* Modify group meta */
 		groups_update_groupmeta($group_id, 'total_member_count', (int) groups_get_groupmeta($group_id, 'total_member_count') + 1);
 		groups_update_groupmeta($group_id, 'last_activity', gmdate('Y-m-d H:i:s'));
-		do_action('groups_join_group', $group_id, $user_id);
+		do_action('groups_join_group', $group_id, $user_id); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- BuddyPress hook, fired like BuddyPress does when a member joins or leaves a group.
 
 		return true;
 	}
@@ -185,7 +185,7 @@ class wc4bp_groups_model
 		// Don't let single admins leave the group.
 		if (count(groups_get_group_admins($group_id)) < 2) {
 			if (groups_is_user_admin($user_id, $group_id)) {
-				bp_core_add_message(__('As the only admin, you cannot leave the group.', 'buddypress'), 'error');
+				bp_core_add_message(__('As the only admin, you cannot leave the group.', 'buddypress'), 'error'); // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- reuses BuddyPress' own translated string.
 
 				return false;
 			}
@@ -195,7 +195,7 @@ class wc4bp_groups_model
 			return false;
 		}
 
-		bp_core_add_message(__('You successfully left the group.', 'buddypress'));
+		bp_core_add_message(__('You successfully left the group.', 'buddypress')); // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- reuses BuddyPress' own translated string.
 
 		/**
 		 * Fires after a user leaves a group.
@@ -205,7 +205,7 @@ class wc4bp_groups_model
 		 *
 		 * @since 1.0.0
 		 */
-		do_action('groups_leave_group', $group_id, $user_id);
+		do_action('groups_leave_group', $group_id, $user_id); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- BuddyPress hook, fired like BuddyPress does when a member joins or leaves a group.
 
 		return true;
 	}

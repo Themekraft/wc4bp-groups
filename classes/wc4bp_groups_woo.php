@@ -298,8 +298,10 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 			$type = $product->get_type();
 
 			if ($type === 'variable') {
-				$post_id = isset($_POST['_variation']) ? $_POST['_variation'] : $post_id;
-				$wc4bp_groups_json = isset($_POST['_wc4bp_groups_json']) ? stripslashes($_POST['_wc4bp_groups_json']) : '';
+				// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies woocommerce_meta_nonce in WC_Admin_Meta_Boxes::save_meta_boxes() before woocommerce_process_product_meta.
+				$post_id = isset($_POST['_variation']) ? sanitize_text_field(wp_unslash($_POST['_variation'])) : $post_id;
+				$wc4bp_groups_json = isset($_POST['_wc4bp_groups_json']) ? wp_unslash($_POST['_wc4bp_groups_json']) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload; decoded below and stored with esc_attr().
+				// phpcs:enable WordPress.Security.NonceVerification.Missing
 				if (!empty($wc4bp_groups_json)) {
 					$wc4bp_groups_json = html_entity_decode($wc4bp_groups_json);
 					$groups_array = json_decode($wc4bp_groups_json);
@@ -350,7 +352,7 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 					}
 				}
 			} else {
-				$wc4bp_groups_json = esc_attr($_POST['_wc4bp_groups_json']);
+				$wc4bp_groups_json = esc_attr($_POST['_wc4bp_groups_json']); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput -- WooCommerce verifies woocommerce_meta_nonce before woocommerce_process_product_meta; escaped with esc_attr() and unslashed by update_post_meta().
 				$wc4bp_groups_json_old = get_post_meta($post_id, '_wc4bp_groups_json', true);
 				if (!empty($wc4bp_groups_json)) {
 					if ($wc4bp_groups_json != $wc4bp_groups_json_old) {
@@ -436,7 +438,7 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 	{
 		global $thepostid, $post;
 
-		$thepostid = empty($thepostid) ? $post->ID : $thepostid;
+		$thepostid = empty($thepostid) ? $post->ID : $thepostid; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- WooCommerce product editor global.
 		$field['class'] = isset($field['class']) ? $field['class'] : 'select short';
 		$field['style'] = isset($field['style']) ? $field['style'] : '';
 		$field['wrapper_class'] = isset($field['wrapper_class']) ? $field['wrapper_class'] : '';
@@ -489,13 +491,15 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 	 */
 	public function add_cart_item_data($cart_item_meta, $product_id)
 	{
+		// phpcs:disable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- WooCommerce add-to-cart requests carry no nonce; the group IDs are escaped with esc_attr().
 		if (!empty($_POST['_bp_group'])) {
 			$groups = array();
 			if (is_array($_POST['_bp_group'])) {
-				$groups = array_map('esc_attr', $_POST['_bp_group']);
+				$groups = array_map('esc_attr', wp_unslash($_POST['_bp_group']));
 			} else {
-				$groups[] = esc_attr($_POST['_bp_group']);
+				$groups[] = esc_attr(wp_unslash($_POST['_bp_group']));
 			}
+			// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			if (!empty($groups)) {
 				$cart_item_meta['_bp_group'] = $groups;
 			}
