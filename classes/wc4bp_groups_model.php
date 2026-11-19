@@ -158,7 +158,7 @@ class wc4bp_groups_model
 					'groups_activity_joined_group', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- BuddyPress hook, fired like BuddyPress does when a member joins or leaves a group.
 					sprintf(
 						/* translators: 1: User link, 2: Group name with link. */
-						__('%1$s joined the group %2$s', 'wc4bp_groups'),
+						__('%1$s joined the group %2$s', 'wc4bp-groups'),
 						bp_core_get_userlink($user_id),
 						'<a href="' . bp_get_group_permalink($bp->groups->current_group) . '">' . esc_html($bp->groups->current_group->name) . '</a>'
 					)

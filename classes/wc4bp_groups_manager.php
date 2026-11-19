@@ -132,7 +132,7 @@ class wc4bp_groups_manager
 	 */
 	public static function translation($str)
 	{
-		return __($str, 'wc4bp_groups');
+		return __($str, 'wc4bp-groups');
 	}
 
 	/**

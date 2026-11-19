@@ -12,7 +12,7 @@
  * Requires Plugins: woocommerce, wc4bp
  * License:     GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wc4bp
+ * Text Domain: wc4bp-groups
  * Svn: wc4bp-groups
  *
  * @package wc4bp_groups
@@ -127,7 +127,7 @@ if (!class_exists('wc4bp_groups')) {
 			$class = 'notice notice-warning';
 			$message = sprintf(
 				/* translators: 1: Plugin name, 2: Required plugin name. */
-				__('%1$s needs %2$s Professional Plan to work!', 'wc4bp_groups'),
+				__('%1$s needs %2$s Professional Plan to work!', 'wc4bp-groups'),
 				'<strong>WooBuddy -> Groups</strong>',
 				'<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>'
 			);
@@ -158,7 +158,7 @@ if (!class_exists('wc4bp_groups')) {
 		 */
 		public function load_plugin_textdomain()
 		{
-			load_plugin_textdomain('wc4bp_groups', false, basename(dirname(__FILE__)) . '/languages');
+			load_plugin_textdomain('wc4bp-groups', false, basename(dirname(__FILE__)) . '/languages');
 		}
 	}
 
