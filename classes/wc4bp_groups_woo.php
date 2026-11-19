@@ -72,7 +72,7 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 
 			foreach ($final_groups as $group_id => $group) {
 				$group_obj = new BP_Groups_Group($group->group_id);
-				$link = bp_get_group_permalink($group_obj);
+				$link = function_exists('bp_get_group_url') ? bp_get_group_url($group_obj) : bp_get_group_permalink($group_obj);
 				$role = '';
 				if ($group->member_type == '1') {
 					$role = '(' . wc4bp_groups_manager::translation('Moderator') . ')';
@@ -306,7 +306,7 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 					$groups = array();
 					foreach ($groups_array as $key => $value) {
 						$groups[$key] = $value;
-						$groups[$key]->group_name = mb_convert_encoding($value->group_name, 'HTML-ENTITIES', 'UTF-8');
+						$groups[$key]->group_name = mb_encode_numericentity($value->group_name, array(0x80, 0x10FFFF, 0, 0x1FFFFF), 'UTF-8');
 					}
 
 					$variation_dictionary = array();
@@ -551,7 +551,12 @@ class wc4bp_groups_woo extends wc4bp_groups_woo_base
 	{
 		if (!isset($cart_item['_bp_group'])) {
 			if (isset($cart_item->legacy_values['_bp_group'])) {
-				$cart_item['_bp_group'] = $cart_item->legacy_values['_bp_group'];
+				if ($cart_item instanceof WC_Order_Item) {
+					// Same as the deprecated array access ($cart_item['_bp_group'] = ...), which stored it as item meta.
+					$cart_item->update_meta_data('_bp_group', $cart_item->legacy_values['_bp_group']);
+				} else {
+					$cart_item['_bp_group'] = $cart_item->legacy_values['_bp_group'];
+				}
 			} else {
 				return;
 			}
