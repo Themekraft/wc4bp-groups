@@ -7,12 +7,12 @@
  * Author:      ThemeKraft
  * Author URI: https://themekraft.com/products/woocommerce-buddypress-integration/
  * Version:     1.4.13
+ * Requires at least: 5.9
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce, wc4bp
- * License:     GPLv3
- * License URI: https://www.gnu.org/licenses/gpl-3.0.html
+ * License:     GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wc4bp
- * Domain Path: /languages
  * Svn: wc4bp-groups
  *
  * @package wc4bp_groups
@@ -125,8 +125,8 @@ if (!class_exists('wc4bp_groups')) {
 		public function admin_notice_need_pro()
 		{
 			$class = 'notice notice-warning';
-			// translators: 1: Plugin name, 2: Required plugin name.
 			$message = sprintf(
+				/* translators: 1: Plugin name, 2: Required plugin name. */
 				__('%1$s needs %2$s Professional Plan to work!', 'wc4bp_groups'),
 				'<strong>WooBuddy -> Groups</strong>',
 				'<strong>WooBuddy -> WooCommerce BuddyPress Integration</strong>'

@@ -1,14 +1,14 @@
 === BuddyPress Groups Integration for WooCommerce ===
 Contributors: themekraft, svenl77, gfirem
 Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
-Requires at least: 4.5
+Requires at least: 5.9
 Requires PHP: 7.4
 Tested up to: 7.1
 Stable tag: 1.4.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WooBuddy -> Groups, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscription. Ideal for subscription and membership sites such as premium support.
+WooBuddy -> Groups, integrate BuddyPress Groups with WooCommerce and WooCommerce Subscriptions. Ideal for subscription and membership sites.
 
 == WooCommerce Compatibility ==
 HPOS compatible: yes
