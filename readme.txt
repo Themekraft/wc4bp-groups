@@ -4,7 +4,7 @@ Tags: buddypress, buddypress groups, woocommerce, e-commerce, woocommerce groups
 Requires at least: 4.5
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 1.4.13
+Stable tag: 1.4.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,10 @@ This addon need the [BuddyPress Groups Integration for WooCommerce](https://word
 4. Done ;)
 
 == Changelog ==
+= 1.4.14 - 19 Nov 2026 =
+* Fixed the Groups tab of the product editor showing groups without a name, which made the product lose its groups when it was saved again. If a group product stopped adding buyers to its groups, open it, check its groups and save it again.
+* Fixed PHP 8.2, WooCommerce and BuddyPress 12 deprecation notices when group products are saved, bought and shown in orders.
+
 = 1.4.13 - 18 Nov 2026 =
 * WooCommerce and WooBuddy are now declared as required plugins.
 * Requires PHP 7.4.
